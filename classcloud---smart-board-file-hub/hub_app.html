@@ -1,0 +1,1316 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SınıfHub - 9A Akıllı Tahta Bulutu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #050505;
+            color: #FFFFFF;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            background-attachment: fixed;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        /* Unified Sharp Dot Pattern */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1.2px, transparent 1.2px);
+            background-size: 32px 32px;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Desktop Aurora Glow */
+        @media (min-width: 769px) {
+            body::after {
+                content: "";
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background:
+                    radial-gradient(circle at 0% 0%, rgba(0, 102, 255, 0.15) 0%, transparent 45%),
+                    radial-gradient(circle at 100% 100%, rgba(255, 68, 0, 0.1) 0%, transparent 45%),
+                    radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 1) 0%, transparent 100%);
+                z-index: -2;
+                pointer-events: none;
+            }
+        }
+
+        /* Unified Mobile Background */
+        @media (max-width: 768px) {
+            body {
+                background: radial-gradient(circle at 50% 0%, #1e1e40, #050505 60%) !important;
+                background-attachment: fixed !important;
+            }
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(20px);
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade {
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        input:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #FFFFFF !important;
+        }
+
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Akıllı tahta dokunmatik iyileştirmesi */
+        button,
+        .clickable {
+            cursor: pointer;
+            user-select: none;
+            touch-action: manipulation;
+        }
+
+        /* Drag and Drop Visual Feedback */
+        .drop-zone-active {
+            border-color: #00E699 !important;
+            background: rgba(0, 230, 153, 0.05) !important;
+            transform: scale(1.02) !important;
+            box-shadow: 0 0 30px rgba(0, 230, 153, 0.2);
+        }
+
+        .dragging {
+            opacity: 0.5;
+            cursor: grabbing;
+        }
+    </style>
+    <script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@^19.2.3",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "lucide-react": "https://esm.sh/lucide-react@^0.562.0"
+  }
+}
+</script>
+</head>
+
+<body class="custom-scrollbar">
+
+    <!-- MAIN APP STRUCTURE -->
+    <div class="min-h-screen flex flex-col">
+
+        <!-- HEADER -->
+        <header
+            class="px-6 py-6 md:px-12 md:py-8 border-b border-white/5 bg-[#000]/80 backdrop-blur-xl sticky top-0 z-50">
+            <div class="w-full flex flex-col gap-6">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-4">
+                        <a href="#" onclick="navigateTo(''); return false;" class="hover:opacity-80 transition-all">
+                            <h1
+                                class="text-2xl md:text-3xl font-black tracking-tight uppercase leading-none text-white">
+                                Sınıf<span class="text-white">Hub</span>
+                            </h1>
+                            <p class="text-[9px] font-bold text-white/40 uppercase tracking-[0.4em] mt-1">9A Akıllı
+                                Tahta Bulutu</p>
+                        </a>
+                    </div>
+                    <div class="flex items-center gap-3">
+
+                        <button id="openFolderModal"
+                            class="p-3 bg-white/10 rounded-xl text-white/60 hover:text-white hover:bg-white/20 transition-all"
+                            title="Yeni Klasör">
+                            <i data-lucide="folder-plus"></i>
+                        </button>
+                        <button id="openAddModal"
+                            class="bg-white hover:bg-zinc-100 text-[#0B0F1A] px-5 py-3 md:px-7 md:py-4 rounded-xl md:rounded-2xl font-black flex items-center gap-2 shadow-2xl shadow-white/20 transition-all active:scale-95 uppercase text-[10px] md:text-xs tracking-widest">
+                            <i data-lucide="plus"></i> Paylaşım Yap
+                        </button>
+                    </div>
+                </div>
+
+                <div class="flex flex-col lg:flex-row items-center gap-4">
+                    <nav id="filterNav"
+                        class="flex items-center gap-1 bg-white/5 p-1 rounded-xl border border-white/5 overflow-x-auto max-w-full no-scrollbar">
+                        <button data-filter="all"
+                            class="filter-btn active flex items-center gap-2 px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-wider bg-white text-[#0B0F1A]">
+                            <i data-lucide="layout-grid" class="w-3 h-3"></i> TÜMÜ
+                        </button>
+                        <button data-filter="image"
+                            class="filter-btn flex items-center gap-2 px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-wider text-white/40 hover:text-white">
+                            <i data-lucide="image" class="w-3 h-3"></i> FOTOĞRAFLAR
+                        </button>
+                        <button data-filter="file"
+                            class="filter-btn flex items-center gap-2 px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-wider text-white/40 hover:text-white">
+                            <i data-lucide="file" class="w-3 h-3"></i> DOSYALAR
+                        </button>
+                        <button data-filter="private"
+                            class="filter-btn flex items-center gap-2 px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-wider text-white/40 hover:text-white">
+                            <i data-lucide="shield-check" class="w-3 h-3"></i> ŞİFRELİLER
+                        </button>
+                    </nav>
+                    <div
+                        class="flex items-center gap-3 bg-white/10 border border-white/20 rounded-xl px-5 py-3 flex-[3] w-full lg:w-auto">
+                        <i data-lucide="search" class="text-white/40 w-4 h-4"></i>
+                        <input id="searchInput" type="text" placeholder="Dosya Ara..."
+                            class="bg-transparent border-none outline-none w-full text-white placeholder:text-white/20 text-sm font-medium">
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- MAIN CONTENT -->
+        <main class="flex-1 w-full p-6 md:p-12">
+            <div id="statusAlert"
+                class="hidden mb-8 p-4 bg-red-500/10 border border-red-500/20 rounded-xl flex items-center gap-3 animate-pulse">
+                <i data-lucide="loader-2" class="text-red-500 animate-spin w-4 h-4"></i>
+                <p id="statusText" class="text-[10px] font-black text-red-500 uppercase tracking-widest"></p>
+            </div>
+
+            <div class="flex flex-wrap items-center justify-between mb-10 gap-4">
+                <div class="flex flex-col gap-4">
+                    <div class="flex items-center gap-3">
+                        <i data-lucide="clock" class="text-white"></i>
+                        <h2 class="text-xl md:text-2xl font-black uppercase tracking-tight">Bulut Akışı</h2>
+                    </div>
+                    <div id="breadcrumb" class="flex items-center gap-2 overflow-x-auto no-scrollbar py-1">
+                        <button onclick="navigateTo('')"
+                            class="text-[10px] font-black uppercase text-white/40 hover:text-white transition-all flex items-center gap-1">
+                            <i data-lucide="home" class="w-3 h-3"></i> ROOT
+                        </button>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3 bg-white/5 px-4 py-2 rounded-xl border border-white/5">
+                    <i data-lucide="hard-drive" class="text-white w-3 h-3"></i>
+                    <div id="storageStats" class="text-[9px] font-black text-white/40 tracking-widest uppercase">ALAN: 0
+                        B</div>
+                </div>
+            </div>
+
+            <div id="itemsContainer" class="card-grid">
+                <!-- Items will be injected here -->
+            </div>
+        </main>
+    </div>
+
+    <!-- ADD CONTENT MODAL -->
+    <div id="addModal" class="modal-overlay">
+        <div
+            class="bg-[#000] w-full max-w-4xl rounded-[30px] md:rounded-[40px] overflow-hidden flex flex-col md:flex-row shadow-2xl border border-white/10 relative">
+
+            <div id="uploadLoader"
+                class="hidden absolute inset-0 z-[110] bg-[#0B0F1A]/95 backdrop-blur-xl flex flex-col items-center justify-center p-8 text-center">
+                <i data-lucide="loader-2" class="w-16 h-16 text-white animate-spin mb-6"></i>
+                <h3 class="text-2xl font-black text-white mb-2 uppercase italic">Bulut Aktarımı</h3>
+                <p class="text-white/40 text-xs font-bold uppercase tracking-widest">Lütfen bekleyin...</p>
+            </div>
+
+            <div class="hidden md:flex w-[300px] bg-[#000] p-10 flex-col border-r border-white/5">
+                <div
+                    class="w-14 h-14 rounded-2xl bg-white flex items-center justify-center font-black text-[#0B0F1A] text-xl mb-12">
+                    AT</div>
+                <h2 class="text-3xl font-black mb-8 text-white uppercase italic">YENİ<br /><span
+                        class="text-white">PAYLAŞIM</span></h2>
+                <div
+                    class="bg-white/5 border border-white/10 rounded-2xl p-6 text-[9px] text-white/40 space-y-4 font-bold uppercase tracking-tighter">
+                    <p class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-[#00E699]"></span> REPO:
+                        9AHUB</p>
+                    <p class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-[#00E699]"></span>
+                        SINIR: 100MB</p>
+                </div>
+            </div>
+
+            <div class="flex-1 p-6 md:p-10 bg-[#000]/60">
+                <div class="flex justify-between items-center mb-2">
+                    <h4 class="font-black text-white uppercase text-xl">Paylaş</h4>
+                    <button class="close-modal text-white/20 hover:text-white p-2 bg-white/5 rounded-full"><i
+                            data-lucide="x"></i></button>
+                </div>
+                <div id="uploadPathIndicator"
+                    class="mb-6 text-[10px] font-bold text-white/40 uppercase tracking-widest flex items-center gap-2">
+                    <i data-lucide="folder" class="w-3 h-3"></i>
+                    <span id="uploadPathText">Ana Dizin</span>
+                </div>
+
+                <div class="flex gap-4 mb-8">
+                    <button id="tabFile"
+                        class="flex-1 flex items-center justify-center gap-2 p-5 rounded-2xl border-2 border-white bg-white/10 text-white font-black text-[10px] uppercase">
+                        <i data-lucide="upload"></i> DOSYA
+                    </button>
+                    <button id="tabNote"
+                        class="flex-1 flex items-center justify-center gap-2 p-5 rounded-2xl border-2 border-transparent bg-white/5 text-white/20 font-black text-[10px] uppercase">
+                        <i data-lucide="edit-3"></i> NOT
+                    </button>
+                </div>
+
+                <div class="space-y-6">
+                    <div id="fileZone"
+                        class="w-full bg-black/20 border-2 border-dashed border-white/10 rounded-3xl p-8 flex flex-col items-center justify-center cursor-pointer hover:border-white/40 transition-all">
+                        <input type="file" id="fileInput" class="hidden">
+                        <i data-lucide="file" class="text-white mb-3"></i>
+                        <p id="fileNameDisplay"
+                            class="text-white/40 font-bold text-xs uppercase tracking-widest text-center truncate w-full">
+                            Dosya Seçiniz</p>
+                    </div>
+
+                    <input id="itemTitle" type="text" placeholder="İsimlendir (Zorunlu)"
+                        class="w-full bg-black/40 border border-white/5 rounded-xl px-6 py-4 text-white font-black">
+
+                    <input id="itemUploader" type="text" placeholder="Kim yüklüyor? (Profil)"
+                        class="w-full bg-black/40 border border-white/5 rounded-xl px-6 py-4 text-white font-black">
+
+                    <textarea id="itemContent" placeholder="Notunuzu yazın..." rows="3"
+                        class="hidden w-full bg-black/40 border border-white/5 rounded-xl px-6 py-4 text-white font-bold resize-none"></textarea>
+
+                    <div
+                        class="bg-black/30 p-5 rounded-2xl border border-white/5 flex items-center justify-between gap-4">
+                        <div class="flex items-center gap-3">
+                            <i data-lucide="shield-check" class="text-white/10"></i>
+                            <p class="text-[10px] font-black text-white uppercase">Şifreli Koruma</p>
+                        </div>
+                        <input id="itemPassword" type="password" placeholder="ŞİFRE"
+                            class="bg-black/40 border border-white/10 rounded-lg px-4 py-2 text-xs font-black text-white w-24">
+                    </div>
+                </div>
+
+                <div class="mt-8 flex gap-4">
+                    <button
+                        class="close-modal flex-1 py-4 font-black text-white/20 text-[10px] uppercase">Vazgeç</button>
+                    <button id="submitShare"
+                        class="flex-[2] bg-white text-[#0B0F1A] font-black py-4 rounded-xl shadow-xl shadow-white/5 text-xs uppercase">Buluta
+                        Aktar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOLDER MODAL -->
+    <div id="folderModal" class="modal-overlay">
+        <div class="bg-[#121826] w-full max-w-lg rounded-[40px] border border-white/10 p-10 relative">
+            <button class="close-modal absolute top-8 right-8 text-white/20"><i data-lucide="x"></i></button>
+            <h2 class="text-2xl font-black uppercase text-center mb-8 italic text-white">YENİ KLASÖR</h2>
+            <div class="space-y-6">
+                <div>
+                    <label class="block text-[10px] font-black text-white/20 mb-2 uppercase tracking-widest">Klasör
+                        Adı</label>
+                    <input id="folderNameInput" type="text" placeholder="Örn: Ders Notları"
+                        class="w-full bg-black/40 border border-white/5 rounded-xl px-4 py-3 text-white font-black text-sm">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-black text-white/20 mb-2 uppercase tracking-widest">Klasör
+                        Şifresi (Opsiyonel)</label>
+                    <input id="folderPasswordInput" type="password" placeholder="Bırakırsanız şifresiz olur"
+                        class="w-full bg-black/40 border border-white/5 rounded-xl px-4 py-3 text-white font-black text-sm">
+                </div>
+                <button id="createFolderSubmit"
+                    class="w-full bg-white text-[#0B0F1A] font-black py-5 rounded-2xl uppercase tracking-widest text-xs mt-4">Klasör
+                    Oluştur</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI MODAL -->
+    <div id="aiModal" class="modal-overlay">
+        <div
+            class="bg-[#121826] w-full max-w-6xl h-[85vh] rounded-[40px] border border-white/10 p-4 md:p-8 relative flex flex-col">
+            <div class="flex items-center justify-between mb-6">
+                <div class="flex items-center gap-3">
+                    <div class="p-3 bg-orange-500/10 rounded-xl text-orange-500">
+                        <i data-lucide="bot"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-2xl font-black uppercase italic text-white">ASİSTAN</h2>
+                        <p class="text-[10px] font-bold text-white/40 uppercase tracking-widest">Powered by DuckDuckGo
+                            AI</p>
+                    </div>
+                </div>
+                <button class="close-modal text-white/20 hover:text-white"><i data-lucide="x"></i></button>
+            </div>
+
+            <div class="flex-1 bg-white rounded-2xl overflow-hidden relative">
+                <iframe src="https://duckduckgo.com/?q=DuckDuckGo+AI+Chat&ia=chat&ko=-1"
+                    class="w-full h-full border-none"
+                    sandbox="allow-scripts allow-same-origin allow-popups allow-forms"></iframe>
+
+                <!-- Fallback Warning Overlay (Initially hidden, shown if needed logic could be added but iframe blockage is browser level) -->
+                <div
+                    class="absolute inset-0 pointer-events-none flex items-center justify-center p-10 bg-black/50 backdrop-blur-sm hidden">
+                    <div class="bg-[#121826] p-8 rounded-3xl border border-white/10 text-center">
+                        <i data-lucide="alert-triangle" class="w-12 h-12 text-yellow-500 mx-auto mb-4"></i>
+                        <h3 class="text-xl font-black text-white mb-2">BAĞLANTI REDDEDİLDİ</h3>
+                        <p class="text-sm text-white/60 mb-6">Google/DuckDuckGo bu sitenin içinde açılmaya izin
+                            vermiyor.</p>
+                        <a href="https://duckduckgo.com/?q=AI+Chat&ia=chat" target="_blank"
+                            class="inline-block bg-white text-black px-6 py-3 rounded-xl font-bold uppercase text-xs pointer-events-auto">Yeni
+                            Sekmede Aç</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SETTINGS MODAL -->
+    <div id="settingsModal" class="modal-overlay">
+        <div class="bg-[#121826] w-full max-w-lg rounded-[40px] border border-white/10 p-10 relative">
+            <button class="close-modal absolute top-8 right-8 text-white/20"><i data-lucide="x"></i></button>
+            <h2 class="text-2xl font-black uppercase text-center mb-8 italic">SİSTEM <span
+                    class="text-white">AYARLARI</span></h2>
+            <div class="space-y-6">
+                <div>
+                    <label class="block text-[10px] font-black text-white/20 mb-2 uppercase tracking-widest">GitHub
+                        Token</label>
+                    <input id="confToken" type="password"
+                        class="w-full bg-black/40 border border-white/5 rounded-xl px-4 py-3 text-white font-mono text-sm">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label
+                            class="block text-[10px] font-black text-white/20 mb-2 uppercase tracking-widest">Kullanıcı</label>
+                        <input id="confOwner" type="text"
+                            class="w-full bg-black/40 border border-white/5 rounded-xl px-4 py-3 text-white text-sm">
+                    </div>
+                    <div>
+                        <label
+                            class="block text-[10px] font-black text-white/20 mb-2 uppercase tracking-widest">Repo</label>
+                        <input id="confRepo" type="text"
+                            class="w-full bg-black/40 border border-white/5 rounded-xl px-4 py-3 text-white text-sm">
+                    </div>
+                </div>
+                <button id="saveSettings"
+                    class="w-full bg-white text-[#0B0F1A] font-black py-5 rounded-2xl uppercase tracking-widest text-xs mt-4">Kaydet
+                    ve Uygula</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MOVE FILE MODAL -->
+    <div id="moveModal" class="modal-overlay">
+        <div class="bg-[#121826] w-full max-w-lg rounded-[40px] border border-white/10 p-10 relative">
+            <button class="close-modal absolute top-8 right-8 text-white/20"><i data-lucide="x"></i></button>
+            <h2 class="text-2xl font-black uppercase text-center mb-4 italic text-white">DOSYA TAŞI</h2>
+            <p id="moveFileName" class="text-center text-white/40 text-sm mb-6"></p>
+            <div class="space-y-4">
+                <p class="text-[10px] font-black text-white/20 uppercase tracking-widest">Hedef Klasör Seç:</p>
+                <div id="folderList" class="max-h-60 overflow-y-auto space-y-2 custom-scrollbar">
+                    <!-- Folder buttons will be injected here -->
+                </div>
+                <button id="moveToRoot"
+                    class="w-full bg-white/10 hover:bg-white/20 text-white font-black py-4 rounded-xl uppercase tracking-widest text-xs flex items-center justify-center gap-2">
+                    <i data-lucide="home" class="w-4 h-4"></i> Ana Dizine Taşı
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const SUPABASE_CONFIG = {
+            baseUrl: 'https://znrlvhbuzmukznnfxpjy.supabase.co/rest/v1/hub_items',
+            storageUrl: 'https://znrlvhbuzmukznnfxpjy.supabase.co/storage/v1/object/hub_files',
+            apiKey: 'sb_publishable_VQ6Eu0R0LKEMZOh9P93L0w_qR3Ylyu3'
+        };
+
+        const GITHUB_CONFIG = {
+            token: '', // BURAYA KENDİ GITHUB TOKENINIZI EKLEYİN
+            owner: 'sosyaala-sketch',
+            repo: '9AHUB',
+            branch: 'main'
+        };
+
+        let items = [];
+        let activeFilter = 'all';
+        let currentPath = '';
+        let isHubAdminMode = false;
+        const MAX_SUPABASE_SIZE = 90 * 1024 * 1024; // 90MB
+
+        // --- CORE FUNCTIONS ---
+        function formatSize(bytes) {
+            if (!bytes || bytes === 0) return '0 B';
+            const k = 1024;
+            const sizes = ['B', 'KB', 'MB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+        }
+
+        function navigateTo(path) {
+            currentPath = path;
+            renderBreadcrumbs();
+            renderItems();
+        }
+
+        function renderBreadcrumbs() {
+            const container = document.getElementById('breadcrumb');
+            let html = `<button onclick="navigateTo('')" class="text-[10px] font-black uppercase ${currentPath === '' ? 'text-white' : 'text-white/40'} hover:text-white transition-all flex items-center gap-1">
+                <i data-lucide="home" class="w-3 h-3"></i> ROOT
+            </button>`;
+
+            if (currentPath) {
+                const parts = currentPath.split('/').filter(p => p && p !== 'uploads');
+                let cumulativePath = 'uploads';
+                parts.forEach((part, index) => {
+                    cumulativePath += '/' + part;
+                    const finalPath = cumulativePath;
+                    html += `
+                        <i data-lucide="chevron-right" class="w-3 h-3 text-white/10"></i>
+                        <button onclick="navigateTo('${finalPath}')" class="text-[10px] font-black uppercase ${index === parts.length - 1 ? 'text-white' : 'text-white/40'} hover:text-white transition-all">
+                            ${part}
+                        </button>
+                    `;
+                });
+            }
+            container.innerHTML = html;
+            lucide.createIcons();
+        }
+
+        function renderItems() {
+            const container = document.getElementById('itemsContainer');
+            const search = document.getElementById('searchInput').value.toLowerCase();
+            const targetDir = currentPath || '';
+
+            let filtered = items.filter(item => (item.parent_path || '') === targetDir);
+
+            if (activeFilter !== 'all') {
+                filtered = filtered.filter(i => {
+                    if (activeFilter === 'private') return i.is_private;
+                    if (activeFilter === 'file' && i.type === 'note') return true;
+                    return i.type === activeFilter;
+                });
+            }
+
+            if (search) {
+                filtered = filtered.filter(i => i.title.toLowerCase().includes(search));
+            }
+
+            container.innerHTML = '';
+
+            // Geri Dön butonu - currentPath boş değilse göster (herhangi bir klasördeyiz)
+            if (currentPath && currentPath !== '') {
+                // Parent path hesapla: son / dan önceki kısım, yoksa root ('')
+                const pathParts = currentPath.split('/');
+                const parentDir = pathParts.length > 1 ? pathParts.slice(0, -1).join('/') : '';
+
+                const backCard = document.createElement('div');
+                backCard.className = `animate-fade relative group rounded-[28px] border border-white/5 bg-white/5 p-6 h-[220px] flex flex-col transition-all hover:-translate-y-1 cursor-pointer items-center justify-center text-white/40 hover:text-white hover:bg-white/10`;
+
+                // Drop zone for moving files out of folder
+                backCard.dataset.dropZone = 'true';
+                backCard.dataset.folderPath = parentDir;
+                backCard.dataset.folderTitle = parentDir || 'ANA DİZİN';
+
+                backCard.innerHTML = `
+                    <i data-lucide="corner-left-up" class="w-12 h-12 mb-4"></i>
+                    <span class="text-[10px] font-black uppercase tracking-widest">Geri Dön</span>
+                    <span class="text-[8px] text-white/20 mt-1">${parentDir || 'ANA DİZİN'}</span>
+                `;
+                backCard.onclick = () => navigateTo(parentDir);
+                container.appendChild(backCard);
+            }
+
+            if (filtered.length === 0) {
+                // insertAdjacentHTML kullan, innerHTML += event handler'ları bozar
+                container.insertAdjacentHTML('beforeend', `<div class="col-span-full py-20 text-center text-white/20 font-black uppercase tracking-widest">İçerik Bulunamadı</div>`);
+                lucide.createIcons();
+                updateStorageStats();
+                return;
+            }
+
+            filtered.forEach(item => {
+                const card = document.createElement('div');
+                const isFolder = item.type === 'folder';
+                const canDrop = isFolder && !item.is_private; // Şifresiz klasörlere bırakılabilir
+
+                card.className = `animate-fade relative group rounded-[28px] border border-white/10 bg-[#0B0F1A] p-6 h-[220px] flex flex-col transition-all hover:-translate-y-1 ${item.is_private ? 'border-dashed opacity-90' : ''} ${isFolder ? 'folder-card' : 'file-card'}`;
+
+                // Dosyalar sürüklenebilir, klasörler drop zone
+                if (!isFolder) {
+                    card.draggable = true;
+                    card.dataset.itemId = item.id;
+                    card.dataset.itemTitle = item.title;
+                }
+                if (canDrop) {
+                    card.dataset.dropZone = 'true';
+                    card.dataset.folderPath = item.path;
+                    card.dataset.folderTitle = item.title;
+                }
+
+                const iconMap = { image: 'image', note: 'file-text', file: 'file-box', folder: 'folder' };
+
+                card.innerHTML = `
+                    ${isHubAdminMode && !isFolder ? `
+                        <div class="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity flex gap-2">
+                            <button class="move-item p-2.5 bg-blue-500/10 text-blue-400 rounded-xl hover:bg-blue-500 hover:text-white transition-all" data-id="${item.id}" title="Taşı">
+                                <i data-lucide="folder-input" class="w-4 h-4"></i>
+                            </button>
+                            <button class="delete-item p-2.5 bg-red-500/10 text-red-500 rounded-xl hover:bg-red-500 hover:text-white transition-all" data-id="${item.id}" title="Sil">
+                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    ` : (isHubAdminMode && isFolder ? `
+                        <div class="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <button class="delete-item p-2.5 bg-red-500/10 text-red-500 rounded-xl hover:bg-red-500 hover:text-white transition-all" data-id="${item.id}">
+                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    ` : '')}
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="p-3 bg-white/5 rounded-xl">
+                            <i data-lucide="${iconMap[item.type] || 'file'}" class="${isFolder ? 'text-zinc-400' : (item.type === 'image' ? 'text-white' : 'text-zinc-200')}"></i>
+                        </div>
+                        <span class="text-[9px] font-black text-white/20 uppercase bg-white/5 px-2 py-1 rounded-md">
+                            ${isFolder ? 'KLASÖR' : item.storage_type.toUpperCase()} | ${formatSize(item.size)}
+                        </span>
+                    </div>
+                    <div class="flex-1 overflow-hidden">
+                        <h3 class="text-base font-black text-white truncate uppercase mb-1">${item.title}</h3>
+                        <p class="text-[10px] text-white/20 font-bold uppercase tracking-widest">${item.is_private ? 'Korumalı' : (isFolder ? 'Dizin' : 'Genel Paylaşım')}</p>
+                    </div>
+                    <div class="mt-4 pt-4 border-t border-white/5 flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            ${isFolder ? (item.is_private ? '<div class="flex items-center gap-1 text-red-400 text-[9px] font-black"><i data-lucide="lock" class="w-2.5 h-2.5"></i> GİZLİ</div>' : '<div class="text-white/20 text-[9px] font-black uppercase">AÇ</div>') : `
+                                <div class="flex gap-2">
+                                    <button class="preview-item text-[9px] font-black uppercase bg-white/10 hover:bg-white/20 text-white px-3 py-1.5 rounded-lg transition-all" data-id="${item.id}">ÖNİZLE</button>
+                                    <button class="download-item text-[9px] font-black uppercase bg-white/10 hover:bg-white text-white hover:text-[#0B0F1A] px-3 py-1.5 rounded-lg transition-all" data-id="${item.id}">İNDİR</button>
+                                </div>
+                            `}
+                        </div>
+                        <div class="flex items-center gap-2">
+                            ${item.uploader ? `<span class="text-[9px] font-black text-white/40 uppercase tracking-widest">${item.uploader}</span>` : ''}
+                            <div class="w-7 h-7 rounded-full bg-white/10 flex items-center justify-center text-[9px] font-black text-white">
+                                ${item.uploader ? item.uploader.substring(0, 2).toUpperCase() : 'AT'}
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                card.onclick = (e) => {
+                    const deleteBtn = e.target.closest('.delete-item');
+                    const previewBtn = e.target.closest('.preview-item');
+                    const downloadBtn = e.target.closest('.download-item');
+
+                    if (deleteBtn) return;
+
+                    if (isFolder) {
+                        if (item.is_private) {
+                            const p = prompt(`${item.title} klasörü için şifre:`);
+                            if (p !== item.password) return alert("Hatalı şifre!");
+                        }
+                        navigateTo(item.path);
+                    } else if (previewBtn) {
+                        handleOpenItem(item);
+                    } else if (downloadBtn) {
+                        handleDownloadItem(item);
+                    } else {
+                        // Default action for card click (except buttons)
+                        handleOpenItem(item);
+                    }
+                };
+
+                container.appendChild(card);
+            });
+
+            lucide.createIcons();
+            updateStorageStats();
+        }
+
+        function updateStorageStats() {
+            const total = items.reduce((acc, i) => acc + (i.size || 0), 0);
+            document.getElementById('storageStats').innerText = `ALAN: ${formatSize(total)}`;
+        }
+
+        async function handleOpenItem(item) {
+            if (item.is_private) {
+                const pass = prompt(`${item.title} için şifre:`);
+                if (pass !== item.password) return alert("Hatalı!");
+            }
+            if (item.url) window.open(item.url, '_blank');
+        }
+
+        async function handleDownloadItem(item) {
+            if (item.is_private) {
+                const pass = prompt(`${item.title} dosyasını indirmek için şifre:`);
+                if (pass !== item.password) return alert("Hatalı!");
+            }
+
+            if (!confirm(`${item.title} dosyasını indirmek istiyor musunuz?`)) return;
+
+            try {
+                const response = await fetch(item.url);
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = item.path.split('/').pop();
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+            } catch (err) {
+                console.error("İndirme hatası:", err);
+                alert("Dosya indirilemedi!");
+            }
+        }
+
+        function sanitizeFilename(str) {
+            const map = {
+                'ç': 'c', 'Ç': 'C', 'ğ': 'g', 'Ğ': 'G', 'ı': 'i', 'İ': 'I',
+                'ö': 'o', 'Ö': 'O', 'ş': 's', 'Ş': 'S', 'ü': 'u', 'Ü': 'U'
+            };
+            let slug = str.replace(/[çÇğĞıİöÖşŞüÜ]/g, (m) => map[m]);
+            return slug.replace(/[^a-z0-9.]/gi, '_').replace(/_+/g, '_').toLowerCase();
+        }
+
+        // --- HYBRID STORAGE LOGIC ---
+        async function uploadToHybrid(item, file) {
+            const isLarge = item.size >= MAX_SUPABASE_SIZE;
+            const storageType = isLarge ? 'github' : 'supabase';
+
+            let uploadedUrl = '';
+            let storagePath = '';
+
+            const safeTitle = sanitizeFilename(item.title);
+            const extension = file ? (file.name.lastIndexOf('.') !== -1 ? file.name.substring(file.name.lastIndexOf('.')) : '') : '.txt';
+            const fileName = `${Date.now()}_${safeTitle}${extension}`;
+            const targetDir = currentPath || '';
+            storagePath = targetDir ? `${targetDir}/${fileName}` : fileName;
+
+            if (storageType === 'supabase') {
+                // Upload to Supabase Storage
+                const res = await fetch(`${SUPABASE_CONFIG.storageUrl}/${storagePath}`, {
+                    method: 'POST',
+                    headers: {
+                        'apikey': SUPABASE_CONFIG.apiKey,
+                        'Authorization': `Bearer ${SUPABASE_CONFIG.apiKey}`,
+                        'Content-Type': file ? file.type : 'text/plain'
+                    },
+                    body: file || item.content
+                });
+                if (!res.ok) {
+                    const errorJson = await res.json().catch(() => ({}));
+                    throw new Error(`Supabase Storage hatası: ${errorJson.message || res.statusText || 'Bilinmeyen Hata'}`);
+                }
+                uploadedUrl = `https://znrlvhbuzmukznnfxpjy.supabase.co/storage/v1/object/public/hub_files/${storagePath}`;
+            } else {
+                // Upload to GitHub
+                let content = '';
+                if (file) {
+                    content = await new Promise(resolve => {
+                        const reader = new FileReader();
+                        reader.readAsDataURL(file);
+                        reader.onload = () => resolve(reader.result.split(',')[1]);
+                    });
+                } else {
+                    content = btoa(unescape(encodeURIComponent(item.content)));
+                }
+
+                const res = await fetch(`https://api.github.com/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/contents/${storagePath}`, {
+                    method: 'PUT',
+                    headers: { 'Authorization': `token ${GITHUB_CONFIG.token}` },
+                    body: JSON.stringify({
+                        message: `Hybrid Upload: ${item.title}`,
+                        content: content,
+                        branch: GITHUB_CONFIG.branch
+                    })
+                });
+                if (!res.ok) throw new Error("GitHub Upload hatası!");
+                const data = await res.json();
+                uploadedUrl = data.content.download_url;
+            }
+
+            // Save Metadata to Supabase Table
+            const metaRes = await fetch(SUPABASE_CONFIG.baseUrl, {
+                method: 'POST',
+                headers: {
+                    'apikey': SUPABASE_CONFIG.apiKey,
+                    'Authorization': `Bearer ${SUPABASE_CONFIG.apiKey}`,
+                    'Content-Type': 'application/json',
+                    'Prefer': 'return=representation'
+                },
+                body: JSON.stringify({
+                    title: item.title,
+                    type: item.type,
+                    storage_type: storageType,
+                    path: storagePath,
+                    size: item.size,
+                    is_private: item.is_private,
+                    password: item.password,
+                    uploader: item.uploader,
+                    parent_path: targetDir,
+                    url: uploadedUrl
+                })
+            });
+
+            if (!metaRes.ok) {
+                const errorJson = await metaRes.json().catch(() => ({}));
+                throw new Error(`Metadata kaydı başarısız: ${errorJson.message || metaRes.statusText || 'Bilinmeyen Hata'}`);
+            }
+            return await metaRes.json();
+        }
+
+        async function createHybridFolder(name, pass) {
+            const targetDir = currentPath || '';
+            const res = await fetch(SUPABASE_CONFIG.baseUrl, {
+                method: 'POST',
+                headers: {
+                    'apikey': SUPABASE_CONFIG.apiKey,
+                    'Authorization': `Bearer ${SUPABASE_CONFIG.apiKey}`,
+                    'Content-Type': 'application/json',
+                    'Prefer': 'return=representation'
+                },
+                body: JSON.stringify({
+                    title: name,
+                    type: 'folder',
+                    storage_type: 'metadata',
+                    path: targetDir ? `${targetDir}/${name}` : name,
+                    size: 0,
+                    is_private: !!pass,
+                    password: pass || '',
+                    parent_path: targetDir
+                })
+            });
+            if (!res.ok) throw new Error("Klasör oluşturulamadı!");
+            await fetchAndSyncItems();
+        }
+
+        // Dosyayı başka klasöre taşı
+        let itemToMove = null;
+
+        async function moveItemToFolder(targetPath) {
+            if (!itemToMove) return;
+
+            console.log("Moving item:", itemToMove.title, "to:", targetPath || "ROOT");
+
+            const res = await fetch(`${SUPABASE_CONFIG.baseUrl}?id=eq.${itemToMove.id}`, {
+                method: 'PATCH',
+                headers: {
+                    'apikey': SUPABASE_CONFIG.apiKey,
+                    'Authorization': `Bearer ${SUPABASE_CONFIG.apiKey}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    parent_path: targetPath
+                })
+            });
+
+            if (!res.ok) {
+                throw new Error("Taşıma işlemi başarısız!");
+            }
+
+            document.getElementById('moveModal').classList.remove('active');
+            await fetchAndSyncItems();
+            alert(`"${itemToMove.title}" başarıyla taşındı!`);
+            itemToMove = null;
+        }
+
+        function openMoveModal(item) {
+            itemToMove = item;
+            document.getElementById('moveFileName').innerText = `"${item.title}"`;
+
+            // Klasör listesini oluştur
+            const folderList = document.getElementById('folderList');
+            const folders = items.filter(i => i.type === 'folder');
+
+            if (folders.length === 0) {
+                folderList.innerHTML = '<p class="text-white/20 text-xs text-center py-4">Henüz klasör yok</p>';
+            } else {
+                folderList.innerHTML = folders.map(f => `
+                    <button class="folder-select-btn w-full bg-white/5 hover:bg-white/10 text-white font-bold py-3 px-4 rounded-xl text-sm flex items-center gap-3 transition-all" data-path="${f.path}">
+                        <i data-lucide="folder" class="w-5 h-5 text-yellow-400"></i>
+                        ${f.title}
+                    </button>
+                `).join('');
+            }
+
+            document.getElementById('moveModal').classList.add('active');
+            lucide.createIcons();
+        }
+
+        async function deleteFromHub(item) {
+            console.log("Starting deletion for:", item.title, "ID:", item.id);
+
+            // 1. Metadata Sil
+            const metaRes = await fetch(`${SUPABASE_CONFIG.baseUrl}?id=eq.${item.id}`, {
+                method: 'DELETE',
+                headers: {
+                    'apikey': SUPABASE_CONFIG.apiKey,
+                    'Authorization': `Bearer ${SUPABASE_CONFIG.apiKey}`
+                }
+            });
+
+            // Supabase returns 204 No Content on successful delete
+            if (!metaRes.ok && metaRes.status !== 204) {
+                const errText = await metaRes.text();
+                console.error("Supabase Metadata Delete Error:", metaRes.status, errText);
+                throw new Error(`Kayıt silinemedi (Kod: ${metaRes.status}).`);
+            }
+
+            console.log("DELETE request completed, status:", metaRes.status);
+
+            // 2. DOĞRULAMA: Gerçekten silindi mi kontrol et
+            await new Promise(r => setTimeout(r, 300)); // Kısa bekleme
+            const verifyRes = await fetch(`${SUPABASE_CONFIG.baseUrl}?id=eq.${item.id}&select=id`, {
+                headers: {
+                    'apikey': SUPABASE_CONFIG.apiKey,
+                    'Authorization': `Bearer ${SUPABASE_CONFIG.apiKey}`
+                }
+            });
+
+            if (verifyRes.ok) {
+                const remaining = await verifyRes.json();
+                if (remaining && remaining.length > 0) {
+                    console.error("DELETION FAILED: Item still exists in database!", remaining);
+                    throw new Error("Silme işlemi başarısız! Yetkisiz erişim (RLS policy). Supabase panelinden manuel silmeniz gerekebilir.");
+                }
+            }
+
+            console.log("✅ Deletion verified - item no longer exists in database");
+
+            // 3. Fiziksel Dosyayı Sil
+            if (item.storage_type === 'supabase' && item.path) {
+                const storageRes = await fetch(`${SUPABASE_CONFIG.storageUrl}/${item.path}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'apikey': SUPABASE_CONFIG.apiKey,
+                        'Authorization': `Bearer ${SUPABASE_CONFIG.apiKey}`
+                    }
+                });
+
+                if (!storageRes.ok) {
+                    console.warn("Storage delete failed (possibly already gone or permission issue):", storageRes.status);
+                } else {
+                    console.log("Storage file deleted successfully");
+                }
+            } else if (item.storage_type === 'github') {
+                try {
+                    const fileRes = await fetch(`https://api.github.com/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/contents/${item.path}`, {
+                        headers: { 'Authorization': `token ${GITHUB_CONFIG.token}` }
+                    });
+                    if (fileRes.ok) {
+                        const fileData = await fileRes.json();
+                        await fetch(`https://api.github.com/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/contents/${item.path}`, {
+                            method: 'DELETE',
+                            headers: { 'Authorization': `token ${GITHUB_CONFIG.token}` },
+                            body: JSON.stringify({ message: `Delete: ${item.title}`, sha: fileData.sha, branch: GITHUB_CONFIG.branch })
+                        });
+                        console.log("GitHub file deleted successfully");
+                    }
+                } catch (e) {
+                    console.error("GitHub Deletion Error:", e);
+                }
+            }
+        }
+
+        async function checkAndArchiveOldFiles() {
+            const twentyDaysAgo = new Date();
+            twentyDaysAgo.setDate(twentyDaysAgo.getDate() - 20);
+
+            const oldFiles = items.filter(i => i.storage_type === 'supabase' && new Date(i.created_at) < twentyDaysAgo);
+
+            for (const file of oldFiles) {
+                console.log(`📦 Archiving old file to GitHub: ${file.title}`);
+                try {
+                    // 1. Supabase'den indir
+                    const res = await fetch(file.url);
+                    const blob = await res.blob();
+
+                    // 2. GitHub'a yükle
+                    const reader = new FileReader();
+                    const content = await new Promise(r => {
+                        reader.readAsDataURL(blob);
+                        reader.onload = () => r(reader.result.split(',')[1]);
+                    });
+
+                    const ghRes = await fetch(`https://api.github.com/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/contents/${file.path}`, {
+                        method: 'PUT',
+                        headers: { 'Authorization': `token ${GITHUB_CONFIG.token}` },
+                        body: JSON.stringify({
+                            message: `Auto Archive: ${file.title}`,
+                            content: content,
+                            branch: GITHUB_CONFIG.branch
+                        })
+                    });
+
+                    if (ghRes.ok) {
+                        const ghData = await ghRes.json();
+                        // 3. Metadata Güncelle
+                        await fetch(`${SUPABASE_CONFIG.baseUrl}?id=eq.${file.id}`, {
+                            method: 'PATCH',
+                            headers: {
+                                'apikey': SUPABASE_CONFIG.apiKey,
+                                'Authorization': `Bearer ${SUPABASE_CONFIG.apiKey}`,
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                storage_type: 'github',
+                                url: ghData.content.download_url
+                            })
+                        });
+                        // 4. Supabase Storage'dan sil
+                        await fetch(`${SUPABASE_CONFIG.storageUrl}/${file.path}`, {
+                            method: 'DELETE',
+                            headers: {
+                                'apikey': SUPABASE_CONFIG.apiKey,
+                                'Authorization': `Bearer ${SUPABASE_CONFIG.apiKey}`
+                            }
+                        });
+                    }
+                } catch (e) { console.error("Archive error:", e); }
+            }
+        }
+
+        // --- UI HANDLERS ---
+        document.getElementById('openAddModal').onclick = () => {
+            // Hangi klasöre yüklendiğini göster
+            const pathText = currentPath ? currentPath.split('/').pop() : 'Ana Dizin';
+            document.getElementById('uploadPathText').innerText = currentPath ? `📁 ${pathText}` : 'Ana Dizin';
+            document.getElementById('addModal').classList.add('active');
+            lucide.createIcons();
+        };
+        document.getElementById('openFolderModal').onclick = () => document.getElementById('folderModal').classList.add('active');
+
+        document.querySelectorAll('.close-modal').forEach(btn => {
+            btn.onclick = () => document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('active'));
+        });
+
+        document.getElementById('tabNote').onclick = () => {
+            document.getElementById('tabNote').className = "flex-1 flex items-center justify-center gap-2 p-5 rounded-2xl border-2 border-white bg-white/20 text-white font-black text-[10px] uppercase";
+            document.getElementById('tabFile').className = "flex-1 flex items-center justify-center gap-2 p-5 rounded-2xl border-2 border-transparent bg-white/10 text-white/40 font-black text-[10px] uppercase";
+            document.getElementById('fileZone').classList.add('hidden');
+            document.getElementById('itemContent').classList.remove('hidden');
+            document.getElementById('itemTitle').dataset.type = 'note';
+        };
+
+        document.getElementById('tabFile').onclick = () => {
+            document.getElementById('tabFile').className = "flex-1 flex items-center justify-center gap-2 p-5 rounded-2xl border-2 border-white bg-white/20 text-white font-black text-[10px] uppercase";
+            document.getElementById('tabNote').className = "flex-1 flex items-center justify-center gap-2 p-5 rounded-2xl border-2 border-transparent bg-white/10 text-white/40 font-black text-[10px] uppercase";
+            document.getElementById('fileZone').classList.remove('hidden');
+            document.getElementById('itemContent').classList.add('hidden');
+            document.getElementById('itemTitle').dataset.type = 'file';
+        };
+
+        document.getElementById('fileZone').onclick = () => document.getElementById('fileInput').click();
+        document.getElementById('fileInput').onchange = (e) => {
+            if (e.target.files[0]) {
+                document.getElementById('fileNameDisplay').innerText = e.target.files[0].name;
+                if (!document.getElementById('itemTitle').value) document.getElementById('itemTitle').value = e.target.files[0].name.split('.')[0];
+            }
+        };
+
+        document.getElementById('submitShare').onclick = async () => {
+            const title = document.getElementById('itemTitle').value;
+            const uploader = document.getElementById('itemUploader').value;
+            const type = document.getElementById('itemTitle').dataset.type || 'file';
+            const pass = document.getElementById('itemPassword').value;
+            const file = document.getElementById('fileInput').files[0];
+            const content = document.getElementById('itemContent').value;
+
+            if (!title) return alert("İsim girin!");
+            if (type === 'file' && !file) return alert("Dosya seçin!");
+
+            document.getElementById('uploadLoader').classList.remove('hidden');
+
+            try {
+                const itemData = {
+                    title: title,
+                    type: file ? (file.type.startsWith('image/') ? 'image' : 'file') : 'note',
+                    is_private: pass.length >= 3,
+                    password: pass,
+                    uploader: uploader,
+                    size: file ? file.size : new Blob([content]).size,
+                    content: content
+                };
+
+                await uploadToHybrid(itemData, file);
+                await fetchAndSyncItems();
+                document.getElementById('addModal').classList.remove('active');
+                // Reset form
+                document.getElementById('itemTitle').value = '';
+                document.getElementById('itemUploader').value = '';
+                document.getElementById('itemContent').value = '';
+                document.getElementById('itemPassword').value = '';
+                document.getElementById('fileInput').value = '';
+                document.getElementById('fileNameDisplay').innerText = 'Dosya Seçiniz';
+
+            } catch (err) {
+                alert("Hata: " + err.message);
+            } finally {
+                document.getElementById('uploadLoader').classList.add('hidden');
+            }
+        };
+
+        document.getElementById('searchInput').oninput = (e) => {
+            const val = e.target.value.toLowerCase().trim();
+            if (val === 'yönetici' || val === 'yönetiici') {
+                const pass = prompt("Yönetici Şifresi:");
+                if (pass === "829615") {
+                    isHubAdminMode = true;
+                    e.target.value = '';
+                    alert("Yönetici Modu Aktif! Artık dosyaları silebilirsiniz.");
+                    renderItems();
+                } else {
+                    if (pass !== null) alert("Hatalı Şifre!");
+                    e.target.value = '';
+                }
+                return;
+            }
+            renderItems();
+        };
+
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.onclick = () => {
+                document.querySelectorAll('.filter-btn').forEach(b => {
+                    b.className = "filter-btn flex items-center gap-2 px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-wider text-white/40 hover:text-white";
+                });
+                btn.className = "filter-btn active flex items-center gap-2 px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-wider bg-white text-[#0B0F1A]";
+                activeFilter = btn.dataset.filter;
+                renderItems();
+            };
+        });
+        // --- DRAG AND DROP HANDLERS ---
+        let draggedItemId = null;
+
+        document.addEventListener('dragstart', (e) => {
+            const card = e.target.closest('.file-card');
+            if (card && card.draggable) {
+                draggedItemId = card.dataset.itemId;
+                itemToMove = items.find(i => i.id == draggedItemId);
+                card.classList.add('dragging');
+                e.dataTransfer.setData('text/plain', draggedItemId);
+                e.dataTransfer.effectAllowed = 'move';
+            }
+        });
+
+        document.addEventListener('dragend', (e) => {
+            const card = e.target.closest('.file-card');
+            if (card) card.classList.remove('dragging');
+            // Tüm drop zone temizliği
+            document.querySelectorAll('.drop-zone-active').forEach(el => el.classList.remove('drop-zone-active'));
+        });
+
+        document.addEventListener('dragover', (e) => {
+            const dropZone = e.target.closest('[data-drop-zone="true"]');
+            if (dropZone && draggedItemId) {
+                e.preventDefault(); // Drop'a izin ver
+                dropZone.classList.add('drop-zone-active');
+            }
+        });
+
+        document.addEventListener('dragleave', (e) => {
+            const dropZone = e.target.closest('[data-drop-zone="true"]');
+            if (dropZone) {
+                dropZone.classList.remove('drop-zone-active');
+            }
+        });
+
+        document.addEventListener('drop', async (e) => {
+            const dropZone = e.target.closest('[data-drop-zone="true"]');
+            if (dropZone && draggedItemId && itemToMove) {
+                e.preventDefault();
+                dropZone.classList.remove('drop-zone-active');
+
+                const targetPath = dropZone.dataset.folderPath;
+                const folderTitle = dropZone.dataset.folderTitle;
+
+                if (confirm(`"${itemToMove.title}" dosyasını "${folderTitle}" klasörüne taşımak istiyor musunuz?`)) {
+                    try {
+                        await moveItemToFolder(targetPath);
+                    } catch (err) {
+                        alert("Taşıma hatası: " + err.message);
+                    }
+                }
+            }
+            draggedItemId = null;
+        });
+
+        document.addEventListener('click', async (e) => {
+            const delBtn = e.target.closest('.delete-item');
+            if (delBtn) {
+                const id = delBtn.dataset.id;
+                // Use double equals to match if ID is string/number
+                const item = items.find(i => i.id == id);
+                console.log("Attempting to delete item:", item);
+                if (!item) {
+                    console.error("Item not found for ID:", id);
+                    return;
+                }
+                if (!confirm(`"${item.title}" silinsin mi?`)) return;
+                try {
+                    await deleteFromHub(item);
+                    // Small delay to ensure Supabase state propagated
+                    await new Promise(r => setTimeout(r, 500));
+                    await fetchAndSyncItems();
+                    alert(`"${item.title}" başarıyla silindi!`);
+                } catch (err) {
+                    console.error("Silme hatası:", err);
+                    alert("SORUN OLUŞTU: " + err.message);
+                }
+            }
+        });
+
+        // Move button click handler
+        document.addEventListener('click', async (e) => {
+            const moveBtn = e.target.closest('.move-item');
+            if (moveBtn) {
+                e.stopPropagation();
+                const id = moveBtn.dataset.id;
+                const item = items.find(i => i.id == id);
+                if (item) {
+                    openMoveModal(item);
+                }
+            }
+
+            // Folder selection in move modal
+            const folderBtn = e.target.closest('.folder-select-btn');
+            if (folderBtn) {
+                const targetPath = folderBtn.dataset.path;
+                try {
+                    await moveItemToFolder(targetPath);
+                } catch (err) {
+                    alert("Hata: " + err.message);
+                }
+            }
+        });
+
+        // Move to root button
+        document.getElementById('moveToRoot').onclick = async () => {
+            try {
+                await moveItemToFolder('');
+            } catch (err) {
+                alert("Hata: " + err.message);
+            }
+        };
+
+        document.getElementById('saveSettings').onclick = () => {
+            // Settings are now hardcoded or managed differently, this button is deprecated.
+            alert("Ayarlar kaydedildi! (Bu bölüm artık kullanılmıyor)");
+            document.getElementById('settingsModal').classList.remove('active');
+        };
+
+        document.getElementById('createFolderSubmit').onclick = async () => {
+            const name = document.getElementById('folderNameInput').value;
+            const pass = document.getElementById('folderPasswordInput').value;
+            if (!name) return alert("Klasör adı girin!");
+
+            document.getElementById('statusAlert').classList.remove('hidden');
+            document.getElementById('statusText').innerText = "KLASÖR OLUŞTURULUYOR...";
+
+            try {
+                await createHybridFolder(name, pass);
+                document.getElementById('folderModal').classList.remove('active');
+                document.getElementById('folderNameInput').value = '';
+                document.getElementById('folderPasswordInput').value = '';
+            } catch (err) {
+                alert(err.message);
+            } finally {
+                document.getElementById('statusAlert').classList.add('hidden');
+            }
+        };
+
+        // --- SYNC WITH SUPABASE ---
+        async function fetchAndSyncItems() {
+            try {
+                // Removed invalid cb parameter which breaks PostgREST (Supabase)
+                const res = await fetch(`${SUPABASE_CONFIG.baseUrl}?select=*&order=created_at.desc`, {
+                    headers: {
+                        'apikey': SUPABASE_CONFIG.apiKey,
+                        'Authorization': `Bearer ${SUPABASE_CONFIG.apiKey}`,
+                        'Cache-Control': 'no-cache'
+                    }
+                });
+
+                if (res.ok) {
+                    const data = await res.json();
+                    items = data;
+                    localStorage.setItem('class_cloud_data', JSON.stringify(items));
+                    renderItems();
+                    console.log("Hub List Updated from Supabase");
+                } else {
+                    const err = await res.text();
+                    console.error("Fetch failed:", res.status, err);
+                }
+            } catch (err) {
+                console.error("Senkronizasyon hatası:", err);
+                // Optionally show a non-intrusive notification
+            }
+        }
+
+        // ANLIK SENKRONİZASYON MOTORU
+        function initHubPolling() {
+            setInterval(fetchAndSyncItems, 10000);
+            setInterval(checkAndArchiveOldFiles, 3600000); // Check for archiving every hour
+            console.log("Hub Real-time Sync Started (10s)");
+        }
+
+        // --- INIT ---
+        window.onload = () => {
+            lucide.createIcons();
+            renderBreadcrumbs();
+            fetchAndSyncItems();
+            // User requested to remove continuous sync
+            // initHubPolling(); 
+            // Keep archiving check (once per hour) but independent of polling if needed
+            setInterval(checkAndArchiveOldFiles, 3600000);
+        };
+    </script>
+</body>
+
+</html>

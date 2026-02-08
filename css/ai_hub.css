@@ -1,0 +1,710 @@
+/* --- AI Hub Styles (Refined) --- */
+
+.ai-hub-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px 40px;
+    height: calc(100vh - 100px);
+    overflow-y: auto;
+    position: relative;
+}
+
+/* Header Styling */
+.ai-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.ai-header h1 {
+    font-size: 32px;
+    font-weight: 300;
+    margin-bottom: 30px;
+    letter-spacing: 2px;
+    color: #fff;
+    opacity: 0.9;
+}
+
+/* Futuristic Search Bar V2 */
+.ai-search-container-v2 {
+    position: relative;
+    max-width: 720px;
+    margin: 40px auto;
+    padding: 2px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.02));
+    border-radius: 24px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.ai-search-container-v2:hover {
+    transform: scale(1.01) translateY(-2px);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+}
+
+.search-input-wrapper {
+    position: relative;
+    background: #0a0a0a;
+    border-radius: 22px;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.search-ai-icon {
+    margin-left: 15px;
+    color: #4caf50;
+    width: 20px;
+    height: 20px;
+    filter: drop-shadow(0 0 5px rgba(76, 175, 80, 0.4));
+}
+
+.ai-search-container-v2 input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 16px;
+    padding: 15px;
+    outline: none;
+    font-weight: 500;
+}
+
+.ai-search-container-v2 input::placeholder {
+    color: rgba(255, 255, 255, 0.3);
+}
+
+.ai-search-container-v2:focus-within {
+    background: linear-gradient(135deg, #4caf50, #2e7d32);
+    box-shadow: 0 0 30px rgba(76, 175, 80, 0.3);
+}
+
+/* Inline Admin Auth V2 */
+.admin-auth-inline {
+    margin: -20px auto 30px;
+    max-width: 600px;
+    animation: slideDown 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    /* Ensure z-index works */
+    z-index: 100;
+    /* Sit above search bar */
+}
+
+.auth-box {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    padding: 10px 15px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    backdrop-filter: blur(10px);
+}
+
+/* ROBUST FIXED MODAL (Pop-up) */
+.robust-fixed-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 99999 !important;
+    /* Always on top */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.robust-modal-backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(10px);
+    z-index: 1;
+}
+
+.robust-modal-content {
+    position: relative;
+    z-index: 2;
+    background: rgba(20, 20, 20, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+    width: 90%;
+    max-width: 500px;
+    padding: 30px;
+    border-radius: 24px;
+    animation: modalPop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes modalPop {
+    from {
+        opacity: 0;
+        transform: scale(0.9) translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+/* Premium Input Inline */
+.premium-input-inline {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #fff;
+    padding: 14px;
+    border-radius: 12px;
+    font-size: 14px;
+    outline: none;
+    transition: all 0.3s;
+}
+
+.premium-input-inline:focus {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: #4caf50;
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+}
+
+.auth-lock-icon {
+    color: #ffd700;
+    width: 18px;
+    height: 18px;
+    margin-left: 5px;
+}
+
+#adminPasswordInputInline {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #fff;
+    font-size: 14px;
+    padding: 10px;
+}
+
+.auth-submit-btn {
+    background: #fff;
+    color: #000;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 12px;
+    font-weight: 800;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.auth-submit-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 5px 15px rgba(255, 255, 255, 0.2);
+}
+
+.auth-close-btn {
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.3);
+    cursor: pointer;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    transition: color 0.3s;
+}
+
+.auth-close-btn:hover {
+    color: #ef4444;
+}
+
+/* Simplified Admin Controls V2 */
+.admin-controls-v2 {
+    margin: 20px auto;
+    max-width: 720px;
+    display: flex;
+    justify-content: center;
+}
+
+.add-notebook-btn {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: #fff;
+    border: none;
+    padding: 14px 30px;
+    border-radius: 16px;
+    font-weight: 900;
+    font-size: 13px;
+    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    transition: all 0.4s;
+    box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
+}
+
+.add-notebook-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 35px rgba(16, 185, 129, 0.4);
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Admin Controls (Hidden by default) */
+.admin-controls {
+    display: none;
+    /* Toggled by JS */
+    justify-content: center;
+    margin-bottom: 30px;
+    animation: fadeIn 0.5s ease;
+}
+
+.admin-add-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #fff;
+    color: #000;
+    padding: 12px 25px;
+    border-radius: 50px;
+    font-weight: 800;
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+    transition: transform 0.2s;
+}
+
+.admin-add-btn:hover {
+    transform: scale(1.05);
+    background: #f0f0f0;
+}
+
+/* Notebook Grid */
+.notebook-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 25px;
+    padding-bottom: 50px;
+}
+
+/* Minimalist Glass Card */
+.notebook-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 24px;
+    padding: 30px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    height: 240px;
+}
+
+.notebook-card:hover {
+    background: rgba(255, 255, 255, 0.08);
+    /* Slightly lighter on hover */
+    border-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+}
+
+.notebook-card.no-hover {
+    transform: none !important;
+    background: rgba(255, 255, 255, 0.03) !important;
+    box-shadow: none !important;
+    transition: none !important;
+}
+
+.notebook-icon {
+    width: 50px;
+    height: 50px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    /* Squircle */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 25px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.notebook-icon i {
+    color: #fff;
+    width: 24px;
+    height: 24px;
+}
+
+.notebook-info h3 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 12px;
+}
+
+.notebook-info p {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.5);
+    line-height: 1.6;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.notebook-arrow {
+    position: absolute;
+    bottom: 30px;
+    right: 30px;
+    opacity: 0.3;
+    transition: all 0.3s;
+}
+
+.notebook-card:hover .notebook-arrow {
+    opacity: 1;
+    transform: translateX(5px);
+}
+
+/* Premium Modal Styling (Matches Hub/Homework) */
+.premium-modal-overlay {
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(15px);
+}
+
+.premium-modal-content {
+    background: #111;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 40px 80px rgba(0, 0, 0, 0.6);
+    border-radius: 35px;
+    padding: 45px;
+}
+
+.premium-input {
+    width: 100%;
+    padding: 16px;
+    background: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 14px;
+    color: #fff;
+    font-size: 15px;
+    transition: all 0.3s;
+}
+
+.premium-input:focus {
+    border-color: #555;
+    background: #222;
+    outline: none;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    .ai-hub-container {
+        padding: 15px;
+    }
+
+    .ai-search-wrapper input {
+        font-size: 15px;
+        padding: 15px 15px 15px 45px;
+    }
+
+    .ai-search-wrapper i {
+        left: 15px;
+    }
+
+    .notebook-grid {
+        gap: 15px;
+    }
+
+    .notebook-card {
+        height: auto;
+        min-height: 120px;
+        padding: 20px;
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .notebook-icon {
+        margin-bottom: 0;
+        margin-right: 20px;
+    }
+
+    .notebook-arrow {
+        position: static;
+        opacity: 0.5;
+        margin-left: auto;
+    }
+}
+
+/* --- Gemini Chat Widget --- */
+.gemini-chat-widget {
+    position: fixed;
+    bottom: 100px;
+    right: 40px;
+    width: 380px;
+    height: 500px;
+    background: #0f0f0f;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 24px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+    display: flex;
+    flex-direction: column;
+    z-index: 900;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(20px) scale(0.95);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+}
+
+.gemini-chat-widget.active {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0) scale(1);
+}
+
+.chat-header {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 15px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.chat-header i {
+    color: #4caf50;
+    width: 18px;
+    height: 18px;
+}
+
+.chat-header span {
+    font-weight: 700;
+    color: #fff;
+    font-size: 14px;
+}
+
+.close-chat {
+    background: transparent;
+    border: none;
+    color: #888;
+    cursor: pointer;
+    padding: 5px;
+}
+
+.close-chat:hover {
+    color: #fff;
+}
+
+.chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* Custom Scrollbar for Chat */
+.chat-messages::-webkit-scrollbar {
+    width: 6px;
+}
+
+.chat-messages::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+}
+
+.message {
+    max-width: 85%;
+    padding: 12px 16px;
+    border-radius: 18px;
+    font-size: 14px;
+    line-height: 1.5;
+    word-wrap: break-word;
+    animation: slideIn 0.3s ease;
+}
+
+.message.user {
+    align-self: flex-end;
+    background: #4caf50;
+    color: #000;
+    font-weight: 500;
+    border-bottom-right-radius: 4px;
+}
+
+.message.system {
+    align-self: flex-start;
+    background: rgba(255, 255, 255, 0.08);
+    color: #ddd;
+    border-bottom-left-radius: 4px;
+}
+
+.chat-input-area {
+    padding: 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.02);
+    display: flex;
+    gap: 10px;
+    align-items: flex-end;
+}
+
+.chat-input-area textarea {
+    flex: 1;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 10px 14px;
+    color: #fff;
+    font-size: 14px;
+    resize: none;
+    outline: none;
+    transition: all 0.2s;
+    font-family: inherit;
+    max-height: 80px;
+}
+
+.chat-input-area textarea:focus {
+    border-color: #4caf50;
+    background: #000;
+}
+
+.chat-input-area button {
+    background: #4caf50;
+    color: #000;
+    border: none;
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.chat-input-area button:hover {
+    transform: scale(1.05);
+}
+
+.gemini-toggle-btn {
+    position: fixed;
+    bottom: 30px;
+    right: 40px;
+    background: linear-gradient(135deg, #4caf50, #2e7d32);
+    color: white;
+    padding: 12px 24px;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+    box-shadow: 0 10px 30px rgba(76, 175, 80, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    cursor: pointer;
+    transition: all 0.3s;
+    z-index: 899;
+}
+
+.gemini-toggle-btn:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(76, 175, 80, 0.5);
+}
+
+.typing-indicator span {
+    display: inline-block;
+    animation: bounce 1s infinite;
+    font-size: 24px;
+    line-height: 10px;
+    margin: 0 1px;
+}
+
+.typing-indicator span:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.typing-indicator span:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes bounce {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 768px) {
+    .gemini-chat-widget {
+        width: 100%;
+        height: 100%;
+        bottom: 0;
+        right: 0;
+        border-radius: 0;
+        transform: translateY(100%);
+        z-index: 2000;
+    }
+
+    .gemini-chat-widget.active {
+        transform: translateY(0);
+    }
+
+    .gemini-toggle-btn {
+        bottom: 80px;
+        /* Above nav bar */
+        right: 20px;
+    }
+}

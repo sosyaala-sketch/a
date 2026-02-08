@@ -1,0 +1,1946 @@
+/* --- Exams Page - Absolute Hub Replication (Clean) --- */
+
+#examsPage {
+    background-color: #050505 !important;
+    font-family: 'Inter', sans-serif !important;
+    color: #FFFFFF !important;
+    position: relative;
+    overflow-x: hidden;
+    min-height: 100vh;
+}
+
+#examsPage::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1.2px, transparent 1.2px);
+    background-size: 32px 32px;
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* Desktop Aurora Glow (Hub Style) */
+#examsPage::after {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background:
+        radial-gradient(circle at 0% 0%, rgba(0, 102, 255, 0.15) 0%, transparent 45%),
+        radial-gradient(circle at 100% 100%, rgba(255, 68, 0, 0.1) 0%, transparent 45%),
+        radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 1) 0%, transparent 100%);
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* Exams Header */
+.exams-header {
+    background: transparent;
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    padding: 1.5rem 0 0.75rem 0;
+    /* Hub standardı */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.exams-header-container {
+    width: 100%;
+    margin: 0;
+    padding: 0 2rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.exams-header-top {
+    margin-bottom: 1.5rem;
+    display: flex;
+    justify-content: flex-start;
+    text-align: left;
+    width: 100%;
+}
+
+.exams-header-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    width: 100%;
+}
+
+.exams-search-area {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 1rem;
+    padding: 0 1.5rem;
+    flex: 1;
+    width: auto;
+    height: 44px;
+    transition: all 0.3s;
+}
+
+.exams-search-area i {
+    color: rgba(255, 255, 255, 0.1);
+    width: 18px;
+    height: 18px;
+}
+
+.exams-search-input {
+    background: transparent !important;
+    border: none !important;
+    outline: none !important;
+    width: 100%;
+    color: #FFFFFF;
+    font-size: 11px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+}
+
+/* Fix for white box while typing/autofill */
+.exams-search-input:-webkit-autofill,
+.exams-search-input:-webkit-autofill:hover,
+.exams-search-input:-webkit-autofill:focus,
+.exams-search-input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px #0B0F1A inset !important;
+    -webkit-text-fill-color: white !important;
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+.exams-search-input:focus {
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+.exams-search-input::placeholder {
+    color: rgba(255, 255, 255, 0.15);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+}
+
+/* Status Row */
+.exams-status-row {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.status-left {
+    font-size: 10px;
+    font-weight: 900;
+    color: rgba(255, 255, 255, 0.2);
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    white-space: nowrap;
+}
+
+.status-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.05) 0%, transparent 100%);
+}
+
+.status-right {
+    font-size: 10px;
+    font-weight: 900;
+    color: #2563eb;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    white-space: nowrap;
+}
+
+
+/* Content Container & Grid */
+.exams-container {
+    padding: 0 2rem;
+    width: 100%;
+    margin: 0;
+    position: relative;
+    z-index: 5;
+}
+
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1rem;
+}
+
+.col-span-full {
+    grid-column: 1 / -1;
+}
+
+@media (max-width: 768px) {
+    .card-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .exams-header-container {
+        padding: 0 1.5rem;
+    }
+
+    .exams-header-bottom {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .exams-filter-container {
+        width: 100%;
+    }
+
+    .exams-search-area {
+        width: 100%;
+        min-width: unset;
+    }
+
+    .exams-container {
+        padding: 1.5rem;
+    }
+}
+
+/* Exam Card */
+.exam-card {
+    background: #0B0F1A;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 40px;
+    padding: 2.5rem;
+    min-height: 240px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.exam-card:hover {
+    transform: translateY(-8px);
+    border-color: rgba(255, 255, 255, 0.1);
+    background: #111726;
+    box-shadow: 0 40px 80px rgba(0, 0, 0, 0.5);
+}
+
+.exam-card-badge {
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+    background: #FFFFFF;
+    color: #000000;
+    font-size: 10px;
+    font-weight: 900;
+    padding: 0.65rem 1.15rem;
+    border-radius: 0.85rem;
+    text-transform: uppercase;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.exam-card-subject {
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: #FFFFFF;
+    margin: 0 0 0.5rem 0;
+    text-transform: uppercase;
+}
+
+.exam-card-category {
+    font-size: 10px;
+    font-weight: 900;
+    color: rgba(255, 255, 255, 0.2);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 2rem;
+}
+
+.hub-btn-preview {
+    font-size: 11px;
+    font-weight: 900;
+    color: #3b82f6;
+    background: transparent;
+    border: none;
+    text-transform: uppercase;
+    cursor: pointer;
+    padding: 0;
+}
+
+.exam-uploader-avatar {
+    position: absolute;
+    bottom: 2rem;
+    right: 2rem;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.05);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 900;
+    color: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.02);
+}
+
+/* Date Headers */
+.hub-section-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 4rem 0 2rem 0;
+}
+
+.hub-section-title {
+    font-size: 1rem;
+    font-weight: 900;
+    color: #ff6b2b;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    font-style: italic;
+    text-shadow: 0 0 12px rgba(255, 107, 43, 0.4);
+}
+
+/* Modals */
+/* modal-overlay cleaned up */
+
+
+.modal-overlay.active {
+    display: flex;
+}
+
+.exams-filter-container {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 0.75rem;
+    padding: 4px;
+    display: flex;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+}
+
+.hub-filter-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 10px 16px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: none;
+    letter-spacing: normal;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: rgba(255, 255, 255, 0.02);
+    color: rgba(255, 255, 255, 0.5);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.hub-filter-btn:hover {
+    color: rgba(255, 255, 255, 0.7);
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.hub-filter-btn i {
+    width: 14px;
+    height: 14px;
+    opacity: 0.6;
+}
+
+.hub-filter-btn.active {
+    background: #fff;
+    color: #000;
+    border-color: #fff;
+}
+
+.hub-filter-btn.active i {
+    opacity: 1;
+}
+
+
+/* hub-modal cleaned up */
+
+
+/* Admin Tabs */
+.admin-tab {
+    flex: 1;
+    padding: 1rem;
+    border-radius: 1rem;
+    font-size: 10px;
+    font-weight: 900;
+    color: rgba(255, 255, 255, 0.3);
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    text-transform: uppercase;
+}
+
+.admin-tab.active {
+    background: #FFFFFF;
+    color: #000000;
+}
+
+.admin-input,
+.admin-textarea {
+    background: #000;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 1rem;
+    padding: 1.25rem;
+    color: #fff;
+    width: 100%;
+    font-size: 14px;
+    outline: none;
+}
+
+.admin-submit-btn {
+    width: 100%;
+    background: #2563eb;
+    color: #fff;
+    font-weight: 900;
+    padding: 1.25rem;
+    border-radius: 1.25rem;
+    border: none;
+    text-transform: uppercase;
+    cursor: pointer;
+    box-shadow: 0 10px 20px rgba(37, 99, 235, 0.2);
+}
+
+/* Utils */
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.animate-fade {
+    animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Day Grouping Layout */
+.exam-day-group {
+    grid-column: 1 / -1;
+    width: 100%;
+    margin-bottom: 0.5rem;
+    animation: fadeScale 0.5s ease backwards;
+}
+
+.exam-day-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: flex-start;
+    width: 100%;
+    margin-top: 0.5rem;
+}
+
+.exam-day-row .exam-card-new {
+    flex: 0 0 260px;
+    width: 260px;
+    min-width: 240px;
+}
+
+@media (max-width: 768px) {
+    .exam-day-row .exam-card-new {
+        flex: 1 1 100%;
+        width: 100%;
+        min-width: unset;
+    }
+
+    .exam-day-group {
+        margin-bottom: 2rem;
+    }
+}
+
+/* New Premium Exam Card Design */
+.exam-card-new {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
+    backdrop-filter: blur(25px) saturate(180%);
+    -webkit-backdrop-filter: blur(25px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 28px;
+    padding: 1.75rem;
+    display: flex;
+    flex-direction: column;
+    min-height: 200px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow:
+        0 15px 35px -10px rgba(0, 0, 0, 0.3),
+        inset 0 0 20px rgba(255, 255, 255, 0.02);
+}
+
+.exam-card-new:hover {
+    transform: translateY(-8px) scale(1.02);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.04));
+    border-color: rgba(255, 255, 255, 0.25);
+    box-shadow:
+        0 30px 60px -12px rgba(0, 0, 0, 0.6),
+        inset 0 0 30px rgba(255, 255, 255, 0.05);
+}
+
+/* Card Rim/Reflection Effect */
+.exam-card-new::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg,
+            transparent,
+            rgba(255, 255, 255, 0.05),
+            transparent);
+    transition: 0.6s;
+}
+
+.exam-card-new:hover::after {
+    left: 100%;
+}
+
+.exam-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+/* Category removed as per request */
+
+
+.exam-lesson-badge {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 0.5rem 1rem;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 800;
+    color: rgba(255, 255, 255, 0.6);
+    text-transform: uppercase;
+}
+
+.exam-subject-title {
+    font-size: 19px;
+    font-weight: 900;
+    color: #FFFFFF;
+    margin: 0 0 1rem 0;
+    font-style: italic;
+    line-height: 1.1;
+    text-transform: uppercase;
+}
+
+.exam-details-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.detail-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.detail-label {
+    font-size: 10px;
+    font-weight: 900;
+    color: rgba(255, 255, 255, 0.2);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.detail-value {
+    font-size: 14px;
+    font-weight: 800;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.separator-line {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.05);
+    width: 100%;
+    margin-bottom: 1.5rem;
+}
+
+.exam-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+}
+
+.btn-detail-view {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    height: 40px;
+    padding: 0 16px;
+    border-radius: 12px;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 11px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.btn-detail-view:hover {
+    background: #fff;
+    color: #000;
+}
+
+.btn-admin-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-admin-icon.edit {
+    color: #eab308;
+    background: rgba(234, 179, 8, 0.08);
+    border: 1px solid rgba(234, 179, 8, 0.1);
+}
+
+.btn-admin-icon.delete {
+    color: #ef4444;
+    background: rgba(239, 68, 68, 0.08);
+    border: 1px solid rgba(239, 68, 68, 0.1);
+}
+
+.footer-admin-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.note-badge {
+    padding: 3px 6px;
+    border-radius: 5px;
+    font-size: 8px;
+    font-weight: 700;
+    background: rgba(234, 179, 8, 0.15);
+    color: #eab308;
+}
+
+/* Note Stats & UI */
+.exam-note-stats {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 9px;
+    font-weight: 800;
+    color: #3b82f6;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    background: rgba(59, 130, 246, 0.1);
+    padding: 4px 8px;
+    border-radius: 6px;
+    border: 1px solid rgba(59, 130, 246, 0.1);
+}
+
+.exam-note-stats.empty {
+    color: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.03);
+    border-color: rgba(255, 255, 255, 0.02);
+}
+
+.exam-note-stats i {
+    width: 12px;
+    height: 12px;
+}
+
+.btn-add-note {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: rgba(34, 197, 94, 0.1);
+    border: 1px solid rgba(34, 197, 94, 0.2);
+    color: #4ade80;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-add-note:hover {
+    background: rgba(34, 197, 94, 0.2);
+    border-color: rgba(34, 197, 94, 0.4);
+    transform: scale(1.1);
+}
+
+.btn-detail-view {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 8px 14px;
+    border-radius: 10px;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 10px;
+    font-weight: 800;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transition: all 0.2s ease;
+}
+
+.btn-detail-view:hover {
+    background: #fff;
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow:
+        0 15px 35px -10px rgba(0, 0, 0, 0.3),
+        inset 0 0 20px rgba(255, 255, 255, 0.02);
+}
+
+.exam-card-new:hover {
+    transform: translateY(-8px) scale(1.02);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.04));
+    border-color: rgba(255, 255, 255, 0.25);
+    box-shadow:
+        0 30px 60px -12px rgba(0, 0, 0, 0.6),
+        inset 0 0 30px rgba(255, 255, 255, 0.05);
+}
+
+/* Card Rim/Reflection Effect */
+.exam-card-new::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg,
+            transparent,
+            rgba(255, 255, 255, 0.05),
+            transparent);
+    transition: 0.6s;
+}
+
+.exam-card-new:hover::after {
+    left: 100%;
+}
+
+.exam-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+/* Category removed as per request */
+
+
+.exam-lesson-badge {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 0.5rem 1rem;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 800;
+    color: rgba(255, 255, 255, 0.6);
+    text-transform: uppercase;
+}
+
+.exam-subject-title {
+    font-size: 19px;
+    font-weight: 900;
+    color: #FFFFFF;
+    margin: 0 0 1rem 0;
+    font-style: italic;
+    line-height: 1.1;
+    text-transform: uppercase;
+}
+
+.exam-details-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.detail-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.detail-label {
+    font-size: 10px;
+    font-weight: 900;
+    color: rgba(255, 255, 255, 0.2);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.detail-value {
+    font-size: 14px;
+    font-weight: 800;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.separator-line {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.05);
+    width: 100%;
+    margin-bottom: 1.5rem;
+}
+
+.exam-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+}
+
+.btn-detail-view {
+    background: rgba(255, 255, 255, 0.08);
+    border: none;
+    padding: 6px 12px;
+    border-radius: 8px;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-detail-view:hover {
+    background: #fff;
+    color: #000;
+}
+
+.note-badge {
+    padding: 3px 6px;
+    border-radius: 5px;
+    font-size: 8px;
+    font-weight: 700;
+    background: rgba(234, 179, 8, 0.15);
+    color: #eab308;
+}
+
+/* Note Stats & UI */
+.exam-note-stats {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 9px;
+    font-weight: 800;
+    color: #3b82f6;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    background: rgba(59, 130, 246, 0.1);
+    padding: 4px 8px;
+    border-radius: 6px;
+    border: 1px solid rgba(59, 130, 246, 0.1);
+}
+
+.exam-note-stats.empty {
+    color: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.03);
+    border-color: rgba(255, 255, 255, 0.02);
+}
+
+.exam-note-stats i {
+    width: 12px;
+    height: 12px;
+}
+
+
+.btn-add-note {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background: rgba(34, 197, 94, 0.08);
+    border: 1px solid rgba(34, 197, 94, 0.1);
+    color: #4ade80;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-add-note:hover {
+    background: rgba(34, 197, 94, 0.15);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(34, 197, 94, 0.2);
+}
+
+.btn-detail-view:hover {
+    background: #fff;
+    color: #000;
+    border-color: #fff;
+}
+
+
+/* Modal Overlay - Deep Dark Backdrop Refinement */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    /* Darker for better focus */
+    backdrop-filter: blur(25px) saturate(180%) contrast(90%);
+    -webkit-backdrop-filter: blur(25px) saturate(180%) contrast(90%);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+}
+
+/* Hub Style Modal - Liquid Glass Refinement */
+.hub-modal {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.03));
+    backdrop-filter: blur(50px) saturate(220%) contrast(100%);
+    -webkit-backdrop-filter: blur(50px) saturate(220%) contrast(100%);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 40px;
+    width: 100%;
+    max-width: 650px;
+    max-height: 90vh;
+    overflow: hidden;
+    position: relative;
+    box-shadow:
+        0 50px 100px -20px rgba(0, 0, 0, 0.8),
+        0 0 0 1px rgba(255, 255, 255, 0.08),
+        inset 0 0 60px rgba(255, 255, 255, 0.03);
+    display: flex;
+    flex-direction: column;
+}
+
+/* Premium Rim Highlight for Modal */
+.hub-modal::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 40px;
+    padding: 1px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), transparent 40%, rgba(255, 255, 255, 0.1));
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+}
+
+/* Glossy Reflection Layer */
+.hub-modal::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.05) 0%, transparent 40%);
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Dual Pane Layout Support */
+.hub-modal-dual {
+    display: flex;
+    flex-direction: row;
+    height: auto;
+    min-height: 400px;
+}
+
+.hub-sidebar {
+    width: 300px;
+    background: rgba(0, 0, 0, 0.35);
+    padding: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(15px);
+    position: relative;
+    z-index: 2;
+}
+
+.hub-main-content {
+    flex: 1;
+    padding: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    background: transparent;
+    position: relative;
+    z-index: 2;
+}
+
+@media (max-width: 768px) {
+    .hub-modal-dual {
+        flex-direction: column;
+    }
+
+    .hub-sidebar {
+        display: none;
+    }
+}
+
+.hub-text-emerald {
+    color: #10b981;
+}
+
+.font-black {
+    font-weight: 900;
+}
+
+.uppercase {
+    text-transform: uppercase;
+}
+
+.italic {
+    font-style: italic;
+}
+
+.tracking-widest {
+    letter-spacing: 0.1em;
+}
+
+.animate-fade {
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modal-main-content {
+    padding: 3.5rem;
+    flex: 1;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Close Button - Integrated Top Right */
+.modal-close-btn {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    color: rgba(255, 255, 255, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 10;
+}
+
+.modal-close-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    transform: rotate(90deg);
+}
+
+.modal-info-box {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    padding: 1.5rem;
+    border-radius: 24px;
+    transition: border-color 0.3s ease;
+}
+
+.modal-info-box:hover {
+    border-color: rgba(255, 255, 255, 0.08);
+}
+
+.modal-label {
+    display: block;
+    font-size: 10px;
+    font-weight: 900;
+    color: rgba(255, 255, 255, 0.45);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin-bottom: 0.75rem;
+}
+
+.modal-value {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: -0.01em;
+}
+
+.modal-subject-title {
+    font-size: 2.25rem;
+    font-weight: 950;
+    color: #fff;
+    font-style: italic;
+    line-height: 1.1;
+    margin-bottom: 2rem;
+    text-transform: uppercase;
+}
+
+/* --- Frosted Glass Buttons --- */
+.modal-link-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 1.25rem;
+    border-radius: 24px;
+    font-size: 11px;
+    font-weight: 950;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    backdrop-filter: blur(25px) saturate(200%);
+    -webkit-backdrop-filter: blur(25px) saturate(200%);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Frosted Green - MEB */
+.modal-link-btn.frosted-green {
+    background: rgba(34, 197, 94, 0.1);
+    border: 1px solid rgba(34, 197, 94, 0.3);
+    color: #4ade80;
+}
+
+.modal-link-btn.frosted-green:hover {
+    background: rgba(34, 197, 94, 0.2);
+    border-color: rgba(34, 197, 94, 0.5);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(34, 197, 94, 0.1);
+}
+
+/* Frosted Orange - Scenario */
+.modal-link-btn.frosted-orange {
+    background: rgba(249, 115, 22, 0.1);
+    border: 1px solid rgba(249, 115, 22, 0.3);
+    color: #fb923c;
+}
+
+.modal-link-btn.frosted-orange:hover {
+    background: rgba(249, 115, 22, 0.2);
+    border-color: rgba(249, 115, 22, 0.5);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(249, 115, 22, 0.1);
+}
+
+.modal-link-btn i {
+    width: 20px;
+    height: 20px;
+}
+
+/* Hub Scoped Header & Sidebar Adjustments */
+.hub-header {
+    padding: 1.5rem 2.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    width: 100%;
+}
+
+.hub-header-left {
+    display: flex;
+    flex-direction: column;
+}
+
+.hub-header-right {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+/* Premium Search Box in Modal */
+.hub-modal-search-box {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 14px;
+    padding: 0 1rem;
+    height: 40px;
+    width: 200px;
+    transition: all 0.3s ease;
+}
+
+.hub-modal-search-box:focus-within {
+    width: 250px;
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
+}
+
+.hub-modal-search-box i {
+    width: 14px;
+    height: 14px;
+    color: rgba(255, 255, 255, 0.2);
+}
+
+.hub-modal-search-input {
+    background: transparent;
+    border: none;
+    outline: none;
+    width: 100%;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding-left: 0.75rem;
+}
+
+/* Sidebar Refinements */
+.hub-logo-container {
+    margin-bottom: 3rem;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.hub-logo-glow {
+    box-shadow:
+        0 0 20px rgba(255, 255, 255, 0.4),
+        inset 0 0 10px rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.hub-sidebar-info {
+    margin-top: 2rem;
+}
+
+.hub-info-pill {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 1.25rem;
+    border-radius: 20px;
+    backdrop-filter: blur(5px);
+}
+
+/* Primary Button in Hub */
+.hub-btn-primary {
+    background: #fff;
+    color: #000;
+    padding: 0 1.25rem;
+    height: 40px;
+    border-radius: 12px;
+    font-size: 10px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    border: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hub-btn-primary:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 20px rgba(255, 255, 255, 0.1);
+}
+
+.hub-btn-close {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    color: rgba(255, 255, 255, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.hub-btn-close:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: #fff;
+    transform: rotate(90deg);
+}
+
+.hub-custom-scrollbar::-webkit-scrollbar {
+    width: 4px;
+}
+
+.hub-custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.hub-custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+}
+
+/* Desktop only flex */
+@media (min-width: 769px) {
+    .hub-md-flex {
+        display: flex;
+    }
+
+    .hub-md-p-10 {
+        padding: 2.5rem;
+    }
+
+    .hub-md-p-12 {
+        padding: 3rem;
+    }
+
+    .hub-md-grid-cols-2 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+/* --- Hub Utility Classes (Missing Definitions) --- */
+.hub-flex {
+    display: flex;
+}
+
+.hub-flex-col {
+    flex-direction: column;
+}
+
+.hub-items-center {
+    align-items: center;
+}
+
+.hub-justify-center {
+    justify-content: center;
+}
+
+.hub-justify-between {
+    justify-content: space-between;
+}
+
+.hub-flex-1 {
+    flex: 1;
+}
+
+.hub-mt-auto {
+    margin-top: auto;
+}
+
+.hub-w-full {
+    width: 100%;
+}
+
+.hub-h-full {
+    height: 100%;
+}
+
+/* Gaps */
+.hub-gap-1 {
+    gap: 0.25rem;
+}
+
+.hub-gap-2 {
+    gap: 0.5rem;
+}
+
+.hub-gap-3 {
+    gap: 0.75rem;
+}
+
+.hub-gap-4 {
+    gap: 1rem;
+}
+
+.hub-gap-5 {
+    gap: 1.25rem;
+}
+
+.hub-gap-6 {
+    gap: 1.5rem;
+}
+
+/* Font Sizes & Colors */
+.hub-text-xs {
+    font-size: 10px;
+}
+
+.hub-text-sm {
+    font-size: 13px;
+}
+
+.hub-text-lg {
+    font-size: 18px;
+}
+
+.hub-text-xl {
+    font-size: 24px;
+}
+
+.hub-text-3xl {
+    font-size: 32px;
+}
+
+.hub-text-white {
+    color: #fff;
+}
+
+.hub-text-white-10 {
+    color: rgba(255, 255, 255, 0.1);
+}
+
+.hub-text-white-20 {
+    color: rgba(255, 255, 255, 0.2);
+}
+
+.hub-text-white-30 {
+    color: rgba(255, 255, 255, 0.3);
+}
+
+.hub-text-white-40 {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+/* Backgrounds */
+.hub-bg-black-20 {
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.hub-bg-black-40 {
+    background: rgba(0, 0, 0, 0.4);
+}
+
+/* Sizes */
+.hub-w-14 {
+    width: 3.5rem;
+}
+
+.hub-h-14 {
+    height: 3.5rem;
+}
+
+.hub-rounded-2xl {
+    border-radius: 1rem;
+}
+
+/* Margins & Paddings */
+.hub-mb-1 {
+    margin-bottom: 0.25rem;
+}
+
+.hub-mb-2 {
+    margin-bottom: 0.5rem;
+}
+
+.hub-mb-10 {
+    margin-bottom: 2.5rem;
+}
+
+.hub-mt-1 {
+    margin-top: 0.25rem;
+}
+
+.hub-mt-4 {
+    margin-top: 1rem;
+}
+
+.hub-pt-4 {
+    margin-top: 1rem;
+}
+
+.hub-pt-8 {
+    padding-top: 2rem;
+}
+
+/* Border Utilities */
+.hub-border-t {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.hub-border-white-5 {
+    border-color: rgba(255, 255, 255, 0.05);
+}
+
+.hub-border-white-10 {
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Specific Fixes for Sidebar Layout */
+.hub-sidebar-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-label {
+    margin-bottom: 0.5rem !important;
+}
+
+/* Header Alignment Fix */
+.hub-header {
+    min-height: 80px;
+}
+
+/* --- Hub Note Card (Premium Redesign) --- */
+.hub-note-card-premium {
+    position: relative;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.01));
+    backdrop-filter: blur(30px) saturate(220%);
+    -webkit-backdrop-filter: blur(30px) saturate(220%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 36px;
+    padding: 2.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    overflow: hidden;
+    transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 20px 50px -15px rgba(0, 0, 0, 0.4);
+}
+
+.hub-note-card-premium:hover {
+    transform: translateY(-10px) scale(1.02);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.6);
+}
+
+.hub-note-card-premium::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 36px;
+    padding: 1.5px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.25), transparent 45%, rgba(255, 255, 255, 0.1));
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+}
+
+.hub-note-icon-box {
+    width: 64px;
+    height: 64px;
+    border-radius: 22px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hub-note-card:hover .hub-note-icon-box {
+    transform: scale(1.1) rotate(5deg);
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.hub-note-title {
+    font-size: 16px;
+    font-weight: 900;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 0.5rem;
+}
+
+.hub-note-meta {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+}
+
+.hub-note-badge {
+    padding: 5px 12px;
+    border-radius: 10px;
+    font-size: 9px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.hub-note-badge.page-count {
+    background: rgba(255, 255, 255, 0.04);
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.hub-note-badge.type {
+    background: rgba(16, 185, 129, 0.08);
+    color: #10b981;
+}
+
+.hub-note-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: auto;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.hub-action-btn {
+    flex: 1;
+    height: 48px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    font-size: 10px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hub-action-btn.view {
+    background: #fff;
+    color: #000;
+}
+
+.hub-action-btn.download {
+    background: rgba(255, 255, 255, 0.04);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.hub-note-card:hover {
+    transform: translateY(-5px) scale(1.02);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.04));
+    border-color: rgba(255, 255, 255, 0.25);
+    box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.6);
+}
+
+.hub-note-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 28px;
+    padding: 1px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), transparent 40%);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+}
+
+/* --- Hub Standard Utilities --- */
+.hub-flex {
+    display: flex !important;
+}
+
+.hub-flex-col {
+    flex-direction: column !important;
+}
+
+.hub-items-center {
+    align-items: center !important;
+}
+
+.hub-justify-center {
+    justify-content: center !important;
+}
+
+.hub-justify-between {
+    justify-content: space-between !important;
+}
+
+.hub-flex-1 {
+    flex: 1 !important;
+}
+
+.hub-truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.hub-gap-1 {
+    gap: 0.25rem;
+}
+
+.hub-gap-2 {
+    gap: 0.5rem;
+}
+
+.hub-gap-3 {
+    gap: 0.75rem;
+}
+
+.hub-gap-4 {
+    gap: 1rem;
+}
+
+.hub-gap-5 {
+    gap: 1.25rem;
+}
+
+.hub-gap-6 {
+    gap: 1.5rem;
+}
+
+.hub-text-xs {
+    font-size: 10px !important;
+}
+
+.hub-text-sm {
+    font-size: 13px !important;
+}
+
+.hub-text-lg {
+    font-size: 18px !important;
+}
+
+.hub-text-xl {
+    font-size: 24px !important;
+}
+
+.hub-text-3xl {
+    font-size: 32px !important;
+}
+
+.hub-font-black {
+    font-weight: 900 !important;
+}
+
+.hub-font-bold {
+    font-weight: 700 !important;
+}
+
+.hub-uppercase {
+    text-transform: uppercase !important;
+}
+
+.hub-italic {
+    font-style: italic !important;
+}
+
+.hub-leading-tight {
+    line-height: 1.1 !important;
+}
+
+.hub-text-white {
+    color: #fff !important;
+}
+
+.hub-text-white-10 {
+    color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.hub-text-white-20 {
+    color: rgba(255, 255, 255, 0.2) !important;
+}
+
+.hub-text-white-30 {
+    color: rgba(255, 255, 255, 0.3) !important;
+}
+
+.hub-text-white-40 {
+    color: rgba(255, 255, 255, 0.4) !important;
+}
+
+.hub-w-14 {
+    width: 3.5rem !important;
+}
+
+.hub-h-14 {
+    height: 3.5rem !important;
+}
+
+.hub-rounded-2xl {
+    border-radius: 1rem !important;
+}
+
+.hub-hidden {
+    display: none !important;
+}
+
+.hub-text-emerald {
+    color: #10b981 !important;
+}
+
+.hub-text-red-500 {
+    color: #ef4444 !important;
+}
+
+.hub-shadow-2xl {
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5) !important;
+}
+
+.hub-hover-scale-105:hover {
+    transform: scale(1.05) !important;
+}
+
+.hub-transition-all {
+    transition: all 0.3s ease !important;
+}
+
+/* --- Premium Hub Buttons --- */
+.hub-btn-premium {
+    background: linear-gradient(135deg, #ffffff 0%, #f0f0f0 100%);
+    color: #000000;
+    border: none;
+    border-radius: 18px;
+    padding: 1rem 2rem;
+    font-size: 11px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    cursor: pointer;
+    box-shadow:
+        0 10px 20px rgba(255, 255, 255, 0.1),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.8rem;
+}
+
+.hub-btn-premium:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow:
+        0 15px 30px rgba(255, 255, 255, 0.2),
+        inset 0 0 0 1px #ffffff;
+    background: #ffffff;
+}
+
+.hub-btn-ghost {
+    background: rgba(255, 255, 255, 0.03);
+    color: rgba(255, 255, 255, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 18px;
+    padding: 1rem 2rem;
+    font-size: 11px;
+    font-weight: 850;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.hub-btn-ghost:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Modal Active State */
+.modal-overlay.active {
+    display: flex !important;
+}
+
+
+.hub-bg-transparent {
+    background: transparent !important;
+}
+
+.hub-border-none {
+    border: none !important;
+}
+
+.hub-w-full {
+    width: 100% !important;
+}
+
+.hub-text-white::placeholder {
+    color: rgba(255, 255, 255, 0.2);
+}
+
+/* --- Layout & Grid Utilities --- */
+.hub-grid {
+    display: grid !important;
+}
+
+.hub-grid-cols-1 {
+    grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
+}
+
+.hub-grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+}
+
+.hub-gap-8 {
+    gap: 2rem !important;
+}
+
+.hub-p-4 {
+    padding: 1rem !important;
+}
+
+.hub-overflow-y-auto {
+    overflow-y: auto !important;
+}
+
+.hub-max-h-full {
+    max-height: 100% !important;
+}
+
+/* --- Special Action Buttons --- */
+.hub-btn-sub {
+    background: rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: #ffffff !important;
+    padding: 0.75rem 1.5rem !important;
+    border-radius: 12px !important;
+    font-size: 10px !important;
+    font-weight: 900 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.1em !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+}
+
+.hub-btn-sub:hover {
+    background: rgba(255, 255, 255, 0.12) !important;
+    border-color: rgba(255, 255, 255, 0.2) !important;
+    transform: translateY(-2px) !important;
+}
+
+.hub-p-8 {
+    padding: 2rem !important;
+}
+
+.hub-w-full {
+    width: 100% !important;
+}
+
+/* Responsive Grid Support */
+@media (min-width: 768px) {
+    .md\:hub-grid-cols-2 {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+}
