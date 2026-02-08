@@ -598,7 +598,13 @@ nav a.active::after {
     }
 
     .nav a {
-        padding: 8px 15px;
+        padding: 6px 12px;
+        /* Thinner padding */
+        font-size: 12px;
+        /* Smaller font size */
+        font-weight: 500;
+        /* Thinner font weight */
+        letter-spacing: 0.5px;
     }
 }
 
