@@ -585,26 +585,58 @@ nav a.active::after {
 
 /* Tablet and Small Laptop Breakpoint (769px - 1200px) */
 @media (min-width: 769px) and (max-width: 1200px) {
+    header {
+        padding: 12px 30px;
+        /* Thinner header bar */
+    }
+
+    .logo {
+        font-size: 22px;
+        /* Smaller logo */
+        font-weight: 600;
+        /* Thinner logo weight */
+        letter-spacing: 1px;
+    }
+
     .hero {
         padding: 40px 20px;
     }
 
     .schedule-viewer {
-        height: 400px;
+        height: 350px;
+        /* Slightly shorter for smaller cards */
     }
 
     .lesson-card {
-        width: 300px;
+        width: 280px;
+        /* Smaller cards for tablet */
+        padding: 25px;
+    }
+
+    /* Adjust positions for smaller cards to prevent overlap */
+    .lesson-card.right-1 {
+        transform: translateX(320px) scale(0.85);
+    }
+
+    .lesson-card.right-2 {
+        transform: translateX(550px) scale(0.65);
+    }
+
+    .lesson-card.left-1 {
+        transform: translateX(-320px) scale(0.85);
+    }
+
+    .lesson-card.left-2 {
+        transform: translateX(-550px) scale(0.65);
     }
 
     .nav a {
         padding: 6px 12px;
-        /* Thinner padding */
-        font-size: 12px;
-        /* Smaller font size */
-        font-weight: 500;
-        /* Thinner font weight */
+        font-size: 11px;
+        font-weight: 400;
+        /* Even thinner font weight */
         letter-spacing: 0.5px;
+        border-radius: 10px;
     }
 }
 
