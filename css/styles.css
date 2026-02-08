@@ -71,20 +71,20 @@ body::after {
 
 header {
     background: #000000 !important;
-    padding: 20px 5%;
+    padding: 20px 50px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     z-index: 1001;
     position: relative;
-    flex-wrap: wrap;
-    gap: 20px;
+    /* Ensure z-index works */
 }
 
 .logo {
-    font-size: clamp(24px, 4vw, 32px);
+    font-size: 32px;
     font-weight: 900;
+    /* Inter Black */
     letter-spacing: 2px;
     cursor: pointer;
     font-family: 'Inter', sans-serif;
@@ -92,27 +92,24 @@ header {
 
 nav {
     display: flex;
-    gap: clamp(10px, 2vw, 30px);
-    flex-wrap: wrap;
-    justify-content: center;
+    gap: 30px;
 }
 
 nav a {
     color: rgba(255, 255, 255, 0.6);
     text-decoration: none;
-    font-size: clamp(11px, 1.2vw, 14px);
+    font-size: 14px;
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 1px;
     transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     cursor: pointer;
-    padding: 10px clamp(10px, 1.5vw, 20px);
+    padding: 10px 20px;
     border-radius: 14px;
     border: 1px solid rgba(255, 255, 255, 0.05);
     background: rgba(255, 255, 255, 0.02);
     backdrop-filter: blur(10px);
     font-family: 'Inter', sans-serif;
-    white-space: nowrap;
 }
 
 nav a:hover {
@@ -182,7 +179,6 @@ nav a.active::after {
 
 .search-container {
     max-width: 800px;
-    width: 90%;
     margin: 0 auto 50px;
     position: relative;
 }
@@ -326,8 +322,8 @@ nav a.active::after {
 
 .lesson-card {
     position: absolute;
-    width: clamp(250px, 25vw, 400px);
-    padding: clamp(20px, 3vw, 35px);
+    width: 350px;
+    padding: 35px;
     border-radius: 25px;
     transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
     cursor: pointer;
@@ -336,7 +332,7 @@ nav a.active::after {
 }
 
 .lesson-card.center {
-    transform: translateX(0) scale(1.1);
+    transform: translateX(0) scale(1.25);
     z-index: 10;
     opacity: 1;
     background: rgba(255, 255, 255, 0.2);
@@ -348,37 +344,37 @@ nav a.active::after {
 }
 
 .lesson-card.right-1 {
-    transform: translateX(min(320px, 30vw)) scale(0.85);
+    transform: translateX(450px) scale(0.85);
     z-index: 8;
     opacity: 0.6;
 }
 
 .lesson-card.right-2 {
-    transform: translateX(min(550px, 50vw)) scale(0.65);
+    transform: translateX(750px) scale(0.65);
     z-index: 6;
     opacity: 0.35;
 }
 
 .lesson-card.right-3 {
-    transform: translateX(min(700px, 65vw)) scale(0.5);
+    transform: translateX(980px) scale(0.5);
     z-index: 4;
     opacity: 0.15;
 }
 
 .lesson-card.left-1 {
-    transform: translateX(max(-320px, -30vw)) scale(0.85);
+    transform: translateX(-450px) scale(0.85);
     z-index: 8;
     opacity: 0.6;
 }
 
 .lesson-card.left-2 {
-    transform: translateX(max(-550px, -50vw)) scale(0.65);
+    transform: translateX(-750px) scale(0.65);
     z-index: 6;
     opacity: 0.35;
 }
 
 .lesson-card.left-3 {
-    transform: translateX(max(-700px, -65vw)) scale(0.5);
+    transform: translateX(-980px) scale(0.5);
     z-index: 4;
     opacity: 0.15;
 }
@@ -590,8 +586,7 @@ nav a.active::after {
 /* Tablet and Small Laptop Breakpoint (769px - 1200px) */
 @media (min-width: 769px) and (max-width: 1200px) {
     .hero {
-        padding: 80px 20px 40px;
-        /* Increased top padding from 40px to 80px */
+        padding: 40px 20px;
     }
 
     .schedule-viewer {
