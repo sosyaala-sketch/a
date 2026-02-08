@@ -590,7 +590,8 @@ nav a.active::after {
 /* Tablet and Small Laptop Breakpoint (769px - 1200px) */
 @media (min-width: 769px) and (max-width: 1200px) {
     .hero {
-        padding: 40px 20px;
+        padding: 80px 20px 40px;
+        /* Increased top padding from 40px to 80px */
     }
 
     .schedule-viewer {
