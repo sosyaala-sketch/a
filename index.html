@@ -444,126 +444,132 @@
     <!-- AI Page -->
     <div id="aiPage" class="page">
         <div class="ai-hub-container">
-            <div class="ai-header">
+            <div class="ai-header"
+                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; width: 100%;">
+                <div style="flex: 1;"></div> <!-- Spacer -->
                 <h1 onclick="if(window.openAdminAuthModal) window.openAdminAuthModal(); else alert('Lütfen bekleyin, sistem yükleniyor...')"
-                    style="cursor: pointer;">AI Kütüphanesi</h1>
-
-                <!-- NEW DESIGN SEARCH BAR V2 -->
-                <div class="ai-search-container-v2">
-                    <div class="search-input-wrapper">
-                        <i data-lucide="sparkles" class="search-ai-icon"></i>
-                        <input type="text" id="aiSearchInput" placeholder="Asistan veya konu ara..." autocomplete="off">
-                    </div>
-                </div>
-
-                <!-- INLINE ADMIN AUTH FORM (Converted to ROBUST POP-UP) -->
-                <div id="adminAuthInline" class="robust-fixed-modal" style="display: none;">
-                    <div class="robust-modal-backdrop" onclick="closeAdminAuthInline()"></div>
-                    <div class="robust-modal-content" style="max-width: 400px; text-align: center;">
-                        <div style="margin-bottom: 20px;">
-                            <i data-lucide="lock" style="width: 40px; height: 40px; color: #ffd700;"></i>
-                        </div>
-                        <h3 style="color: #fff; margin-bottom: 20px;">Yönetici Girişi</h3>
-
-                        <div style="margin-bottom: 20px;">
-                            <input type="password" id="adminPasswordInputInline" class="premium-input-inline"
-                                placeholder="Şifre Giriniz (829615)"
-                                style="text-align: center; font-size: 18px; letter-spacing: 2px;">
-                        </div>
-
-                        <div style="display: flex; gap: 10px;">
-                            <button onclick="closeAdminAuthInline()"
-                                style="flex: 1; background: rgba(255,255,255,0.1); color: #fff; border: none; padding: 12px; border-radius: 12px; cursor: pointer;">İptal</button>
-                            <button onclick="verifyAdminPasswordInline()" class="auth-submit-btn"
-                                style="flex: 2; padding: 12px; border-radius: 12px;">GİRİŞ YAP</button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- SIMPLIFIED ADMIN CONTROLS -->
-                <div id="adminControlsV2" class="admin-controls-v2" style="display: none; gap: 10px;">
-                    <button class="add-notebook-btn" onclick="openAddNotebookInline()">
-                        <i data-lucide="plus"></i>
-                        YENİ DEFTER EKLE
-                    </button>
-                    <button class="add-notebook-btn" onclick="deleteAllNotebooks()"
-                        style="background: rgba(239, 68, 68, 0.2); border-color: rgba(239, 68, 68, 0.5); color: #ef4444;">
-                        <i data-lucide="trash-2"></i>
-                        TÜMÜNÜ SİL
+                    style="cursor: pointer; flex: 2; text-align: center;">AI Kütüphanesi</h1>
+                <div style="flex: 1; display: flex; justify-content: flex-end;">
+                    <button onclick="showPage('home')" class="liquid-glass-btn"
+                        style="width: 45px; height: 45px; border-radius: 12px; display: flex; align-items: center; justify-content: center; padding: 0; border: none; background: rgba(255,255,255,0.05);">
+                        <i data-lucide="home" style="width: 20px; height: 20px;"></i>
                     </button>
                 </div>
+            </div> <!-- NEW DESIGN SEARCH BAR V2 -->
+            <div class="ai-search-container-v2">
+                <div class="search-input-wrapper">
+                    <i data-lucide="sparkles" class="search-ai-icon"></i>
+                    <input type="text" id="aiSearchInput" placeholder="Asistan veya konu ara..." autocomplete="off">
+                </div>
+            </div>
 
-                <!-- ROBUST FIXED MODAL FOR ADD NOTEBOOK (Pop-up Style) -->
-                <div id="addNotebookInline" class="robust-fixed-modal" style="display: none;">
-                    <div class="robust-modal-backdrop" onclick="closeAddNotebookInline()"></div>
-                    <div class="robust-modal-content">
-                        <div
-                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                            <h3 style="margin: 0; color: #fff; font-size: 18px; font-weight: 700;">Yeni Defter
-                                Oluştur
-                            </h3>
-                            <button onclick="closeAddNotebookInline()" class="auth-close-btn">
-                                <i data-lucide="x" style="width: 24px; height: 24px;"></i>
-                            </button>
+            <!-- INLINE ADMIN AUTH FORM (Converted to ROBUST POP-UP) -->
+            <div id="adminAuthInline" class="robust-fixed-modal" style="display: none;">
+                <div class="robust-modal-backdrop" onclick="closeAdminAuthInline()"></div>
+                <div class="robust-modal-content" style="max-width: 400px; text-align: center;">
+                    <div style="margin-bottom: 20px;">
+                        <i data-lucide="lock" style="width: 40px; height: 40px; color: #ffd700;"></i>
+                    </div>
+                    <h3 style="color: #fff; margin-bottom: 20px;">Yönetici Girişi</h3>
+
+                    <div style="margin-bottom: 20px;">
+                        <input type="password" id="adminPasswordInputInline" class="premium-input-inline"
+                            placeholder="Şifre Giriniz (829615)"
+                            style="text-align: center; font-size: 18px; letter-spacing: 2px;">
+                    </div>
+
+                    <div style="display: flex; gap: 10px;">
+                        <button onclick="closeAdminAuthInline()"
+                            style="flex: 1; background: rgba(255,255,255,0.1); color: #fff; border: none; padding: 12px; border-radius: 12px; cursor: pointer;">İptal</button>
+                        <button onclick="verifyAdminPasswordInline()" class="auth-submit-btn"
+                            style="flex: 2; padding: 12px; border-radius: 12px;">GİRİŞ YAP</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SIMPLIFIED ADMIN CONTROLS -->
+            <div id="adminControlsV2" class="admin-controls-v2" style="display: none; gap: 10px;">
+                <button class="add-notebook-btn" onclick="openAddNotebookInline()">
+                    <i data-lucide="plus"></i>
+                    YENİ DEFTER EKLE
+                </button>
+                <button class="add-notebook-btn" onclick="deleteAllNotebooks()"
+                    style="background: rgba(239, 68, 68, 0.2); border-color: rgba(239, 68, 68, 0.5); color: #ef4444;">
+                    <i data-lucide="trash-2"></i>
+                    TÜMÜNÜ SİL
+                </button>
+            </div>
+
+            <!-- ROBUST FIXED MODAL FOR ADD NOTEBOOK (Pop-up Style) -->
+            <div id="addNotebookInline" class="robust-fixed-modal" style="display: none;">
+                <div class="robust-modal-backdrop" onclick="closeAddNotebookInline()"></div>
+                <div class="robust-modal-content">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <h3 style="margin: 0; color: #fff; font-size: 18px; font-weight: 700;">Yeni Defter
+                            Oluştur
+                        </h3>
+                        <button onclick="closeAddNotebookInline()" class="auth-close-btn">
+                            <i data-lucide="x" style="width: 24px; height: 24px;"></i>
+                        </button>
+                    </div>
+                    <form onsubmit="addNewNotebook(event)">
+                        <label
+                            style="display: block; color: rgba(255,255,255,0.6); font-size: 12px; margin-bottom: 8px;">BAŞLIK</label>
+                        <input type="text" id="newNbTitle" placeholder="Örn: Tarih Notları" class="premium-input-inline"
+                            required>
+
+                        <label
+                            style="display: block; color: rgba(255,255,255,0.6); font-size: 12px; margin-top: 15px; margin-bottom: 8px;">AÇIKLAMA</label>
+                        <input type="text" id="newNbDesc" placeholder="Kısa açıklama..." class="premium-input-inline">
+
+                        <label
+                            style="display: block; color: rgba(255,255,255,0.6); font-size: 12px; margin-top: 15px; margin-bottom: 8px;">NOTEBOOKLM
+                            LINKI</label>
+                        <input type="url" id="newNbLink" placeholder="https://notebooklm.google.com/..."
+                            class="premium-input-inline" required>
+
+                        <div style="margin-top: 25px; display: flex; gap: 10px;">
+                            <button type="button" onclick="closeAddNotebookInline()"
+                                style="flex: 1; background: rgba(255,255,255,0.1); border: none; padding: 12px; border-radius: 12px; color: #fff; cursor: pointer;">İptal</button>
+                            <button type="submit" class="auth-submit-btn"
+                                style="flex: 2; padding: 12px; font-size: 14px; background: #4caf50; color: #fff;">OLUŞTUR</button>
                         </div>
-                        <form onsubmit="addNewNotebook(event)">
-                            <label
-                                style="display: block; color: rgba(255,255,255,0.6); font-size: 12px; margin-bottom: 8px;">BAŞLIK</label>
-                            <input type="text" id="newNbTitle" placeholder="Örn: Tarih Notları"
-                                class="premium-input-inline" required>
-
-                            <label
-                                style="display: block; color: rgba(255,255,255,0.6); font-size: 12px; margin-top: 15px; margin-bottom: 8px;">AÇIKLAMA</label>
-                            <input type="text" id="newNbDesc" placeholder="Kısa açıklama..."
-                                class="premium-input-inline">
-
-                            <label
-                                style="display: block; color: rgba(255,255,255,0.6); font-size: 12px; margin-top: 15px; margin-bottom: 8px;">NOTEBOOKLM
-                                LINKI</label>
-                            <input type="url" id="newNbLink" placeholder="https://notebooklm.google.com/..."
-                                class="premium-input-inline" required>
-
-                            <div style="margin-top: 25px; display: flex; gap: 10px;">
-                                <button type="button" onclick="closeAddNotebookInline()"
-                                    style="flex: 1; background: rgba(255,255,255,0.1); border: none; padding: 12px; border-radius: 12px; color: #fff; cursor: pointer;">İptal</button>
-                                <button type="submit" class="auth-submit-btn"
-                                    style="flex: 2; padding: 12px; font-size: 14px; background: #4caf50; color: #fff;">OLUŞTUR</button>
-                            </div>
-                        </form>
-                    </div>
+                    </form>
                 </div>
             </div>
-
-            <div id="notebookGrid" class="notebook-grid">
-                <!-- Notebooks rendered via JS -->
-            </div>
-
-            <!-- GEMINI CHAT WIDGET -->
-            <div id="geminiChatWidget" class="gemini-chat-widget">
-                <div class="chat-header">
-                    <div class="flex items-center gap-2">
-                        <i data-lucide="sparkles"></i>
-                        <span>SENA (AI)</span>
-                    </div>
-                    <button onclick="toggleGeminiChat()" class="close-chat"><i data-lucide="x"></i></button>
-                </div>
-                <div id="geminiChatMessages" class="chat-messages">
-                    <div class="message system">
-                        Selam! Ben SENA. Sana nasıl yardım edebilirim?
-                    </div>
-                </div>
-                <div class="chat-input-area">
-                    <textarea id="geminiChatInput" placeholder="Bir soru sor..." rows="1"></textarea>
-                    <button onclick="sendGeminiMessage()" id="geminiSendBtn"><i data-lucide="send"></i></button>
-                </div>
-            </div>
-
-            <!-- Chat Toggle Button -->
-            <button id="geminiToggleBtn" onclick="toggleGeminiChat()" class="gemini-toggle-btn">
-                <i data-lucide="message-square"></i>
-                <span>AI SOHBET</span>
-            </button>
         </div>
+
+        <div id="notebookGrid" class="notebook-grid">
+            <!-- Notebooks rendered via JS -->
+        </div>
+
+        <!-- GEMINI CHAT WIDGET -->
+        <div id="geminiChatWidget" class="gemini-chat-widget">
+            <div class="chat-header">
+                <div class="flex items-center gap-2">
+                    <i data-lucide="sparkles"></i>
+                    <span>SENA (AI)</span>
+                </div>
+                <button onclick="toggleGeminiChat()" class="close-chat"><i data-lucide="x"></i></button>
+            </div>
+            <div id="geminiChatMessages" class="chat-messages">
+                <div class="message system">
+                    Selam! Ben SENA. Sana nasıl yardım edebilirim?
+                </div>
+            </div>
+            <div class="chat-input-area">
+                <textarea id="geminiChatInput" placeholder="Bir soru sor..." rows="1"></textarea>
+                <button onclick="sendGeminiMessage()" id="geminiSendBtn"><i data-lucide="send"></i></button>
+            </div>
+        </div>
+
+        <!-- Chat Toggle Button -->
+        <button id="geminiToggleBtn" onclick="toggleGeminiChat()" class="gemini-toggle-btn">
+            <i data-lucide="message-square"></i>
+            <span>AI SOHBET</span>
+        </button>
+    </div>
     </div>
 
     <!-- Exams Page -->
@@ -572,11 +578,17 @@
         <header class="exams-header sticky z-50">
             <div class="exams-header-container">
                 <!-- TOP ROW -->
-                <div class="exams-header-top">
-                    <div class="exams-header-title-area">
+                <div class="exams-header-top"
+                    style="display: flex; justify-content: space-between; align-items: center;">
+                    <div class="exams-header-title-area" onclick="showPage('home')" style="cursor: pointer;">
                         <h1 class="exams-title">SINIF<span>HUB</span></h1>
                         <p class="exams-subtitle">YAZILI AKIŞ SİSTEMİ</p>
                     </div>
+                    <!-- House icon for home -->
+                    <button onclick="showPage('home')" class="liquid-glass-btn"
+                        style="width: 45px; height: 45px; border-radius: 12px; display: flex; align-items: center; justify-content: center; padding: 0; border: none;">
+                        <i data-lucide="home" style="width: 20px; height: 20px;"></i>
+                    </button>
                 </div>
 
                 <!-- BOTTOM ROW -->
@@ -1460,25 +1472,25 @@
 
         <!-- Mobile Bottom Navigation -->
         <!-- Mobile Top Navigation -->
-        <!-- Mobile Bottom Navigation (Reverted) -->
-        <nav class="mobile-bottom-nav">
-            <a onclick="showPage('home')" id="mobile-nav-home" class="mobile-nav-item active">
+        <!-- Mobile Bottom Navigation (Liquid Glass Floating) -->
+        <nav class="floating-glass-nav">
+            <a onclick="showPage('home')" id="mobile-nav-home" class="floating-nav-item active">
                 <i data-lucide="home"></i>
-                <span>ANA SAYFA</span>
+                <span>ANASAYFA</span>
             </a>
-            <a onclick="showPage('homework')" id="mobile-nav-homework" class="mobile-nav-item">
+            <a onclick="showPage('homework')" id="mobile-nav-homework" class="floating-nav-item">
                 <i data-lucide="file-text"></i>
                 <span>ÖDEVLER</span>
             </a>
-            <a onclick="showPage('exams')" id="mobile-nav-exams" class="mobile-nav-item">
+            <a onclick="showPage('exams')" id="mobile-nav-exams" class="floating-nav-item">
                 <i data-lucide="edit-3"></i>
                 <span>YAZILILAR</span>
             </a>
-            <a onclick="showPage('hub')" id="mobile-nav-hub" class="mobile-nav-item">
+            <a onclick="showPage('hub')" id="mobile-nav-hub" class="floating-nav-item">
                 <i data-lucide="layout-grid"></i>
                 <span>HUB</span>
             </a>
-            <a onclick="showPage('ai')" id="mobile-nav-ai" class="mobile-nav-item">
+            <a onclick="showPage('ai')" id="mobile-nav-ai" class="floating-nav-item">
                 <i data-lucide="bot"></i>
                 <span>AI</span>
             </a>

@@ -18,11 +18,11 @@ function showPage(pageName) {
     });
 
     // Reset Mobile Nav Active States
-    document.querySelectorAll('.mobile-nav-item').forEach(link => {
+    document.querySelectorAll('.mobile-nav-item, .floating-nav-item').forEach(link => {
         link.classList.remove('active');
-        link.style.color = '#666';
+        link.style.color = ''; // Reset to CSS default
         const i = link.querySelector('i');
-        if (i) i.style.color = '#666';
+        if (i) i.style.color = '';
     });
 
     document.querySelectorAll('nav a').forEach(link => {

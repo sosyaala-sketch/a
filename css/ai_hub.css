@@ -437,6 +437,7 @@
 @media (max-width: 768px) {
     .ai-hub-container {
         padding: 15px;
+        padding-bottom: 120px;
     }
 
     .ai-search-wrapper input {

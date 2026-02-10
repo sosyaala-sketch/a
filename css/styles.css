@@ -704,20 +704,21 @@ nav a.active::after {
         background-attachment: fixed;
     }
 
-    /* Mobile Bottom Nav (Reverted) */
+    /* Mobile Bottom Nav (Optimized for Visibility) */
     .mobile-bottom-nav {
         display: flex;
         position: fixed;
         bottom: 0;
         left: 0;
         width: 100%;
-        background: #050505;
-        /* Full black/dark bg */
-        border-top: 1px solid rgba(255, 255, 255, 0.05);
+        background: rgba(10, 10, 10, 0.8);
+        backdrop-filter: blur(20px) saturate(180%);
+        -webkit-backdrop-filter: blur(20px) saturate(180%);
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
         justify-content: space-around;
-        padding: 12px 0 25px 0;
-        z-index: 1000;
-        box-shadow: 0 -20px 40px rgba(0, 0, 0, 0.8);
+        padding: 12px 0 calc(env(safe-area-inset-bottom, 0px) + 15px) 0;
+        z-index: 9999;
+        box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.5);
     }
 
     .mobile-nav-item {
@@ -1044,8 +1045,8 @@ nav a.active::after {
         padding: 20px;
         margin-bottom: 0;
         margin-top: 0;
-        padding-bottom: 120px !important;
-        /* Added for mobile scroll */
+        padding-bottom: 150px !important;
+        /* Added for mobile scroll space */
     }
 
     .homework-list-container {
