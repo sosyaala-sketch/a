@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="css/ai_hub.css">
     <link rel="stylesheet" href="css/exams.css">
     <link rel="stylesheet" href="css/liquid_glass.css">
+    <link rel="stylesheet" href="css/mobile_modern.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
         rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -114,66 +115,106 @@
         </div>
 
         <!-- Mobile Home View (Dashboard Style) -->
+        <!-- Mobile Home View (Modern Dashboard Style) -->
         <div class="mobile-home-view">
-            <!-- Custom Mobile Header -->
+            <!-- New Modern Mobile Header -->
             <div class="mobile-header">
-                <div>
-                    <h1>SOSYAAL 9A</h1>
-                    <p id="mobileDateDisplay">PAZAR, 25 OCAK</p>
+                <div class="header-left">
+                    <p class="summary-label">GÜNLÜK ÖZET</p>
+                    <h1 id="mobileDateDisplay">Salı, 10 Şubat</h1>
                 </div>
-                <div class="notification-icon">
-                    <i data-lucide="bell"></i>
-                </div>
-            </div>
-
-            <!-- Quick Action Grid -->
-            <div class="mobile-dashboard-grid">
-                <div class="mobile-grid-item" onclick="showPage('homework')">
-                    <div class="grid-icon orange"><i data-lucide="file-text"></i></div>
-                    <span>ÖDEVLER</span>
-                </div>
-                <div class="mobile-grid-item" onclick="showPage('exams')">
-                    <div class="grid-icon purple"><i data-lucide="layers"></i></div>
-                    <span>YAZILILAR</span>
-                </div>
-                <div class="mobile-grid-item" onclick="showTodayHomework()">
-                    <div class="grid-icon red"><i data-lucide="pin"></i></div>
-                    <span>BUGÜN</span>
-                </div>
-                <div class="mobile-grid-item" onclick="showPage('hub')">
-                    <div class="grid-icon green"><i data-lucide="folder"></i></div>
-                    <span>HUB</span>
-                </div>
-            </div>
-
-            <!-- Current Lesson Hero Card -->
-            <div class="mobile-hero-section">
-                <div
-                    style="font-size: 10px; font-weight: 800; color: #666; margin-bottom: 10px; padding-left: 5px; letter-spacing: 1px;">
-                    ŞUANKİ DERS <span style="color: #00d2d3; margin-left: 5px;">●</span></div>
-                <div class="mobile-hero-card">
-                    <div id="mobileHeroTime">14:40 — 15:20</div>
-                    <div id="mobileHeroSubject">Kimya</div>
-                    <div id="mobileHeroDay">Pazartesi Günü</div>
-
-                    <div class="hero-pagination">
-                        <span class="active"></span><span></span><span></span>
+                <div class="header-right">
+                    <div class="header-icon-btn">
+                        <i data-lucide="bell"></i>
+                    </div>
+                    <div class="profile-avatar">
+                        <img src="https://ui-avatars.com/api/?name=9A&background=f3a683&color=fff" alt="Profile">
                     </div>
                 </div>
             </div>
 
-            <!-- Day Selector -->
-            <div class="mobile-day-selector">
-                <button class="m-day-btn active" data-day="Pazartesi">Pzt</button>
-                <button class="m-day-btn" data-day="Salı">Sal</button>
-                <button class="m-day-btn" data-day="Çarşamba">Çarş</button>
-                <button class="m-day-btn" data-day="Perşembe">Perş</button>
-                <button class="m-day-btn" data-day="Cuma">Cuma</button>
+            <!-- Modern Quick Action Grid (Circular) -->
+            <div class="modern-action-grid">
+                <div class="modern-grid-item" onclick="showPage('homework')">
+                    <div class="modern-icon-circle orange"><i data-lucide="clipboard-list"></i></div>
+                    <span>ÖDEVLER</span>
+                </div>
+                <div class="modern-grid-item" onclick="showPage('exams')">
+                    <div class="modern-icon-circle purple"><i data-lucide="edit-3"></i></div>
+                    <span>YAZILILAR</span>
+                </div>
+                <div class="modern-grid-item" onclick="showPage('hub')">
+                    <div class="modern-icon-circle brown"><i data-lucide="compass"></i></div>
+                    <span>HUB</span>
+                </div>
+                <div class="modern-grid-item" onclick="showPage('ai')">
+                    <div class="modern-icon-circle sand"><i data-lucide="message-square"></i></div>
+                    <span>SENA</span>
+                </div>
             </div>
 
-            <!-- Timeline List -->
-            <div id="mobileHomeTimeline" class="mobile-home-timeline">
-                <!-- Timeline items will be rendered here by JS -->
+            <!-- Current Lesson Hero Card (Sleek/Thin) -->
+            <div class="modern-hero-section">
+                <div class="modern-hero-card">
+                    <div class="hero-top">
+                        <span class="now-badge">ŞU AN</span>
+                        <div class="hero-time-info">
+                            <span id="mobileHeroTime">14:40</span>
+                            <span id="mobileHeroEndTime">15:20 biter</span>
+                        </div>
+                    </div>
+                    <h2 id="mobileHeroSubject">İngilizce</h2>
+                    <div class="hero-bottom">
+                        <div class="hero-location">
+                            <i data-lucide="map-pin"></i>
+                            <span id="mobileHeroLocation">Derslik 9A</span>
+                        </div>
+                        <div id="mobileHeroHwStatus" class="hero-hw-status">
+                            <!-- JS will inject "Ödev Var" badge if needed -->
+                        </div>
+                    </div>
+                    <div class="hero-progress-bar">
+                        <div id="heroProgressFill" class="progress-fill"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Minimalist Day Selector (Circular) -->
+            <div class="modern-calendar-section">
+                <p class="section-label">TAKTAK VİM</p>
+                <div class="modern-day-selector">
+                    <div class="day-col">
+                        <span class="day-name">PZT</span>
+                        <button class="day-circle" data-day="Pazartesi">9</button>
+                    </div>
+                    <div class="day-col">
+                        <span class="day-name">SAL</span>
+                        <button class="day-circle active" data-day="Salı">10</button>
+                    </div>
+                    <div class="day-col">
+                        <span class="day-name">ÇAR</span>
+                        <button class="day-circle" data-day="Çarşamba">11</button>
+                    </div>
+                    <div class="day-col">
+                        <span class="day-name">PER</span>
+                        <button class="day-circle" data-day="Perşembe">12</button>
+                    </div>
+                    <div class="day-col">
+                        <span class="day-name">CUM</span>
+                        <button class="day-circle" data-day="Cuma">13</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Weekly Flow (Timeline) -->
+            <div class="modern-timeline-section">
+                <div class="section-header">
+                    <p class="section-label">HAFTALIK AKIŞ</p>
+                    <button class="see-all-btn" onclick="showPage('schedule')">Tümünü Gör</button>
+                </div>
+                <div id="mobileHomeTimeline" class="modern-timeline-grid">
+                    <!-- Timeline cards will be rendered here by JS -->
+                </div>
             </div>
         </div>
     </div>

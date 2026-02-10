@@ -1,0 +1,430 @@
+/* --- Modern Mobile Dashboard (Light Premium Theme) --- */
+@media (max-width: 768px) {
+    .mobile-home-view {
+        background-color: #fdfaf5 !important;
+        background-image: radial-gradient(rgba(0, 0, 0, 0.03) 1.5px, transparent 1px);
+        background-size: 30px 30px;
+        color: #1a1a1a !important;
+        min-height: 100vh;
+        padding: 20px 0 120px 0 !important;
+        font-family: 'Inter', sans-serif;
+    }
+
+    /* Header */
+    .mobile-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 25px;
+        margin-bottom: 25px;
+    }
+
+    .summary-label {
+        font-size: 11px;
+        font-weight: 800;
+        color: #b5a48e;
+        letter-spacing: 1.5px;
+        margin-bottom: 5px;
+    }
+
+    .mobile-header h1 {
+        font-size: 26px;
+        font-weight: 900;
+        color: #1a1a1a;
+        letter-spacing: -0.5px;
+    }
+
+    .header-right {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .header-icon-btn {
+        width: 45px;
+        height: 45px;
+        background: #fff;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    .header-icon-btn i {
+        color: #1a1a1a;
+        width: 20px;
+    }
+
+    .profile-avatar {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        overflow: hidden;
+        border: 2px solid #fff;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    .profile-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    /* Quick Action Grid */
+    .modern-action-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 15px;
+        padding: 0 20px;
+        margin-bottom: 35px;
+    }
+
+    .modern-grid-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .modern-icon-circle {
+        width: 65px;
+        height: 65px;
+        border-radius: 50%;
+        background: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.04);
+        transition: transform 0.2s;
+    }
+
+    .modern-icon-circle i {
+        width: 24px;
+        height: 24px;
+    }
+
+    .modern-icon-circle.orange i {
+        color: #e67e22;
+    }
+
+    .modern-icon-circle.purple i {
+        color: #9b59b6;
+    }
+
+    .modern-icon-circle.brown i {
+        color: #a1887f;
+    }
+
+    .modern-icon-circle.sand i {
+        color: #d1a684;
+    }
+
+    .modern-grid-item span {
+        font-size: 10px;
+        font-weight: 800;
+        color: #8c8378;
+        letter-spacing: 0.5px;
+    }
+
+    /* Hero Card (Lesson) */
+    .modern-hero-section {
+        padding: 0 20px;
+        margin-bottom: 35px;
+    }
+
+    .modern-hero-card {
+        background: #fff;
+        border-radius: 35px;
+        padding: 30px;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.03);
+        position: relative;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.8);
+    }
+
+    .hero-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+
+    .now-badge {
+        background: #f1ede6;
+        color: #b5a48e;
+        padding: 6px 15px;
+        border-radius: 20px;
+        font-size: 10px;
+        font-weight: 900;
+        letter-spacing: 0.5px;
+    }
+
+    .hero-time-info {
+        text-align: right;
+        display: flex;
+        flex-direction: column;
+    }
+
+    #mobileHeroTime {
+        font-size: 18px;
+        font-weight: 800;
+        color: #d1a684;
+    }
+
+    #mobileHeroEndTime {
+        font-size: 11px;
+        font-weight: 700;
+        color: #b5a48e;
+    }
+
+    .modern-hero-card h2 {
+        font-size: 34px;
+        font-weight: 900;
+        color: #1a1a1a;
+        margin-bottom: 20px;
+        letter-spacing: -1px;
+    }
+
+    .hero-bottom {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .hero-location {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: #8c8378;
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+    .hero-location i {
+        width: 14px;
+        color: #1a1a1a;
+    }
+
+    .hero-hw-status {
+        background: rgba(209, 166, 132, 0.1);
+        color: #d1a684;
+        padding: 5px 12px;
+        border-radius: 10px;
+        font-size: 10px;
+        font-weight: 800;
+        text-transform: uppercase;
+    }
+
+    .hero-progress-bar {
+        width: 100%;
+        height: 6px;
+        background: #f1ede6;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .progress-fill {
+        height: 100%;
+        background: #d1a684;
+        border-radius: 10px;
+        width: 45%;
+        /* Dynamically set by JS */
+    }
+
+    /* Calendar Section */
+    .modern-calendar-section {
+        padding: 0 20px;
+        margin-bottom: 35px;
+    }
+
+    .section-label {
+        font-size: 12px;
+        font-weight: 900;
+        color: #8c8378;
+        letter-spacing: 1.5px;
+        margin-bottom: 20px;
+        padding-left: 5px;
+    }
+
+    .modern-day-selector {
+        display: flex;
+        justify-content: space-between;
+        background: transparent;
+    }
+
+    .day-col {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .day-name {
+        font-size: 10px;
+        font-weight: 800;
+        color: #b5a48e;
+    }
+
+    .day-circle {
+        width: 55px;
+        height: 55px;
+        border-radius: 20px;
+        background: #fff;
+        border: none;
+        color: #1a1a1a;
+        font-size: 18px;
+        font-weight: 800;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.03);
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+    .day-circle.active {
+        background: #d1a684;
+        color: #fff;
+        box-shadow: 0 10px 30px rgba(209, 166, 132, 0.3);
+        transform: scale(1.1);
+    }
+
+    /* Timeline Section */
+    .modern-timeline-section {
+        padding: 0 20px;
+    }
+
+    .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .see-all-btn {
+        font-size: 12px;
+        font-weight: 700;
+        color: #d1a684;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+    }
+
+    .modern-timeline-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+    }
+
+    .modern-timeline-card {
+        background: #f7f1e6;
+        border-radius: 30px;
+        padding: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        position: relative;
+    }
+
+    .m-card-icon {
+        width: 40px;
+        height: 40px;
+        background: rgba(255, 255, 255, 0.5);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #d1a684;
+    }
+
+    .modern-timeline-card h4 {
+        font-size: 16px;
+        font-weight: 800;
+        color: #1a1a1a;
+    }
+
+    .m-card-time {
+        font-size: 11px;
+        font-weight: 700;
+        color: #8c8378;
+        letter-spacing: 0.5px;
+    }
+
+    .m-card-location {
+        font-size: 10px;
+        font-weight: 800;
+        color: #b5a48e;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        text-transform: uppercase;
+    }
+
+    .m-card-location i {
+        width: 10px;
+    }
+
+    /* --- Modern Mobile App Dock (Light Theme Override) --- */
+    .mobile-app-dock {
+        bottom: 25px !important;
+        left: 5% !important;
+        width: 90% !important;
+        border-radius: 40px !important;
+        background: rgba(255, 255, 255, 0.7) !important;
+        backdrop-filter: blur(25px) saturate(200%) !important;
+        -webkit-backdrop-filter: blur(25px) saturate(200%) !important;
+        border: 1px solid rgba(255, 255, 255, 0.5) !important;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05) !important;
+        padding: 10px 15px !important;
+        height: 75px !important;
+    }
+
+    .mobile-app-dock::before {
+        display: none !important;
+    }
+
+    .dock-item {
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+    }
+
+    .dock-item i {
+        color: #b5a48e !important;
+        width: 22px !important;
+        height: 22px !important;
+    }
+
+    .dock-item span {
+        color: #b5a48e !important;
+        font-weight: 800 !important;
+        font-size: 9px !important;
+    }
+
+    .dock-item.active {
+        color: #fff !important;
+    }
+
+    /* Circular background for active item */
+    .dock-item.active i {
+        background: #d1a684 !important;
+        color: #fff !important;
+        width: 45px !important;
+        height: 45px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        border-radius: 50% !important;
+        transform: translateY(-5px) !important;
+        box-shadow: 0 8px 20px rgba(209, 166, 132, 0.4) !important;
+    }
+
+    .dock-item.active span {
+        color: #d1a684 !important;
+        transform: translateY(-2px) !important;
+    }
+
+    .dock-item.active::after {
+        display: none !important;
+    }
+}
+
+/* Hide the text for active item to make it focus on icon if needed, but image shows text */

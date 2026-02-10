@@ -125,7 +125,16 @@ window.addEventListener('load', () => {
         });
     });
 
-    // Mobile Day Selector Listeners
+    // Mobile Day Selector Listeners (Modern)
+    document.querySelectorAll('.day-circle').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const selectedDay = btn.dataset.day;
+            currentMobileTimelineDay = selectedDay;
+            updateMobileTimeline(selectedDay);
+        });
+    });
+
+    // Old Mobile Day Selector Listeners (Fallback)
     document.querySelectorAll('.m-day-btn').forEach(btn => {
         btn.addEventListener('click', () => {
             const selectedDay = btn.dataset.day;
@@ -142,10 +151,13 @@ window.addEventListener('load', () => {
 
     // Initialize Mobile Dashboard independently
     if (typeof updateMobileHeroCard === 'function') {
-        updateMobileHeroCard(); // Always shows today
+        updateMobileHeroCard();
     }
     if (typeof updateMobileTimeline === 'function') {
-        currentMobileTimelineDay = getTomorrowDayName(); // Set default to tomorrow
+        // Default to TODAY instead of tomorrow for更好的 user exp
+        const TurkishDays = ['Pazar', 'Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi'];
+        const todayName = TurkishDays[new Date().getDay()];
+        currentMobileTimelineDay = (todayName === 'Pazar' || todayName === 'Cumartesi') ? 'Pazartesi' : todayName;
         updateMobileTimeline(currentMobileTimelineDay);
     }
 });

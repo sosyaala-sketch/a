@@ -355,35 +355,72 @@ function closeTomorrowScheduleModal() {
 }
 function updateMobileHeroCard() {
     const heroTime = document.getElementById('mobileHeroTime');
+    const heroEndTime = document.getElementById('mobileHeroEndTime');
     const heroSubject = document.getElementById('mobileHeroSubject');
-    const heroDay = document.getElementById('mobileHeroDay');
+    const heroLocation = document.getElementById('mobileHeroLocation');
+    const hwStatus = document.getElementById('mobileHeroHwStatus');
+    const progressFill = document.getElementById('heroProgressFill');
 
-    const today = getTodayDayName();
-    if (heroDay) heroDay.textContent = today + ' Günü';
+    const TurkishDays = ['Pazar', 'Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi'];
+    const today = TurkishDays[new Date().getDay()];
+
+    // Update header date
+    const dateDisplay = document.getElementById('mobileDateDisplay');
+    if (dateDisplay) {
+        const options = { weekday: 'long', day: 'numeric', month: 'long' };
+        dateDisplay.textContent = new Date().toLocaleDateString('tr-TR', options);
+    }
 
     const lessons = scheduleData[today];
     if (!lessons) return;
 
     const now = new Date();
     const currentMinutes = now.getHours() * 60 + now.getMinutes();
-    let heroLesson = lessons[0];
+    let heroLesson = null;
+    let isActive = false;
 
-    // Find active or next
+    // Find active lesson
     for (let i = 0; i < lessons.length; i++) {
         const l = lessons[i];
         const [start, end] = l.time.split(' - ');
         const startM = parseTimeToMinutes(start);
         const endM = parseTimeToMinutes(end);
 
-        if (currentMinutes < endM) {
+        if (currentMinutes >= startM && currentMinutes < endM) {
             heroLesson = l;
+            isActive = true;
+            // Progress calculation
+            const total = endM - startM;
+            const elapsed = currentMinutes - startM;
+            const percent = (elapsed / total) * 100;
+            if (progressFill) progressFill.style.width = `${percent}%`;
+            break;
+        } else if (currentMinutes < startM) {
+            heroLesson = l; // Next lesson
+            if (progressFill) progressFill.style.width = `0%`;
             break;
         }
     }
 
+    // Default to last lesson if day is over
+    if (!heroLesson) heroLesson = lessons[lessons.length - 1];
+
     if (heroLesson && heroSubject && heroTime) {
         heroSubject.textContent = heroLesson.lesson;
-        heroTime.textContent = heroLesson.time.replace(' - ', ' — ');
+        const [start, end] = heroLesson.time.split(' - ');
+        heroTime.textContent = start;
+        if (heroEndTime) heroEndTime.textContent = `${end} biter`;
+        if (heroLocation) heroLocation.textContent = heroLesson.location;
+
+        // Check for homework in this lesson
+        if (hwStatus) {
+            const hasHw = window.homeworkList && window.homeworkList.some(hw =>
+                hw.subject && heroLesson.lesson && hw.subject.toLowerCase().includes(heroLesson.lesson.toLowerCase())
+            );
+            hwStatus.innerHTML = hasHw ? '🔥 ÖDEV VAR' : '✨ Ödev Yok';
+            hwStatus.style.background = hasHw ? 'rgba(231, 76, 60, 0.1)' : 'rgba(46, 204, 113, 0.1)';
+            hwStatus.style.color = hasHw ? '#e74c3c' : '#2ecc71';
+        }
     }
 }
 
@@ -391,14 +428,14 @@ function updateMobileTimeline(day) {
     const timeline = document.getElementById('mobileHomeTimeline');
     if (!timeline) return;
 
-    // Update Mobile Day Selector active state
-    document.querySelectorAll('.m-day-btn').forEach(btn => {
+    // Update Modern Day Selector active state
+    document.querySelectorAll('.day-circle').forEach(btn => {
         btn.classList.toggle('active', btn.dataset.day === day);
     });
 
     const lessons = scheduleData[day];
     if (!lessons) {
-        timeline.innerHTML = '<p style="text-align:center; padding: 20px; color: #666;">Ders bulunamadı.</p>';
+        timeline.innerHTML = '<p style="text-align:center; padding: 20px; color: #b5a48e; grid-column: span 2;">Ders bulunamadı.</p>';
         return;
     }
 
@@ -414,29 +451,36 @@ function updateMobileTimeline(day) {
 
         const isActive = isToday && (currentMinutes >= startM && currentMinutes < endM);
 
-        const div = document.createElement('div');
-        div.className = `m-timeline-item ${isActive ? 'active' : ''}`;
+        // Define icons based on lesson
+        let icon = 'book-open';
+        const lessonLower = l.lesson.toLowerCase();
+        if (lessonLower.includes('mat')) icon = 'percent';
+        if (lessonLower.includes('biyo') || lessonLower.includes('fen')) icon = 'flask-conical';
+        if (lessonLower.includes('ing')) icon = 'globe-2';
+        if (lessonLower.includes('spor') || lessonLower.includes('beden')) icon = 'activity';
+        if (lessonLower.includes('müzik')) icon = 'music';
+        if (lessonLower.includes('görsel') || lessonLower.includes('resim')) icon = 'palette';
 
-        const statusText = isActive ? '<span class="m-status-live">● DEVAM EDİYOR</span>' : '';
+        const card = document.createElement('div');
+        card.className = `modern-timeline-card ${isActive ? 'active' : ''}`;
+        if (isActive) {
+            card.style.background = '#fff';
+            card.style.boxShadow = '0 10px 30px rgba(0,0,0,0.05)';
+        }
 
-        div.innerHTML = `
-            <div class="m-timeline-left">
-                <div class="m-time-group">
-                    <span class="m-time-start">${start}</span>
-                    <span class="m-time-end">${end}</span>
-                </div>
-                <div class="m-sep"></div>
-                <div class="m-info">
-                    ${statusText}
-                    <h4>${l.lesson}</h4>
-                    <p>${l.location}</p>
-                </div>
+        card.innerHTML = `
+            <div class="m-card-icon" style="${isActive ? 'background: #d1a684; color: #fff;' : ''}">
+                <i data-lucide="${icon}"></i>
             </div>
-            <div class="m-timeline-right">
-                <i data-lucide="chevron-right"></i>
+            <div>
+                <h4>${l.lesson}</h4>
+                <p class="m-card-time">${start} — ${end}</p>
+            </div>
+            <div class="m-card-location">
+                <i data-lucide="map-pin"></i> ${l.location}
             </div>
          `;
-        timeline.appendChild(div);
+        timeline.appendChild(card);
     });
     if (window.lucide) lucide.createIcons();
 }
