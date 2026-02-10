@@ -751,6 +751,10 @@ function openHomeworkDetail(hw) {
     const deleteBtn = document.getElementById('deleteHomeworkBtn');
     if (deleteBtn) {
         deleteBtn.onclick = () => {
+            if (!hw.id) {
+                alert("Hata: Ödev ID'si bulunamadı!");
+                return;
+            }
             const password = prompt("Ödevi silmek için şifreyi girin:");
             if (password === '829615') {
                 console.log('🗑️ Deleting homework via V2:', hw.subject);

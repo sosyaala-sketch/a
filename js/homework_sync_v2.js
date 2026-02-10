@@ -190,33 +190,50 @@ const HomeworkSyncV2 = {
      * Optimistic Update
      */
     async deleteHomework(id) {
-        console.log('🗑️ [V2] Deleting homework from Supabase:', id);
+        if (!id) {
+            console.error('❌ [V2] Silme işlemi iptal edildi: ID eksik.');
+            return false;
+        }
+
+        console.log('🗑️ [V2] Supabase üzerinden siliniyor:', id);
 
         try {
             const res = await fetch(`${this.config.baseUrl}?id=eq.${id}`, {
                 method: 'DELETE',
                 headers: {
                     'apikey': this.config.apiKey,
-                    'Authorization': `Bearer ${this.config.apiKey}`
+                    'Authorization': `Bearer ${this.config.apiKey}`,
+                    'Content-Type': 'application/json'
                 }
             });
 
             if (!res.ok) {
-                throw new Error(`Delete failed: ${res.status}`);
+                const errorBody = await res.text();
+                throw new Error(`Silme başarısız: ${res.status} - ${errorBody}`);
             }
 
-            console.log('✅ [V2] Homework deleted successfully');
+            console.log('✅ [V2] Supabase silme işlemi başarılı');
 
-            // OPTIMISTIC UPDATE
+            // Sadece Supabase başarılı olursa local listeyi güncelle
             const currentList = this.getLocalData() || [];
-            const updatedList = currentList.filter(i => i.id !== id);
+
+            // ID tipine takılmadan (String/Number) filtreleme yap
+            const updatedList = currentList.filter(item => String(item.id) !== String(id));
+
+            // Eğer filtreleme sonucunda liste boşaldıysa ama ID gönderilmişse bir hata vardır, durdur!
+            if (currentList.length > 0 && updatedList.length === 0 && id) {
+                console.warn('⚠️ [V2] Filtreleme tüm listeyi temizledi, işlem iptal edildi!');
+                // Bu durumda tüm veriyi kaybetmemek için sunucudan tekrar çekmek en güvenlisi
+                return await this.fetchAll(true);
+            }
 
             this.saveLocalData(updatedList);
             this.updateUI(updatedList);
 
             return true;
         } catch (err) {
-            console.error('❌ [V2] Delete error:', err);
+            console.error('❌ [V2] Silme hatası:', err);
+            alert('Silme sırasında hata oluştu: ' + err.message);
             throw err;
         }
     },
