@@ -13,6 +13,7 @@ window.examNotesCache = {};
 function initExams() {
     console.log('🚀 [Exams] Hub Replication Sync...');
 
+    // Desktop Filters
     const filterButtons = document.querySelectorAll('.hub-filter-btn');
     filterButtons.forEach(btn => {
         btn.onclick = () => {
@@ -22,35 +23,26 @@ function initExams() {
         };
     });
 
-    const searchInput = document.getElementById('examSearchInput');
-    if (searchInput) {
-        searchInput.oninput = (e) => {
-            const val = e.target.value.toLowerCase();
-            if (val === 'yönetiici' || val === 'yönetici') {
-                setTimeout(() => {
-                    const pass = prompt("Yönetici Şifresi:");
-                    if (pass === "829615") {
-                        isExamAdminMode = true;
-                        const si = document.getElementById('examSearchInput');
-                        if (si) si.value = '';
-                        examSearchQuery = '';
-                        alert("Yönetici Modu Aktif! Sınavları düzenleyebilir, silebilir ve yeni sınav ekleyebilirsiniz.");
-                        const addBtn = document.getElementById('adminAddExamBtn');
-                        if (addBtn) addBtn.style.display = 'flex';
-                        renderExams();
-                    } else {
-                        if (pass !== null) alert("Hatalı Şifre!");
-                        const si = document.getElementById('examSearchInput');
-                        if (si) si.value = '';
-                        examSearchQuery = '';
-                        renderExams();
-                    }
-                }, 100);
-                return;
-            }
-            examSearchQuery = val;
+    // Mobile Filters
+    const mobileTabs = document.querySelectorAll('.exam-tab');
+    mobileTabs.forEach(tab => {
+        tab.onclick = () => {
+            activeExamFilter = tab.dataset.filter;
+            mobileTabs.forEach(t => t.classList.toggle('active', t === tab));
             renderExams();
         };
+    });
+
+    // Desktop Search
+    const searchInput = document.getElementById('examSearchInput');
+    if (searchInput) {
+        searchInput.oninput = (e) => handleExamSearch(e.target.value);
+    }
+
+    // Mobile Search
+    const mobileSearchInput = document.getElementById('mobileExamSearchInput');
+    if (mobileSearchInput) {
+        mobileSearchInput.oninput = (e) => handleExamSearch(e.target.value);
     }
 
     if (window.ExamsSync) {
@@ -60,16 +52,65 @@ function initExams() {
     }
 }
 
+function handleExamSearch(val) {
+    val = val.toLowerCase();
+    if (val === 'yönetiici' || val === 'yönetici') {
+        triggerMobileAdmin();
+        return;
+    }
+    examSearchQuery = val;
+    renderExams();
+}
+
+function triggerMobileAdmin() {
+    const pass = prompt("Yönetici Şifresi:");
+    if (pass === "829615") {
+        isExamAdminMode = true;
+        alert("Yönetici Modu Aktif! Sınavları düzenleyebilir, silebilir ve yeni sınav ekleyebilirsiniz.");
+        updateExamAdminUI();
+        renderExams();
+    } else if (pass !== null) {
+        alert("Hatalı Şifre!");
+    }
+
+    // Clear inputs
+    const si = document.getElementById('examSearchInput');
+    const msi = document.getElementById('mobileExamSearchInput');
+    if (si) si.value = '';
+    if (msi) msi.value = '';
+    examSearchQuery = '';
+    renderExams();
+}
+
+function updateExamAdminUI() {
+    const addBtn = document.getElementById('adminAddExamBtn');
+    if (addBtn) addBtn.style.display = 'flex';
+
+    const mobileAddBtn = document.getElementById('mobileAddExamBtn');
+    if (mobileAddBtn) mobileAddBtn.style.display = 'flex';
+
+    const mobileAdminBtn = document.getElementById('mobileAdminExamBtn');
+    if (mobileAdminBtn) {
+        mobileAdminBtn.style.background = '#e74c3c';
+        mobileAdminBtn.style.color = '#fff';
+    }
+}
+
 function renderExams() {
     const container = document.getElementById('examsGrid');
-    if (!container) return;
+    const mobileContainer = document.getElementById('mobileExamsGrid');
+
+    if (!container && !mobileContainer) return;
+
+    const noExamsHtml = `
+        <div class="col-span-full py-20 text-center text-white/20 font-black uppercase tracking-widest">
+            Planlanmış Sınav Bulunmuyor
+        </div>
+    `;
 
     if (!window.exams || window.exams.length === 0) {
-        container.innerHTML = `
-            <div class="col-span-full py-20 text-center text-white/20 font-black uppercase tracking-widest">
-                Planlanmış Sınav Bulunmuyor
-            </div>
-        `;
+        if (container) container.innerHTML = noExamsHtml;
+        if (mobileContainer) mobileContainer.innerHTML = noExamsHtml;
         return;
     }
 
@@ -100,27 +141,76 @@ function renderExams() {
     const sortedDates = Object.keys(groups).sort((a, b) => activeExamFilter === 'aktif' ? new Date(a) - new Date(b) : new Date(b) - new Date(a));
 
     if (sortedDates.length === 0) {
-        container.innerHTML = `<div class="col-span-full py-20 text-center text-white/20 font-black uppercase tracking-widest">Eşleşen Sınav Yok</div>`;
+        const emptyHtml = `<div class="col-span-full py-20 text-center text-white/20 font-black uppercase tracking-widest">Eşleşen Sınav Yok</div>`;
+        if (container) container.innerHTML = emptyHtml;
+        if (mobileContainer) mobileContainer.innerHTML = emptyHtml;
         return;
     }
 
-    let html = '';
-    sortedDates.forEach(date => {
-        html += `
-            <div class="exam-day-group">
-                <div class="hub-section-header">
-                    <i data-lucide="calendar" style="color: #ff6b2b; width: 18px; height: 18px;"></i>
-                    <h2 class="hub-section-title">${formatExamDate(date)}</h2>
+    // Render Desktop Grid
+    if (container) {
+        let html = '';
+        sortedDates.forEach(date => {
+            html += `
+                <div class="exam-day-group">
+                    <div class="hub-section-header">
+                        <i data-lucide="calendar" style="color: #ff6b2b; width: 18px; height: 18px;"></i>
+                        <h2 class="hub-section-title">${formatExamDate(date)}</h2>
+                    </div>
+                    <div class="exam-day-row">
+                        ${groups[date].map(exam => renderHubExamCard(exam)).join('')}
+                    </div>
                 </div>
-                <div class="exam-day-row">
-                    ${groups[date].map(exam => renderHubExamCard(exam)).join('')}
+            `;
+        });
+        container.innerHTML = html;
+    }
+
+    // Render Mobile Grid
+    if (mobileContainer) {
+        let mobileHtml = '';
+        filtered.forEach(exam => {
+            mobileHtml += renderMobileExamCard(exam);
+        });
+        mobileContainer.innerHTML = mobileHtml;
+    }
+
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+}
+
+function renderMobileExamCard(exam) {
+    const subject = exam.subject || 'DERS ADI';
+    const date = formatExamDate(exam.date);
+    const lesson = exam.lessonNumber ? (String(exam.lessonNumber).toLowerCase().includes('ders') ? exam.lessonNumber : `${exam.lessonNumber}. Ders`) : '-';
+
+    return `
+        <div class="mobile-exam-card-modern animate-fade-in" onclick="window.openExamModal('${exam.id}')">
+            <span class="exam-card-subject-v2">${subject.toUpperCase()}</span>
+            <span class="exam-card-title-v2">${subject} Yazılı Sınavı</span>
+            
+            <div class="exam-card-meta-v2">
+                <div class="exam-meta-item">
+                    <i data-lucide="calendar"></i>
+                    <span class="value">${date}</span>
+                </div>
+                <div class="exam-meta-item">
+                    <i data-lucide="clock"></i>
+                    <span class="value">${lesson}</span>
                 </div>
             </div>
-        `;
-    });
 
-    container.innerHTML = html;
-    if (typeof lucide !== 'undefined') lucide.createIcons();
+            ${isExamAdminMode ? `
+                <div style="position: absolute; top: 15px; right: 15px; display: flex; gap: 8px;">
+                    <button onclick="event.stopPropagation(); window.openEditExamModal('${exam.id}')" style="background: rgba(0,0,0,0.05); border: none; padding: 8px; border-radius: 8px; color: #666;">
+                        <i data-lucide="edit-3" style="width: 14px; height: 14px;"></i>
+                    </button>
+                    <button onclick="event.stopPropagation(); window.handleDeleteExam('${exam.id}')" style="background: rgba(231, 76, 60, 0.1); border: none; padding: 8px; border-radius: 8px; color: #e74c3c;">
+                        <i data-lucide="trash-2" style="width: 14px; height: 14px;"></i>
+                    </button>
+                </div>
+            ` : ''}
+        </div>
+    `;
 }
 
 function renderHubExamCard(exam) {
@@ -798,6 +888,7 @@ window.switchExamFormMode = switchExamFormMode;
 window.handleNewExam = handleNewExam;
 
 window.renderExams = renderExams;
+window.triggerMobileAdmin = triggerMobileAdmin;
 window.openExamNotesModal = openExamNotesModal;
 window.closeExamNotesModal = closeExamNotesModal;
 window.openNoteUploadModal = openNoteUploadModal;

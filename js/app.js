@@ -1,7 +1,7 @@
 function updateCurrentTime() {
     const now = new Date();
     const timeStr = now.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-    const dateStr = now.toLocaleDateString('tr-TR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+    const dateStr = now.toLocaleDateString('tr-TR', { weekday: 'long', month: 'long', day: 'numeric' });
 
     const timeEl = document.getElementById('currentTime');
     const dateEl = document.getElementById('currentDate');
@@ -10,6 +10,11 @@ function updateCurrentTime() {
     if (timeEl) timeEl.textContent = timeStr;
     if (dateEl) dateEl.textContent = dateStr;
     if (mobileDateEl) mobileDateEl.textContent = dateStr.toUpperCase();
+
+    // Sync Mobile Hero Card
+    if (typeof updateMobileHeroCard === 'function') {
+        updateMobileHeroCard();
+    }
 }
 
 function showPage(pageName) {
@@ -28,6 +33,25 @@ function showPage(pageName) {
     document.querySelectorAll('nav a').forEach(link => {
         link.classList.remove('active');
     });
+
+    // Handle Mobile Top Nav Active state
+    document.querySelectorAll('.mobile-top-nav a').forEach(link => {
+        link.classList.remove('active');
+        if (link.onclick.toString().includes(`'${pageName}'`)) {
+            link.classList.add('active');
+        }
+    });
+
+    // Handle Mobile Back Button visibility
+    const backBtn = document.getElementById('mobileBackBtn');
+    if (backBtn) {
+        if (pageName === 'home') {
+            backBtn.classList.remove('show');
+        } else {
+            backBtn.classList.add('show');
+        }
+    }
+    if (window.lucide) lucide.createIcons();
 
     if (pageName === 'home') {
         const homePage = document.getElementById('homePage');
@@ -51,8 +75,18 @@ function showPage(pageName) {
             const i = mobileNav.querySelector('i');
             if (i) i.style.color = '#fff';
         }
-        generateCalendar();
-        renderHomeworkCards();
+        if (window.innerWidth <= 768) {
+            const mobileSchedule = document.getElementById('mobileScheduleContainer');
+            const desktopControls = document.getElementById('desktopScheduleControls');
+            const desktopTable = document.querySelector('.schedule-table');
+            if (mobileSchedule) mobileSchedule.style.display = 'block';
+            if (desktopControls) desktopControls.style.display = 'none';
+            if (desktopTable) desktopTable.style.display = 'none';
+            if (typeof setMobileScheduleView === 'function') {
+                setMobileScheduleView('week');
+            }
+        }
+
     } else if (pageName === 'homework') {
         const homeworkPage = document.getElementById('homeworkPage');
         const navHomework = document.getElementById('nav-homework');
@@ -98,6 +132,9 @@ function showPage(pageName) {
             const i = mobileNav.querySelector('i');
             if (i) i.style.color = '#fff';
         }
+        if (typeof initHub === 'function' && window.innerWidth <= 768) {
+            initHub();
+        }
     } else if (pageName === 'ai') {
         const aiPage = document.getElementById('aiPage');
         const mobileNav = document.getElementById('mobile-nav-ai');
@@ -116,6 +153,7 @@ function showPage(pageName) {
 window.addEventListener('load', () => {
     updateCurrentTime();
     setInterval(updateCurrentTime, 1000);
+    if (window.lucide) lucide.createIcons();
     setupViewToggles();
 
     // Setup day selection event listeners

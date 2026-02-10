@@ -4,6 +4,28 @@ let currentLessonIndex = 0;
 let realTimeCheckInterval;
 let currentMobileTimelineDay = '';
 
+function shortenLessonName(name) {
+    if (!name) return "";
+    const lowerName = name.toLowerCase();
+
+    const abbreviations = {
+        "türk dili ve edebiyatı": "T. Dili Ed.",
+        "temel dini bilgiler": "T. Dini Bil.",
+        "bilişim teknolojileri": "Bilişim Tek.",
+        "peygamberimizin hayatı": "Peygambers Hay.",
+        "din kültürü ve ahlak bilgisi": "Din Kültürü",
+        "beden eğitimi ve spor": "Beden Eğt.",
+        "görsel sanatlar": "Görsel San.",
+        "sağlık bilgisi ve trafik kültürü": "Sağlık Bil."
+    };
+
+    for (const [key, value] of Object.entries(abbreviations)) {
+        if (lowerName.includes(key)) return value;
+    }
+
+    return name;
+}
+
 function parseTimeToMinutes(timeStr) {
     const [hours, minutes] = timeStr.split(':').map(Number);
     return hours * 60 + minutes;
@@ -192,7 +214,6 @@ function renderMobileTimeline(dayName) {
     if (!timelineContainer) return;
 
     timelineContainer.innerHTML = '';
-
     const lessons = scheduleData[day];
     if (!lessons) return;
 
@@ -204,13 +225,13 @@ function renderMobileTimeline(dayName) {
         item.className = `timeline-item ${isActive ? 'active' : ''}`;
 
         item.innerHTML = `
+            <div class="timeline-time">
+                ${lesson.time.split(' - ')[0]}<br>
+                <span style="opacity: 0.5; font-size: 10px;">${lesson.time.split(' - ')[1]}</span>
+            </div>
             <div class="timeline-content">
-                <div>
-                    <div class="timeline-subject">${lesson.lesson}</div>
-                    <div class="timeline-location">
-                        ${lesson.location}
-                    </div>
-                </div>
+                <div class="timeline-subject">${lesson.lesson}</div>
+                <div class="timeline-location">${lesson.location}</div>
             </div>
         `;
         timelineContainer.appendChild(item);
@@ -225,7 +246,6 @@ function renderMobileWeekView() {
     const days = ['Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma'];
 
     days.forEach(day => {
-        // Add Day Header
         const header = document.createElement('div');
         header.className = 'mobile-week-day-header';
         header.textContent = day;
@@ -237,13 +257,10 @@ function renderMobileWeekView() {
                 const item = document.createElement('div');
                 item.className = 'timeline-item';
                 item.innerHTML = `
+                    <div class="timeline-time">${lesson.time.split(' - ')[0]}</div>
                     <div class="timeline-content">
-                        <div>
-                            <div class="timeline-subject">${lesson.lesson}</div>
-                            <div class="timeline-location">
-                                ${lesson.location}
-                            </div>
-                        </div>
+                        <div class="timeline-subject">${shortenLessonName(lesson.lesson)}</div>
+                        <div class="timeline-location">${lesson.location}</div>
                     </div>
                 `;
                 timelineContainer.appendChild(item);
@@ -358,69 +375,107 @@ function updateMobileHeroCard() {
     const heroEndTime = document.getElementById('mobileHeroEndTime');
     const heroSubject = document.getElementById('mobileHeroSubject');
     const heroLocation = document.getElementById('mobileHeroLocation');
+    const heroLocationContainer = document.querySelector('.hero-location');
     const hwStatus = document.getElementById('mobileHeroHwStatus');
     const progressFill = document.getElementById('heroProgressFill');
+    const nowBadge = document.querySelector('.now-badge');
 
     const TurkishDays = ['Pazar', 'Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi'];
-    const today = TurkishDays[new Date().getDay()];
-
-    // Update header date
-    const dateDisplay = document.getElementById('mobileDateDisplay');
-    if (dateDisplay) {
-        const options = { weekday: 'long', day: 'numeric', month: 'long' };
-        dateDisplay.textContent = new Date().toLocaleDateString('tr-TR', options);
-    }
-
-    const lessons = scheduleData[today];
-    if (!lessons) return;
-
     const now = new Date();
     const currentMinutes = now.getHours() * 60 + now.getMinutes();
+    const currentSeconds = now.getSeconds();
+
     let heroLesson = null;
     let isActive = false;
+    let dayOffset = 0;
+    let targetStartM = 0;
 
-    // Find active lesson
-    for (let i = 0; i < lessons.length; i++) {
-        const l = lessons[i];
-        const [start, end] = l.time.split(' - ');
-        const startM = parseTimeToMinutes(start);
-        const endM = parseTimeToMinutes(end);
+    // Search for the next available lesson (unending loop until lesson found)
+    while (dayOffset < 8) {
+        const checkDayIndex = (now.getDay() + dayOffset) % 7;
+        const checkDayName = TurkishDays[checkDayIndex];
+        const dayLessons = scheduleData[checkDayName];
 
-        if (currentMinutes >= startM && currentMinutes < endM) {
-            heroLesson = l;
-            isActive = true;
-            // Progress calculation
-            const total = endM - startM;
-            const elapsed = currentMinutes - startM;
-            const percent = (elapsed / total) * 100;
-            if (progressFill) progressFill.style.width = `${percent}%`;
-            break;
-        } else if (currentMinutes < startM) {
-            heroLesson = l; // Next lesson
-            if (progressFill) progressFill.style.width = `0%`;
-            break;
+        if (dayLessons && dayLessons.length > 0) {
+            for (let i = 0; i < dayLessons.length; i++) {
+                const l = dayLessons[i];
+                const [start, end] = l.time.split(' - ');
+                const startM = parseTimeToMinutes(start);
+                const endM = parseTimeToMinutes(end);
+
+                if (dayOffset === 0) {
+                    if (currentMinutes >= startM && currentMinutes < endM) {
+                        heroLesson = l;
+                        isActive = true;
+                        break;
+                    } else if (currentMinutes < startM) {
+                        heroLesson = l;
+                        targetStartM = startM;
+                        break;
+                    }
+                } else {
+                    heroLesson = l;
+                    targetStartM = startM + (dayOffset * 1440);
+                    break;
+                }
+            }
         }
+        if (heroLesson) break;
+        dayOffset++;
     }
 
-    // Default to last lesson if day is over
-    if (!heroLesson) heroLesson = lessons[lessons.length - 1];
+    if (!heroLesson) {
+        if (heroSubject) heroSubject.textContent = "DERS PROGRAMI BOŞ";
+        return;
+    }
 
-    if (heroLesson && heroSubject && heroTime) {
-        heroSubject.textContent = heroLesson.lesson;
-        const [start, end] = heroLesson.time.split(' - ');
-        heroTime.textContent = start;
+    const [start, end] = heroLesson.time.split(' - ');
+    const startM = parseTimeToMinutes(start);
+    const endM = parseTimeToMinutes(end);
+
+    if (isActive) {
+        if (heroSubject) heroSubject.textContent = shortenLessonName(heroLesson.lesson);
+        if (nowBadge) nowBadge.textContent = "ŞU AN";
+        if (heroTime) heroTime.textContent = start;
         if (heroEndTime) heroEndTime.textContent = `${end} biter`;
-        if (heroLocation) heroLocation.textContent = heroLesson.location;
+        if (heroLocationContainer) heroLocationContainer.style.display = 'none';
+        if (hwStatus) hwStatus.style.display = 'flex';
 
-        // Check for homework in this lesson
-        if (hwStatus) {
-            const hasHw = window.homeworkList && window.homeworkList.some(hw =>
-                hw.subject && heroLesson.lesson && hw.subject.toLowerCase().includes(heroLesson.lesson.toLowerCase())
-            );
-            hwStatus.innerHTML = hasHw ? '🔥 ÖDEV VAR' : '✨ Ödev Yok';
-            hwStatus.style.background = hasHw ? 'rgba(231, 76, 60, 0.1)' : 'rgba(46, 204, 113, 0.1)';
-            hwStatus.style.color = hasHw ? '#e74c3c' : '#2ecc71';
+        const total = endM - startM;
+        const elapsed = currentMinutes - startM;
+        const percent = Math.min(100, Math.max(0, (elapsed / total) * 100));
+        if (progressFill) progressFill.style.width = `${percent}%`;
+    } else {
+        if (heroSubject) heroSubject.textContent = shortenLessonName(heroLesson.lesson).toUpperCase();
+        if (nowBadge) nowBadge.textContent = "SIRADAKİ";
+
+        // Accurate countdown including multi-day offsets
+        const totalDiffM = targetStartM - currentMinutes;
+        const h = Math.floor(totalDiffM / 60);
+        const m = totalDiffM % 60;
+
+        let countdownStr = "";
+        if (h > 0) {
+            countdownStr = `${h} sa ${m} dk`;
+        } else {
+            countdownStr = `${m} dk kaldı`;
         }
+
+        if (heroTime) heroTime.textContent = countdownStr;
+        if (heroEndTime) heroEndTime.textContent = "başlamasına";
+        if (heroLocationContainer) heroLocationContainer.style.display = 'none';
+        if (hwStatus) hwStatus.style.display = 'none';
+        if (progressFill) progressFill.style.width = "0%";
+    }
+
+    // Check for homework
+    if (hwStatus && hwStatus.style.display !== 'none') {
+        const hasHw = window.homeworkList && window.homeworkList.some(hw =>
+            hw.subject && heroLesson.lesson && hw.subject.toLowerCase().includes(heroLesson.lesson.toLowerCase())
+        );
+        hwStatus.innerHTML = hasHw ? '🔥 ÖDEV VAR' : '✨ Ödev Yok';
+        hwStatus.style.background = hasHw ? 'rgba(231, 76, 60, 0.1)' : 'rgba(46, 204, 113, 0.1)';
+        hwStatus.style.color = hasHw ? '#e74c3c' : '#2ecc71';
     }
 }
 
@@ -454,12 +509,22 @@ function updateMobileTimeline(day) {
         // Define icons based on lesson
         let icon = 'book-open';
         const lessonLower = l.lesson.toLowerCase();
-        if (lessonLower.includes('mat')) icon = 'percent';
-        if (lessonLower.includes('biyo') || lessonLower.includes('fen')) icon = 'flask-conical';
-        if (lessonLower.includes('ing')) icon = 'globe-2';
-        if (lessonLower.includes('spor') || lessonLower.includes('beden')) icon = 'activity';
+        if (lessonLower.includes('mat')) icon = 'calculator';
+        if (lessonLower.includes('edebiyat')) icon = 'book-text';
+        if (lessonLower.includes('dil') || lessonLower.includes('almanca') || lessonLower.includes('ing')) icon = 'languages';
+        if (lessonLower.includes('tarih')) icon = 'landmark';
+        if (lessonLower.includes('coğrafya')) icon = 'map';
+        if (lessonLower.includes('fizik')) icon = 'atom';
+        if (lessonLower.includes('kimya')) icon = 'flask-conical';
+        if (lessonLower.includes('biyo') || lessonLower.includes('fen')) icon = 'dna';
+        if (lessonLower.includes('spor') || lessonLower.includes('beden')) icon = 'dumbbell';
         if (lessonLower.includes('müzik')) icon = 'music';
         if (lessonLower.includes('görsel') || lessonLower.includes('resim')) icon = 'palette';
+        if (lessonLower.includes('din')) icon = 'scroll';
+        if (lessonLower.includes('bilişim')) icon = 'cpu';
+        if (lessonLower.includes('sağlık')) icon = 'heart-pulse';
+        if (lessonLower.includes('sosyal') || lessonLower.includes('aile')) icon = 'users';
+        if (lessonLower.includes('rehber')) icon = 'user-check';
 
         const card = document.createElement('div');
         card.className = `modern-timeline-card ${isActive ? 'active' : ''}`;
@@ -469,15 +534,15 @@ function updateMobileTimeline(day) {
         }
 
         card.innerHTML = `
-            <div class="m-card-icon" style="${isActive ? 'background: #d1a684; color: #fff;' : ''}">
-                <i data-lucide="${icon}"></i>
+            <div class="m-card-lesson-num" style="${isActive ? 'background: #d1a684; color: #fff;' : ''}">
+                ${index + 1}
             </div>
             <div>
-                <h4>${l.lesson}</h4>
+                <h4>${shortenLessonName(l.lesson)}</h4>
                 <p class="m-card-time">${start} — ${end}</p>
             </div>
-            <div class="m-card-location">
-                <i data-lucide="map-pin"></i> ${l.location}
+            <div class="m-card-location" style="margin-top: 10px;">
+                ${l.location}
             </div>
          `;
         timeline.appendChild(card);

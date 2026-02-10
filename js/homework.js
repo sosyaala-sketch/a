@@ -147,15 +147,13 @@ function renderHomeworkCards() {
 
 window.renderMobileHomeworkList = function () {
     const container = document.getElementById('mobileHomeworkList');
-    const countEl = document.getElementById('mobileHwCount');
+    const totalCountEl = document.getElementById('mobileHwTotalCount');
+    const urgentCountEl = document.getElementById('mobileHwUrgentCount');
+
     if (!container) return;
 
     container.innerHTML = '';
 
-    // Update count
-    if (countEl) countEl.textContent = window.homeworkList.length;
-
-    // Use sorting
     const sorted = [...window.homeworkList].sort((a, b) => {
         if (currentSortBy === 'dueDate') {
             return new Date(a.dueDate) - new Date(b.dueDate);
@@ -164,26 +162,56 @@ window.renderMobileHomeworkList = function () {
         }
     });
 
+    // Update Stats
+    const total = sorted.length;
+    let urgent = 0;
+    const now = new Date();
+
+    // Update Tab Active State
+    document.querySelectorAll('.hw-tab').forEach(tab => {
+        const isDueTab = tab.innerText.includes('Süresi');
+        tab.classList.toggle('active', (currentSortBy === 'dueDate' && isDueTab) || (currentSortBy === 'givenDate' && !isDueTab));
+    });
+
+    if (totalCountEl) totalCountEl.textContent = total;
+
     sorted.forEach(hw => {
         const card = document.createElement('div');
-        card.className = 'mobile-hw-card';
+        card.className = 'mobile-hw-card-modern animate-fade-in';
         card.onclick = () => openHomeworkDetail(hw);
 
-        const lessonInfo = hw.lesson ? `${hw.lesson}. DERS` : 'DERS';
+        const dueDate = new Date(hw.dueDate);
+        const diffTime = dueDate - now;
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        const isUrgent = diffDays <= 2;
+        if (isUrgent) urgent++;
+
+        const statusLabel = isUrgent ? 'ACİL' : 'ZAMAN VAR';
+        const statusClass = isUrgent ? 'urgent' : 'neutral';
 
         card.innerHTML = `
-            <div class="hw-card-header">
-                <div class="hw-subject-badge">${hw.subject}</div>
-                <div class="hw-lesson-info">${lessonInfo}</div>
+            <div class="hw-card-header-v2">
+                <span class="hw-card-subject-v2">${hw.subject.toUpperCase()}</span>
+                <span class="hw-card-status-v2 ${statusClass}">${statusLabel}</span>
             </div>
-            <div class="hw-content">
+            <div class="hw-card-content-v2">
                 <h3>${hw.description}</h3>
-                <p><i data-lucide="calendar"></i> ${hw.dueDate}</p>
+            </div>
+            <div class="hw-card-footer-v2">
+                <div class="footer-item">
+                    <i data-lucide="calendar"></i>
+                    <span>${hw.dueDate}</span>
+                </div>
+                <div class="footer-item">
+                    <i data-lucide="clock"></i>
+                    <span>${hw.lesson}. Ders</span>
+                </div>
             </div>
         `;
         container.appendChild(card);
     });
 
+    if (urgentCountEl) urgentCountEl.textContent = urgent;
     if (window.lucide) lucide.createIcons();
 };
 
