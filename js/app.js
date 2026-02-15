@@ -121,24 +121,22 @@ function showPage(pageName) {
             initExams();
         }
     } else if (pageName === 'hub') {
-        if (window.innerWidth <= 768) {
-            const hubPage = document.getElementById('hubPage');
-            const mobileNav = document.getElementById('mobile-nav-hub');
-            const navHub = document.getElementById('nav-hub');
-            if (hubPage) hubPage.classList.add('active');
-            if (navHub) navHub.classList.add('active');
-            if (mobileNav) {
-                mobileNav.classList.add('active');
-                mobileNav.style.color = '#fff';
-                const i = mobileNav.querySelector('i');
-                if (i) i.style.color = '#fff';
-            }
-            if (typeof initHub === 'function') {
-                initHub();
-            }
-        } else {
-            window.open('classcloud---smart-board-file-hub/hub_app.html', '_blank');
-            return;
+        const hubPage = document.getElementById('hubPage');
+        const mobileNav = document.getElementById('mobile-nav-hub');
+        const navHub = document.getElementById('nav-hub');
+        if (hubPage) {
+            hubPage.classList.add('active');
+            hubPage.style.display = 'block'; // Explicitly force visibility
+        }
+        if (navHub) navHub.classList.add('active');
+        if (mobileNav) {
+            mobileNav.classList.add('active');
+            mobileNav.style.color = '#fff';
+            const i = mobileNav.querySelector('i');
+            if (i) i.style.color = '#fff';
+        }
+        if (typeof initHub === 'function') {
+            try { initHub(); } catch (e) { console.error("Hub init error:", e); }
         }
     } else if (pageName === 'ai') {
         const aiPage = document.getElementById('aiPage');

@@ -46,6 +46,15 @@
         background: #fdfaf5 !important;
     }
 
+    /* Hide Gemini Chat and unnecessary buttons on Mobile */
+    .gemini-toggle-btn,
+    .gemini-chat-widget,
+    .desktop-admin-toggle {
+        display: none !important;
+        visibility: hidden !important;
+        pointer-events: none !important;
+    }
+
     /* Header Styling */
     .mobile-header {
         display: flex;
