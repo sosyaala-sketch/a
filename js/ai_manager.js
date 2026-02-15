@@ -91,15 +91,38 @@ async function loadNotebooks(forceRefresh = false) {
 function disableAdminMode() {
     isAdminMode = false;
     const controls = document.getElementById('adminControlsV2');
-    if (controls) {
-        controls.style.display = 'none';
-    }
-    const searchInput = document.getElementById('aiSearchInput');
-    if (searchInput) {
-        searchInput.placeholder = "Asistan veya konu ara...";
-        searchInput.style.borderColor = "rgba(255, 255, 255, 0.08)";
-    }
+    if (controls) controls.style.display = 'none';
+
     renderNotebooks(notebooks);
+}
+
+// Global Search Sync
+function syncAiSearch(val) {
+    const query = val.toLocaleLowerCase('tr').trim();
+
+    // Update all relevant inputs to keep them in sync
+    const inputs = ['aiSearchInput', 'aiSearchInputDesktop', 'aiSearchInputMobile'];
+    inputs.forEach(id => {
+        const el = document.getElementById(id);
+        if (el && el.value !== val) el.value = val;
+    });
+
+    // Handle Admin Command
+    const adminCmds = ['yönetici', 'yonetici', 'admin'];
+    if (adminCmds.includes(query)) {
+        openAdminAuthInline();
+        inputs.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.value = '';
+        });
+        return;
+    }
+
+    const filtered = notebooks.filter(n =>
+        (n.title || '').toLocaleLowerCase('tr').includes(query) ||
+        (n.description || '').toLocaleLowerCase('tr').includes(query)
+    );
+    renderNotebooks(filtered);
 }
 
 function renderNotebooks(items) {
@@ -131,10 +154,10 @@ function renderNotebooks(items) {
             </div>
             <div class="notebook-info">
                 <h3>${notebook.title}</h3>
-                <p>${notebook.description || 'Açıklama yok'}</p>
+                <p>${notebook.description || 'Google NotebookLM Asistanı'}</p>
             </div>
             <div class="notebook-arrow">
-                <i data-lucide="arrow-right"></i>
+                <i data-lucide="chevron-right"></i>
             </div>
         `;
 
@@ -184,46 +207,17 @@ function renderNotebooks(items) {
     });
 
     if (typeof lucide !== 'undefined') lucide.createIcons();
+
+    // Update count in UI
+    const countEl = document.getElementById('aiNotebookCount');
+    if (countEl) countEl.innerText = items.length;
 }
 
 function setupSearchListener() {
     const searchInput = document.getElementById('aiSearchInput');
-    if (!searchInput) {
-        console.warn('⚠️ Search input not found');
-        return;
-    }
+    if (!searchInput) return;
 
-    console.log('🎤 Search listener attached');
-    searchInput.addEventListener('input', (e) => {
-        // Turkish Safe Lowercase
-        const query = e.target.value.toLocaleLowerCase('tr').trim();
-        console.log('Search Query:', query);
-
-        const adminCmds = ['yönetici', 'yonetici', 'admin'];
-        if (adminCmds.includes(query)) {
-            console.log('🗝️ [AI] Admin mode triggered!');
-            renderNotebooks(notebooks);
-            openAdminAuthInline();
-            e.target.value = '';
-            return;
-        }
-
-        const filtered = notebooks.filter(n =>
-            (n.title || '').toLocaleLowerCase('tr').includes(query) ||
-            (n.description || '').toLocaleLowerCase('tr').includes(query)
-        );
-        renderNotebooks(filtered);
-    });
-
-    searchInput.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') {
-            const query = e.target.value.toLocaleLowerCase('tr').trim();
-            if (['yönetici', 'yonetici', 'admin'].includes(query)) {
-                openAdminAuthInline();
-                e.target.value = '';
-            }
-        }
-    });
+    searchInput.addEventListener('input', (e) => syncAiSearch(e.target.value));
 }
 
 function setupPasswordListener() {
@@ -272,19 +266,6 @@ function enableAdminMode() {
     isAdminMode = true;
     const controls = document.getElementById('adminControlsV2');
     if (controls) controls.style.display = 'flex';
-
-    const searchInput = document.getElementById('aiSearchInput');
-    const searchContainer = document.querySelector('.ai-search-container-v2');
-    const hint = document.querySelector('.search-hint');
-
-    if (searchInput) {
-        searchInput.placeholder = "Yönetici Modu";
-        searchInput.value = '';
-        if (searchContainer) {
-            searchContainer.style.background = 'linear-gradient(135deg, rgba(76,175,80,0.3), rgba(76,175,80,0.1))';
-            searchContainer.style.borderColor = '#4caf50';
-        }
-    }
 
     renderNotebooks(notebooks);
     alert('✅ Yönetici Modu Aktif!');
@@ -394,12 +375,37 @@ async function deleteAllNotebooks() {
 // Global pop-up helper
 function openAiPopup(customLink) {
     const url = customLink || "https://notebooklm.google.com/notebook/6b4e5654-c061-4a27-b94f-ccd089921225?authuser=4";
-    const width = 500;
-    const height = 800;
-    const left = (screen.width - width) / 2;
-    const top = (screen.height - height) / 2;
-    window.open(url, "9A_Assistant_AI", `width=${width},height=${height},top=${top},left=${left},scrollbars=yes,resizable=yes`);
+
+    // Use the premium unified modal
+    const modal = document.getElementById('aiIframeModal');
+    const iframe = document.getElementById('aiIframe');
+
+    if (modal && iframe) {
+        iframe.src = url;
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        console.log('🖥️ [AI] Opening assistant inline:', url);
+    } else {
+        // Fallback to popup if modal missing
+        const width = 1000;
+        const height = 800;
+        const left = (screen.width - width) / 2;
+        const top = (screen.height - height) / 2;
+        window.open(url, "9A_Assistant_AI", `width=${width},height=${height},top=${top},left=${left},scrollbars=yes,resizable=yes`);
+    }
 }
+
+// Close helper
+function closeAiIframeModal() {
+    const modal = document.getElementById('aiIframeModal');
+    const iframe = document.getElementById('aiIframe');
+    if (modal) {
+        modal.classList.remove('active');
+        if (iframe) iframe.src = ''; // Clear source to stop audio/scripts
+        document.body.style.overflow = '';
+    }
+}
+window.closeAiIframeModal = closeAiIframeModal;
 
 // GEMINI CHAT
 function toggleGeminiChat() {
@@ -471,6 +477,7 @@ function closeEditNotebookModal() { document.getElementById('editNotebookModal')
 function handleUpdateNotebook(e) { e.preventDefault(); }
 
 // --- EXSPOSE TO WINDOW (FINAL) ---
+window.syncAiSearch = syncAiSearch;
 window.loadNotebooks = loadNotebooks;
 window.renderNotebooks = renderNotebooks;
 window.notebooks = notebooks;

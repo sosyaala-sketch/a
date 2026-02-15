@@ -12,7 +12,9 @@
     <link rel="stylesheet" href="css/liquid_glass.css">
     <link rel="stylesheet" href="css/mobile_modern.css">
     <link rel="stylesheet" href="css/hub_mobile.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+    <link rel="stylesheet" href="css/calendar.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800;900&display=swap"
         rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
@@ -41,6 +43,25 @@
         .animate-fade-in {
             animation: fadeIn 0.5s ease forwards;
         }
+
+        /* CRITICAL HUB VISIBILITY */
+        .hub-desktop-view {
+            display: block !important;
+        }
+
+        .hub-mobile-view {
+            display: none !important;
+        }
+
+        @media (max-width: 768px) {
+            .hub-desktop-view {
+                display: none !important;
+            }
+
+            .hub-mobile-view {
+                display: block !important;
+            }
+        }
     </style>
 </head>
 
@@ -53,8 +74,9 @@
                 <a onclick="showPage('schedule')" id="nav-schedule">Ders Programı</a>
                 <a onclick="showPage('homework')" id="nav-homework">Ödevler</a>
                 <a onclick="showPage('exams')" id="nav-exams">Yazılılar</a>
+                <a onclick="showPage('calendar')" id="nav-calendar">Takvim</a>
                 <a onclick="showPage('hub')" id="nav-hub">Hub</a>
-                <a onclick="showPage('ai')" id="nav-ai">AI</a>
+                <a onclick="showPage('ai')" id="nav-ai">SENA AI</a>
             </nav>
         </div>
     </header>
@@ -65,40 +87,111 @@
         <div class="desktop-home-view">
             <section class="hero">
                 <div class="search-container">
-                    <input type="text" class="search-box" placeholder="İçerik ara..."
-                        onclick="window.open('https://what-does-glint-mean.bic.hr/', '_blank')">
-                    <div class="search-icon" onclick="window.open('https://what-does-glint-mean.bic.hr/', '_blank')">
-                        <i data-lucide="search"></i>
+                    <form action="https://www.google.com/search" method="get" target="_blank"
+                        style="width: 100%; display: block; position: relative;">
+                        <input type="text" name="q" class="search-box" placeholder="Google'da bir şeyler ara..."
+                            autocomplete="off">
+                        <button type="submit" class="search-icon"
+                            style="background: transparent; border: none; padding: 0;">
+                            <i data-lucide="search"></i>
+                        </button>
+                    </form>
+                </div>
+
+
+
+                <div class="hero-widgets-container">
+                    <div class="clock-widget">
+                        <div id="currentTime" class="time-large"></div>
+                        <div id="currentDate" class="date-large"></div>
+                    </div>
+                    <div id="weatherWidget" class="weather-widget" onclick="openWeatherModal()">
+                        <!-- Weather content loaded via JS -->
+                        <div class="weather-loading">
+                            <i data-lucide="loader-2" class="spin"></i>
+                        </div>
                     </div>
                 </div>
 
-                <div class="quick-links">
-                    <div class="quick-link" onclick="showPage('schedule')">
-                        <div class="icon">📅</div>
-                        <span>Program</span>
-                    </div>
-                    <div class="quick-link" onclick="showPage('homework')">
-                        <div class="icon">📝</div>
-                        <span>Ödevler</span>
-                    </div>
-                    <div class="quick-link" onclick="showPage('exams')">
-                        <div class="icon">📚</div>
-                        <span>Yazılılar</span>
-                    </div>
-                    <div class="quick-link" onclick="showTodayHomework()">
-                        <div class="icon">📌</div>
-                        <span>Bugün</span>
-                    </div>
-                    <div class="quick-link" onclick="showPage('hub')">
-                        <div class="icon">📁</div>
-                        <span>Hub</span>
+                <!-- Weather Modal -->
+                <div id="weatherModal" class="modal-overlay"
+                    style="display: none; align-items: center; justify-content: center; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 2000; background: rgba(0,0,0,0.7); backdrop-filter: blur(25px) saturate(180%); -webkit-backdrop-filter: blur(25px) saturate(180%); padding: 20px; overflow-y: auto;"
+                    onclick="if(event.target === this) closeWeatherModal()">
+                    <div class="weather-modal-content"
+                        style="background: rgba(20, 20, 20, 0.4); border: 1px solid rgba(255,255,255,0.15); border-radius: 40px; padding: 40px; max-width: 1200px; width: 100%; backdrop-filter: blur(20px); box-shadow: 0 40px 100px rgba(0,0,0,0.6), inset 0 0 40px rgba(255,255,255,0.02); position: relative; overflow: hidden; margin: auto;">
+                        <!-- Rim Highlight -->
+                        <div
+                            style="position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);">
+                        </div>
+
+                        <!-- Header -->
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 35px;">
+                            <div>
+                                <p
+                                    style="color: rgba(255,255,255,0.4); font-size: 10px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 5px;">
+                                    DETAYLI HAVA DURUMU</p>
+                                <h3
+                                    style="margin: 0; font-size: 32px; font-weight: 900; color: #fff; font-style: italic; letter-spacing: -1px;">
+                                    Ankara</h3>
+                            </div>
+                            <button onclick="closeWeatherModal()"
+                                style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.1); color: #fff; width: 45px; height: 45px; border-radius: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.3s;">
+                                <i data-lucide="x" style="width: 20px; height: 20px;"></i>
+                            </button>
+                        </div>
+
+                        <!-- Current Weather Card -->
+                        <div id="currentWeatherCard"
+                            style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(139, 92, 246, 0.15)); border: 1px solid rgba(255,255,255,0.2); border-radius: 30px; padding: 35px; margin-bottom: 30px; position: relative; overflow: hidden;">
+                            <div
+                                style="position: absolute; top: 0; right: 0; width: 200px; height: 200px; background: radial-gradient(circle, rgba(255,255,255,0.1), transparent); pointer-events: none;">
+                            </div>
+                            <!-- Current weather details will be injected here -->
+                        </div>
+
+                        <!-- Tabs -->
+                        <div
+                            style="display: flex; gap: 10px; margin-bottom: 30px; background: rgba(255,255,255,0.02); padding: 6px; border-radius: 18px; border: 1px solid rgba(255,255,255,0.08);">
+                            <button id="weatherTabHourly" onclick="switchWeatherTab('hourly')"
+                                style="flex: 1; padding: 12px 20px; border-radius: 14px; border: none; background: #fff; color: #000; font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; cursor: pointer; transition: all 0.3s;">
+                                Saatlik Tahmin
+                            </button>
+                            <button id="weatherTabDaily" onclick="switchWeatherTab('daily')"
+                                style="flex: 1; padding: 12px 20px; border-radius: 14px; border: none; background: transparent; color: rgba(255,255,255,0.4); font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; cursor: pointer; transition: all 0.3s;">
+                                7 Günlük Tahmin
+                            </button>
+                            <button id="weatherTabDetails" onclick="switchWeatherTab('details')"
+                                style="flex: 1; padding: 12px 20px; border-radius: 14px; border: none; background: transparent; color: rgba(255,255,255,0.4); font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; cursor: pointer; transition: all 0.3s;">
+                                Detaylı Veriler
+                            </button>
+                        </div>
+
+                        <!-- Hourly Weather -->
+                        <div id="hourlyWeatherContainer" style="display: block;">
+                            <div id="hourlyWeatherList"
+                                style="display: flex; gap: 15px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.2) transparent;">
+                                <!-- Hourly items via JS -->
+                            </div>
+                        </div>
+
+                        <!-- Daily Weather -->
+                        <div id="dailyWeatherContainer" style="display: none;">
+                            <div id="dailyWeatherList" style="display: flex; flex-direction: column; gap: 12px;">
+                                <!-- Daily items via JS -->
+                            </div>
+                        </div>
+
+                        <!-- Detailed Metrics -->
+                        <div id="detailsWeatherContainer" style="display: none;">
+                            <div id="detailedMetricsGrid"
+                                style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px;">
+                                <!-- Detailed metrics via JS -->
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <div class="current-time-display">
-                    <div id="currentTime" class="time"></div>
-                    <div id="currentDate" class="date"></div>
-                </div>
 
                 <div class="day-selector">
                     <button class="day-btn" data-day="Pazartesi">Pzt</button>
@@ -125,12 +218,17 @@
                     <p class="summary-label">GÜNLÜK ÖZET</p>
                     <h1 id="mobileDateDisplay">Salı, 10 Şubat</h1>
                 </div>
-                <div class="header-right">
-                    <div class="header-icon-btn">
-                        <i data-lucide="bell"></i>
+                <div class="header-right" style="display: flex; align-items: center; gap: 10px;">
+                    <!-- Mobile Weather Summary -->
+                    <div id="mobileWeatherParams"
+                        style="display:flex; align-items:center; gap:6px; background:rgba(0,0,0,0.05); padding:6px 10px; border-radius:16px; border:1px solid rgba(0,0,0,0.05); cursor:pointer;"
+                        onclick="showPage('weather')">
+                        <div id="mWeatherIcon"><i data-lucide="cloud"
+                                style="width:16px; height:16px; color:#1a1a1a;"></i></div>
+                        <span id="mWeatherTemp" style="font-weight:800; font-size:13px; color:#1a1a1a;">--°</span>
                     </div>
-                    <div class="profile-avatar-circle">
-                        <span>9A</span>
+                    <div class="header-icon-btn" onclick="showPage('weather')">
+                        <i data-lucide="bell"></i>
                     </div>
                 </div>
             </div>
@@ -142,6 +240,7 @@
                     <a onclick="showPage('schedule')">Ders Programı</a>
                     <a onclick="showPage('homework')">Ödevler</a>
                     <a onclick="showPage('exams')">Yazılılar</a>
+                    <a onclick="showPage('calendar')">Takvim</a>
                     <a onclick="showPage('hub')">Hub</a>
                     <a onclick="showPage('ai')">AI</a>
                 </div>
@@ -193,6 +292,7 @@
                     </div>
                 </div>
             </div>
+
 
             <!-- Minimalist Day Selector (Circular) -->
             <div class="modern-calendar-section">
@@ -335,9 +435,7 @@
                 </tbody>
             </table>
 
-            <div style="margin-top: 35px; display: flex; justify-content: center; align-items: center;">
-                <button onclick="showTomorrowSchedule()" class="tomorrow-btn">YARIN</button>
-            </div>
+
         </div>
     </div>
     </div>
@@ -520,234 +618,579 @@
         </div>
     </div>
 
-    <!-- Hub Page -->
-    <div id="hubPage" class="page">
-        <!-- Desktop Hub View (Iframe) -->
-        <div class="desktop-only">
-            <iframe id="hubFrame" src="classcloud---smart-board-file-hub/hub_app.html"
-                style="width: 100%; height: calc(100vh - 100px); border: none; border-radius: 20px;"></iframe>
-        </div>
-
-        <!-- Modern Mobile Hub View -->
-        <div class="mobile-only">
-            <div class="mobile-header">
-                <div class="mobile-header-top">
-                    <button class="mobile-icon-back-btn" onclick="showPage('home')"
-                        style="background: rgba(255,255,255,0.05); color: #fff;">
-                        <i data-lucide="chevron-left"></i>
-                    </button>
-                    <h1>Bulut Paylaşım</h1>
-                    <div class="mobile-header-actions">
-                        <button class="mobile-icon-btn" onclick="toggleHubFabs()" id="mobileHeaderAddBtn"
-                            style="background: #000; color: #fff; width: 40px; height: 40px; border-radius: 12px; border: none; display: flex; align-items: center; justify-content: center;">
-                            <i data-lucide="plus"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="mobile-stats-row">
-                <div class="mobile-stat-card">
-                    <span class="stat-value" id="mobileHubTotalCount">0</span>
-                    <span class="stat-label">TOPLAM</span>
-                </div>
-                <div class="mobile-stat-card urgent">
-                    <span class="stat-value" id="mobileHubFolderCount">0</span>
-                    <span class="stat-label">KLASÖR</span>
-                </div>
-                <div class="mobile-stat-card completed">
-                    <span class="stat-value" id="mobileHubFileCount">0</span>
-                    <span class="stat-label">DOSYA</span>
-                </div>
-            </div>
-
-
-
-            <div class="mobile-hub-search-row">
-                <div class="mobile-search-bar">
-                    <i data-lucide="search"></i>
-                    <input id="mobileHubSearchInput" type="text" placeholder="Bulutta bir şeyler ara..."
-                        autocomplete="off">
-                </div>
-            </div>
-
-            <div class="mobile-hub-filter-tabs">
-                <button class="hub-tab active" data-filter="all">Tümü</button>
-                <button class="hub-tab" data-filter="file">Dosyalar</button>
-                <button class="hub-tab" data-filter="image">Fotoğraflar</button>
-                <button class="hub-tab" data-filter="folder">Klasörler</button>
-            </div>
-
-            <div id="mobileHubGrid" class="mobile-modern-hub-list">
-                <!-- Mobile Hub cards will be rendered here -->
-            </div>
-
-            <!-- Floating Action Buttons -->
-
-        </div>
-    </div>
-    </div>
-
-    <!-- AI Page -->
-    <div id="aiPage" class="page mobile-only-page" style="background: #fdfaf5 !important;">
-
-        <!-- Mobile Header (Standard) -->
+    <!-- Weather Page (Mobile Full Screen) -->
+    <div id="weatherPage" class="page mobile-only-page" style="background: #fdfaf5 !important;">
+        <!-- Mobile Header -->
         <div class="mobile-header">
             <div class="mobile-header-top">
                 <button class="mobile-icon-back-btn" onclick="showPage('home')"
                     style="background: #fff; color: #1a1a1a;">
                     <i data-lucide="chevron-left"></i>
                 </button>
-                <h1>AI Asistanı</h1>
+                <h1>Hava Durumu</h1>
                 <div class="mobile-header-actions">
-                    <button class="mobile-icon-btn" onclick="openAdminAuthModal()"
+                    <button class="mobile-icon-btn" onclick="fetchWeather()"
                         style="background: #fff; color: #1a1a1a; width: 40px; height: 40px; border-radius: 12px; border: none; display: flex; align-items: center; justify-content: center;">
-                        <i data-lucide="settings-2"></i>
+                        <i data-lucide="refresh-cw"></i>
                     </button>
                 </div>
             </div>
         </div>
 
         <!-- Content Container -->
-        <div class="mobile-ai-content" style="padding: 0 25px; padding-bottom: 100px;">
+        <div class="mobile-weather-content" style="padding: 0 25px; padding-bottom: 100px;">
 
-            <!-- Standard Mobile Search Bar -->
-            <div class="mobile-search-bar" style="margin-bottom: 25px;">
+            <!-- Current Weather Card -->
+            <div id="mobileCurrentWeatherCard" class="mobile-current-weather-card">
+                <div class="weather-loading" style="text-align: center; padding: 40px;">
+                    <i data-lucide="loader-2" class="spin" style="width: 40px; height: 40px; color: #a69076;"></i>
+                    <p style="margin-top: 15px; color: #a69076; font-weight: 700;">Yükleniyor...</p>
+                </div>
+            </div>
+
+            <!-- Weather Tabs -->
+            <div class="mobile-weather-tabs"
+                style="display: flex; gap: 8px; margin: 20px 0; background: #f1ede6; padding: 5px; border-radius: 18px;">
+                <button class="mobile-weather-tab active" onclick="switchMobileWeatherTab('hourly')" data-tab="hourly"
+                    style="flex: 1; padding: 12px; border-radius: 14px; border: none; background: #fff; color: #413225; font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px; cursor: pointer; transition: all 0.3s;">
+                    Saatlik
+                </button>
+                <button class="mobile-weather-tab" onclick="switchMobileWeatherTab('daily')" data-tab="daily"
+                    style="flex: 1; padding: 12px; border-radius: 14px; border: none; background: transparent; color: #a69076; font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px; cursor: pointer; transition: all 0.3s;">
+                    7 Günlük
+                </button>
+                <button class="mobile-weather-tab" onclick="switchMobileWeatherTab('details')" data-tab="details"
+                    style="flex: 1; padding: 12px; border-radius: 14px; border: none; background: transparent; color: #a69076; font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px; cursor: pointer; transition: all 0.3s;">
+                    Detaylar
+                </button>
+            </div>
+
+            <!-- Hourly Weather Container -->
+            <div id="mobileHourlyWeatherContainer" class="mobile-weather-tab-content" style="display: block;">
+                <div id="mobileHourlyWeatherList" class="mobile-hourly-weather-list">
+                    <!-- Hourly items via JS -->
+                </div>
+            </div>
+
+            <!-- Daily Weather Container -->
+            <div id="mobileDailyWeatherContainer" class="mobile-weather-tab-content" style="display: none;">
+                <div id="mobileDailyWeatherList" class="mobile-daily-weather-list">
+                    <!-- Daily items via JS -->
+                </div>
+            </div>
+
+            <!-- Details Weather Container -->
+            <div id="mobileDetailsWeatherContainer" class="mobile-weather-tab-content" style="display: none;">
+                <div id="mobileDetailedMetricsGrid" class="mobile-detailed-metrics-grid">
+                    <!-- Detailed metrics via JS -->
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Calendar Page -->
+    <div id="calendarPage" class="page">
+        <!-- Desktop Calendar View -->
+        <div class="desktop-only" style="padding: 40px; background: #020202; min-height: 100vh;">
+            <div id="desktopCalendarContainer" style="max-width: 1440px; margin: 0 auto;">
+                <!-- Calendar will be rendered here by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Mobile Calendar View -->
+        <div class="mobile-only" style="background: #fdfaf5; min-height: 100vh; color: #1a1a1a;">
+            <!-- Mobile Header (Sena Style) -->
+            <div class="mobile-header" style="background: transparent; border: none; padding: 25px 20px 10px 20px;">
+                <div class="mobile-header-top" style="margin-bottom: 20px;">
+                    <button class="mobile-icon-back-btn" onclick="showPage('home')"
+                        style="background: #fff; color: #1a1a1a; border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+                        <i data-lucide="chevron-left"></i>
+                    </button>
+                    <h1 style="font-size: 24px; font-weight: 900; color: #121212; letter-spacing: -0.5px;">Takvim</h1>
+                    <div class="mobile-header-actions">
+                        <button class="mobile-icon-btn" onclick="openAdminModal()" id="mobileAddEventBtn"
+                            style="background: #fff; color: #a69076; width: 44px; height: 44px; border-radius: 14px; border: 1px solid rgba(0,0,0,0.05); display: none; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+                            <i data-lucide="plus"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Search Blur Overlay -->
+            <div id="mobileCalendarOverlay" class="mobile-calendar-overlay" onclick="closeMobileSearch()"></div>
+
+            <!-- Mobile Calendar Content -->
+            <div class="mobile-calendar-wrapper"
+                style="padding: 0 15px; padding-bottom: 120px; position: relative; z-index: 10;">
+
+                <!-- Search Bar (Sena AI Style - Moved Above Calendar) -->
+                <div id="mobileSearchWrapper" class="mobile-search-bar"
+                    style="background: #fff; border: 1px solid rgba(0,0,0,0.05); border-radius: 18px; padding: 12px 18px; display: flex; align-items: center; gap: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.03); position: relative; margin-bottom: 15px; transition: all 0.3s ease;">
+                    <i data-lucide="search" style="width: 18px; height: 18px; color: #a69076; flex-shrink: 0;"></i>
+                    <input id="mobileCalendarSearch" type="text" placeholder="Tatil veya ders ara..."
+                        style="background: transparent; border: none; outline: none; font-size: 15px; font-weight: 600; color: #1a1a1a; width: 100%; padding-left: 2px;"
+                        autocomplete="off">
+                </div>
+
+                <!-- Category Folders (Now Stacked when search active) -->
+                <div id="mobileCategoryFolders" class="mobile-category-folders"
+                    style="display: none; margin-bottom: 20px; gap: 10px; overflow-x: auto; padding: 5px 0; scrollbar-width: none; -ms-overflow-style: none;">
+                    <!-- Categories will be rendered here via JS -->
+                </div>
+
+                <!-- Main Calendar Grid -->
+                <div id="mobileCalendarContainer" class="apple-style-calendar"
+                    style="background: #fff; border: 1px solid rgba(0,0,0,0.03); border-radius: 28px; padding: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.04); transition: all 0.3s ease;">
+                    <!-- Calendar will be rendered here by JavaScript -->
+                </div>
+
+                <!-- Selected Day Events (Apple List Style) -->
+                <div id="mobileEventsList" class="mobile-events-detail-list" style="margin-top: 25px;">
+                    <!-- Events for selected day will be injected here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Hub Page -->
+        <div id="hubPage" class="page">
+            <!-- Desktop View -->
+            <div id="hubDesktopContainer" class="hub-desktop-view">
+                <!-- Header (Derived from hub_app.html) -->
+                <header
+                    class="px-4 py-4 md:px-12 md:py-5 border-b border-white/5 bg-[#000]/30 backdrop-blur-3xl sticky top-0 z-50">
+                    <div class="hub-sidebar-compact flex flex-col md:flex-row items-center justify-between gap-4">
+                        <div class="flex flex-col gap-1 w-full md:w-auto">
+                            <div class="flex items-center gap-4">
+                                <a href="#" onclick="navigateDesktopHubTo(''); return false;"
+                                    class="hover:opacity-80 transition-all">
+                                    <h1
+                                        class="text-xl md:text-2xl font-black tracking-tight uppercase leading-none text-white">
+                                        Sınıf<span class="text-white">Hub</span>
+                                    </h1>
+                                    <p class="text-[8px] font-bold text-white/30 uppercase tracking-[0.4em] mt-0.5">9A
+                                        Akıllı Tahta Bulutu</p>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
+                            <nav id="hubDesktopFilterNav"
+                                class="flex items-center gap-0.5 bg-white/5 p-0.5 rounded-xl border border-white/5 overflow-x-auto max-w-full no-scrollbar">
+                                <button data-filter="all"
+                                    class="hub-filter-btn active flex items-center gap-2 px-3 py-2 rounded-lg text-[8px] font-black uppercase tracking-widest transition-all">TÜMÜ</button>
+                                <button data-filter="image"
+                                    class="hub-filter-btn flex items-center gap-2 px-3 py-2 rounded-lg text-[8px] font-black uppercase tracking-widest transition-all">FOTO</button>
+                                <button data-filter="file"
+                                    class="hub-filter-btn flex items-center gap-2 px-3 py-2 rounded-lg text-[8px] font-black uppercase tracking-widest transition-all">DOSYA</button>
+                                <button data-filter="private"
+                                    class="hub-filter-btn flex items-center gap-2 px-3 py-2 rounded-lg text-[8px] font-black uppercase tracking-widest transition-all">ÖZEL</button>
+                            </nav>
+
+                            <div
+                                class="flex items-center gap-3 bg-white/5 border border-white/10 rounded-xl px-4 py-2 w-full md:w-[240px] transition-all focus-within:border-white/30 focus-within:bg-white/10 hub-glass-btn">
+                                <i data-lucide="search" class="text-white/40 w-3.5 h-3.5"></i>
+                                <input id="hubDesktopSearchInput" type="text" placeholder="ARA..."
+                                    class="bg-transparent border-none outline-none w-full text-white placeholder:text-white/20 text-[10px] font-black uppercase tracking-widest">
+                            </div>
+
+                            <div class="flex items-center gap-2 w-full md:w-auto">
+                                <button id="hubDesktopOpenFolderModal"
+                                    class="flex-1 md:flex-none p-2.5 hub-glass-btn rounded-xl text-white/60 hover:text-white transition-all active:scale-95"
+                                    title="Yeni Klasör">
+                                    <i data-lucide="folder-plus" class="w-4 h-4"></i>
+                                </button>
+                                <button id="hubDesktopOpenAddModal"
+                                    class="flex-[2] md:flex-none bg-white hover:bg-zinc-100 text-[#0B0F1A] px-5 py-2.5 rounded-xl font-black flex items-center justify-center gap-2 shadow-xl shadow-white/10 transition-all active:scale-95 uppercase text-[9px] tracking-widest">
+                                    <i data-lucide="plus" class="w-3.5 h-3.5"></i> PAYLAŞ
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </header>
+
+                <!-- Main Content -->
+                <main class="flex-1 w-full p-4 md:p-10 hub-sidebar-compact">
+                    <div id="hubDesktopStatusAlert"
+                        class="hidden mb-4 p-3 bg-red-500/10 border border-red-500/20 rounded-xl flex items-center gap-3 animate-pulse">
+                        <i data-lucide="loader-2" class="text-red-500 animate-spin w-4 h-4"></i>
+                        <p id="hubDesktopStatusText"
+                            class="text-[10px] font-black text-red-500 uppercase tracking-widest"></p>
+                    </div>
+
+                    <div class="flex flex-wrap items-center justify-between mb-6 gap-3">
+                        <div class="flex flex-col gap-2">
+                            <div class="flex items-center gap-3">
+                                <i data-lucide="clock" class="text-white w-4 h-4"></i>
+                                <h2 class="text-lg md:text-xl font-black uppercase tracking-tight">Bulut Akışı</h2>
+                            </div>
+                            <div id="hubDesktopBreadcrumb"
+                                class="flex items-center gap-2 overflow-x-auto no-scrollbar py-1">
+                                <!-- Breadcrumbs -->
+                            </div>
+                        </div>
+                        <div id="hubDesktopStorageStats"
+                            class="text-[10px] font-black uppercase tracking-widest text-white/40 bg-white/5 px-3 py-1.5 rounded-lg border border-white/5">
+                            ALAN: HESAPLANIYOR...
+                        </div>
+                    </div>
+
+                    <div id="hubDesktopFileGrid" class="hub-card-grid">
+                        <!-- Items -->
+                    </div>
+                </main>
+
+                <!-- Modals -->
+                <div id="hubDesktopAddModal" class="hub-desktop-modal-overlay">
+                    <div class="hub-desktop-modal-content w-full max-w-4xl overflow-hidden flex flex-col md:flex-row shadow-2xl relative"
+                        style="background: rgba(255,255,255,0.01); backdrop-filter: blur(40px);">
+                        <div id="hubDesktopUploadLoader"
+                            class="hidden absolute inset-0 z-[110] bg-[#0B0F1A]/95 backdrop-blur-xl flex flex-col items-center justify-center p-8 text-center">
+                            <i data-lucide="loader-2" class="w-16 h-16 text-white animate-spin mb-6"></i>
+                            <h3 class="text-2xl font-black text-white mb-2 uppercase italic">Bulut Aktarımı</h3>
+                            <p class="text-white/40 text-xs font-bold uppercase tracking-widest">Lütfen bekleyin...</p>
+                        </div>
+                        <div class="hidden md:flex w-[300px] bg-[#000] p-10 flex-col border-r border-white/5">
+                            <div
+                                class="w-14 h-14 rounded-2xl bg-white flex items-center justify-center font-black text-[#0B0F1A] text-xl mb-12">
+                                AT</div>
+                            <h2 class="text-3xl font-black mb-8 text-white uppercase italic">YENİ<br /><span
+                                    class="text-white">PAYLAŞIM</span></h2>
+                            <div
+                                class="bg-white/5 border border-white/10 rounded-2xl p-6 text-[9px] text-white/40 space-y-4 font-bold uppercase tracking-tighter">
+                                <p class="flex items-center gap-2"><span
+                                        class="w-1.5 h-1.5 rounded-full bg-[#00E699]"></span> REPO: 9AHUB</p>
+                                <p class="flex items-center gap-2"><span
+                                        class="w-1.5 h-1.5 rounded-full bg-[#00E699]"></span> SINIR: 100MB</p>
+                            </div>
+                        </div>
+                        <div class="flex-1 p-6 md:p-10 bg-[#000]/60">
+                            <div class="flex justify-between items-center mb-2">
+                                <h4 class="font-black text-white uppercase text-xl">Paylaş</h4>
+                                <button
+                                    class="hub-desktop-close-modal text-white/20 hover:text-white p-2 bg-white/5 rounded-full"><i
+                                        data-lucide="x"></i></button>
+                            </div>
+                            <div id="hubDesktopUploadPathIndicator"
+                                class="mb-6 text-[10px] font-bold text-white/40 uppercase tracking-widest flex items-center gap-2">
+                                <i data-lucide="folder" class="w-3 h-3"></i>
+                                <span id="uploadPathText">Ana Dizin</span>
+                            </div>
+
+                            <div class="flex gap-4 mb-8">
+                                <button id="hubDesktopTabFile"
+                                    class="flex-1 flex items-center justify-center gap-2 p-5 rounded-2xl border-2 border-white bg-white/10 text-white font-black text-[10px] uppercase">
+                                    <i data-lucide="upload"></i> DOSYA
+                                </button>
+                                <button id="hubDesktopTabNote"
+                                    class="flex-1 flex items-center justify-center gap-2 p-5 rounded-2xl border-2 border-transparent bg-white/5 text-white/20 font-black text-[10px] uppercase">
+                                    <i data-lucide="edit-3"></i> NOT
+                                </button>
+                            </div>
+
+                            <div class="space-y-6">
+                                <div id="hubDesktopFileZone"
+                                    class="w-full bg-black/20 border-2 border-dashed border-white/10 rounded-3xl p-8 flex flex-col items-center justify-center cursor-pointer hover:border-white/40 transition-all">
+                                    <input type="file" id="hubDesktopFileInput" class="hidden">
+                                    <i data-lucide="file" class="text-white mb-3"></i>
+                                    <p id="hubDesktopFileNameDisplay"
+                                        class="text-white/40 font-bold text-xs uppercase tracking-widest text-center truncate w-full">
+                                        Dosya Seçiniz</p>
+                                </div>
+
+                                <input id="hubDesktopItemTitle" type="text" placeholder="İsimlendir (Zorunlu)"
+                                    class="w-full hub-modal-input-glass rounded-xl px-6 py-4 text-white font-black">
+                                <input id="hubDesktopItemUploader" type="text" placeholder="Kim yüklüyor? (Profil)"
+                                    class="w-full hub-modal-input-glass rounded-xl px-6 py-4 text-white font-black">
+                                <textarea id="hubDesktopItemContent" placeholder="Notunuzu yazın..." rows="3"
+                                    class="hidden w-full hub-modal-input-glass rounded-xl px-6 py-4 text-white font-bold resize-none"></textarea>
+
+                                <div
+                                    class="bg-black/30 p-5 rounded-2xl border border-white/5 flex items-center justify-between gap-4">
+                                    <div class="flex items-center gap-3">
+                                        <i data-lucide="shield-check" class="text-white/10"></i>
+                                        <p class="text-[10px] font-black text-white uppercase">Şifreli Koruma</p>
+                                    </div>
+                                    <input id="hubDesktopItemPassword" type="password" placeholder="ŞİFRE"
+                                        class="hub-modal-input-glass rounded-lg px-4 py-2 text-xs font-black text-white w-24">
+                                </div>
+                            </div>
+
+                            <div class="mt-8 flex gap-4">
+                                <button
+                                    class="hub-desktop-close-modal flex-1 py-4 font-black text-white/20 text-[10px] uppercase">Vazgeç</button>
+                                <button id="hubDesktopSubmitShare"
+                                    class="flex-[2] bg-white text-[#0B0F1A] font-black py-4 rounded-xl shadow-xl shadow-white/5 text-xs uppercase">Buluta
+                                    Aktar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="hubDesktopFolderModal" class="hub-desktop-modal-overlay">
+                    <div class="hub-desktop-modal-content w-full max-w-lg p-10 relative">
+                        <button class="hub-desktop-close-modal absolute top-8 right-8 text-white/20"><i
+                                data-lucide="x"></i></button>
+                        <h2 class="text-2xl font-black uppercase text-center mb-8 italic text-white">YENİ KLASÖR</h2>
+                        <div class="space-y-6">
+                            <div>
+                                <label
+                                    class="block text-[10px] font-black text-white/20 mb-2 uppercase tracking-widest">Klasör
+                                    Adı</label>
+                                <input id="hubDesktopFolderNameInput" type="text" placeholder="Örn: Ders Notları"
+                                    class="w-full hub-modal-input-glass rounded-xl px-4 py-3 text-white font-black text-sm">
+                            </div>
+                            <div>
+                                <label
+                                    class="block text-[10px] font-black text-white/20 mb-2 uppercase tracking-widest">Klasör
+                                    Şifresi (Opsiyonel)</label>
+                                <input id="hubDesktopFolderPasswordInput" type="password"
+                                    placeholder="Bırakırsanız şifresiz olur"
+                                    class="w-full hub-modal-input-glass rounded-xl px-4 py-3 text-white font-black text-sm">
+                            </div>
+                            <button id="hubDesktopCreateFolderSubmit"
+                                class="w-full bg-white text-[#0B0F1A] font-black py-5 rounded-2xl uppercase tracking-widest text-xs mt-4">Klasör
+                                Oluştur</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="hubDesktopMoveModal" class="hub-desktop-modal-overlay">
+                    <div class="hub-desktop-modal-content w-full max-w-lg p-10 relative">
+                        <button class="hub-desktop-close-modal absolute top-8 right-8 text-white/20"><i
+                                data-lucide="x"></i></button>
+                        <h2 class="text-2xl font-black uppercase text-center mb-4 italic text-white">DOSYA TAŞI</h2>
+                        <p id="moveFileName" class="text-center text-white/40 text-sm mb-6"></p>
+                        <div class="space-y-4">
+                            <p class="text-[10px] font-black text-white/20 uppercase tracking-widest">Hedef Klasör Seç:
+                            </p>
+                            <div id="hubDesktopFolderList" class="max-h-60 overflow-y-auto space-y-2 custom-scrollbar">
+                            </div>
+                            <button onclick="moveDesktopHubItemToFolder('')"
+                                class="w-full bg-white/10 hover:bg-white/20 text-white font-black py-4 rounded-xl uppercase tracking-widest text-xs flex items-center justify-center gap-2">
+                                <i data-lucide="home" class="w-4 h-4"></i> Ana Dizine Taşı
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mobile View -->
+            <div class="hub-mobile-view minimalist">
+                <div class="mobile-header">
+                    <div class="mobile-header-top">
+                        <button class="mobile-icon-back-btn" onclick="showPage('home')">
+                            <i data-lucide="chevron-left"></i>
+                        </button>
+                        <h1>Hub</h1>
+                        <div class="mobile-header-actions">
+                            <button class="mobile-icon-btn plus-btn" onclick="toggleHubFabs()" id="mobileHeaderAddBtn">
+                                <i data-lucide="plus"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="mobile-stats-row">
+                        <div class="mobile-stat-card">
+                            <span class="stat-value" id="mobileHubTotalCount">0</span>
+                            <span class="stat-label">Toplam</span>
+                        </div>
+                        <div class="mobile-stat-card">
+                            <span class="stat-value" id="mobileHubFolderCount">0</span>
+                            <span class="stat-label">Klasör</span>
+                        </div>
+                        <div class="mobile-stat-card">
+                            <span class="stat-value" id="mobileHubFileCount">0</span>
+                            <span class="stat-label">Dosya</span>
+                        </div>
+                    </div>
+
+                    <div class="mobile-search-bar">
+                        <i data-lucide="search"></i>
+                        <input id="mobileHubSearchInput" type="text" placeholder="Bir şeyler ara..." autocomplete="off">
+                    </div>
+
+                    <div class="mobile-hub-filter-tabs">
+                        <button class="hub-tab active" data-filter="all">Tümü</button>
+                        <button class="hub-tab" data-filter="file">Dosyalar</button>
+                        <button class="hub-tab" data-filter="image">Fotoğraflar</button>
+                        <button class="hub-tab" data-filter="folder">Klasörler</button>
+                    </div>
+                </div>
+
+                <div id="mobileHubGrid" class="mobile-modern-hub-list">
+                    <!-- Mobile Hub cards will be rendered here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Page (Unified Desktop & Mobile) -->
+    <div id="aiPage" class="page minimalist">
+
+        <!-- Desktop Header (Visible on Desktop Only) -->
+        <div class="ai-desktop-header">
+            <div class="ai-header-inner">
+                <div class="ai-branding">
+                    <div class="ai-logo-box">
+                        <i data-lucide="bot"></i>
+                    </div>
+                    <div class="ai-text-info">
+                        <h1>SENA AI <small>v2.5</small></h1>
+                    </div>
+                </div>
+                <div class="ai-actions">
+                    <div class="desktop-search-container">
+                        <i data-lucide="search"></i>
+                        <input id="aiSearchInputDesktop" type="text" placeholder="Asistanlarda ara..."
+                            oninput="syncAiSearch(this.value)">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Header (Visible on Mobile Only) -->
+        <div class="ai-mobile-header">
+            <div class="m-nav-bar">
+                <button class="m-round-btn" onclick="showPage('home')">
+                    <i data-lucide="arrow-left"></i>
+                </button>
+                <div class="m-page-title">
+                    <h2>SENA AI</h2>
+                    <span class="m-version">v2.5</span>
+                </div>
+                <div style="width: 48px;"></div> <!-- Spacer for symmetry -->
+            </div>
+
+            <div class="m-stats-grid">
+                <div class="m-stat-item">
+                    <span class="m-stat-val" id="aiNotebookCount">0</span>
+                    <span class="m-stat-label">ASİSTAN</span>
+                </div>
+                <div class="m-stat-item">
+                    <span class="m-stat-val">AKTİF</span>
+                    <span class="m-stat-label">DURUM</span>
+                </div>
+            </div>
+
+            <div class="m-search-box">
                 <i data-lucide="search"></i>
-                <input id="aiSearchInput" type="text" placeholder="Asistan veya konu ara..." autocomplete="off">
+                <input id="aiSearchInput" type="text" placeholder="Bir asistan veya ders ara..." autocomplete="off"
+                    oninput="syncAiSearch(this.value)">
+            </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="ai-content-wrapper">
+            <div id="adminControlsV2" class="admin-action-bar" style="display: none;">
+                <div class="bar-info">
+                    <div class="pulse-dot"></div>
+                    <span>Yönetici Modu Aktif</span>
+                </div>
+                <button class="new-asistan-btn" onclick="openAddNotebookInline()">
+                    <i data-lucide="plus-circle"></i> Yeni Asistan Oluştur
+                </button>
             </div>
 
-            <!-- Admin Controls -->
-            <div id="adminControlsV2" class="admin-controls-v2" style="display: none; gap: 10px; margin-bottom: 20px;">
-                <button class="add-notebook-btn" onclick="openAddNotebookInline()"
-                    style="flex: 1; padding: 12px; font-size: 13px;">
-                    <i data-lucide="plus"></i> YENİ
-                </button>
-                <button class="add-notebook-btn" onclick="deleteAllNotebooks()"
-                    style="flex: 1; background: #fff0f0; color: #e74c3c; border: 1px solid #ffcccc; padding: 12px; font-size: 13px;">
-                    <i data-lucide="trash-2"></i> SİL
-                </button>
-            </div>
-
-            <!-- Notebook Grid (Reusing Hub Grid Styles) -->
-            <div id="notebookGrid" class="mobile-modern-hub-list"
-                style="display: grid; grid-template-columns: 1fr; gap: 15px;">
+            <div id="notebookGrid" class="notebook-responsive-grid">
                 <!-- Notebooks rendered via JS -->
             </div>
 
-            <!-- See All Button -->
-            <div style="display: flex; justify-content: center; margin-top: 25px;">
-                <button onclick="alert('Daha fazlası yakında!')" style="
-                    background: #f1ede6; 
-                    color: #8d7b68; 
-                    border: none; 
-                    padding: 12px 30px; 
-                    border-radius: 20px; 
-                    font-size: 13px; 
-                    font-weight: 800; 
-                    letter-spacing: 1px; 
-                    cursor: pointer; 
-                    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-                ">
-                    TÜMÜNÜ GÖR
+
+        </div>
+    </div>
+
+    <!-- Pop-ups & Modals -->
+    <div id="adminAuthInline" class="robust-fixed-modal" style="display: none;">
+        <div class="robust-modal-backdrop" onclick="closeAdminAuthInline()"></div>
+        <div class="robust-modal-content">
+            <div style="text-align: center; margin-bottom: 25px;">
+                <div
+                    style="width: 60px; height: 60px; background: #fdfaf5; border-radius: 20px; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px auto;">
+                    <i data-lucide="lock" style="width: 28px; height: 28px; color: #413225;"></i>
+                </div>
+                <h3 style="color: #413225; margin: 0; font-weight: 900;">Yönetici Girişi</h3>
+            </div>
+
+            <input type="password" id="adminPasswordInputInline" class="premium-input-inline" placeholder="Şifre"
+                style="text-align: center; border-radius: 18px; margin-bottom: 20px;">
+
+            <div style="display: flex; gap: 12px;">
+                <button onclick="closeAdminAuthInline()"
+                    style="flex: 1; padding: 15px; border-radius: 15px; border: none; background: #f1ede6; color: #a69076; font-weight: 800;">İPTAL</button>
+                <button onclick="verifyAdminPasswordInline()"
+                    style="flex: 2; padding: 15px; border-radius: 15px; border: none; background: #413225; color: #fff; font-weight: 900;">GİRİŞ
+                    YAP</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="addNotebookInline" class="robust-fixed-modal" style="display: none;">
+        <div class="robust-modal-backdrop" onclick="closeAddNotebookInline()"></div>
+        <div class="robust-modal-content">
+            <h3 style="color: #413225; font-weight: 900; margin-bottom: 20px;">Yeni Asistan</h3>
+            <form onsubmit="addNewNotebook(event)">
+                <input type="text" id="newNbTitle" placeholder="Asistan Başlığı" class="premium-input-inline"
+                    style="margin-bottom: 12px;" required>
+                <input type="text" id="newNbDesc" placeholder="Kısa Açıklama" class="premium-input-inline"
+                    style="margin-bottom: 12px;">
+                <input type="url" id="newNbLink" placeholder="NotebookLM Linki" class="premium-input-inline"
+                    style="margin-bottom: 25px;" required>
+
+                <div style="display: flex; gap: 12px;">
+                    <button type="button" onclick="closeAddNotebookInline()"
+                        style="flex: 1; padding: 16px; border-radius: 16px; border: none; background: #f1ede6; color: #a69076; font-weight: 800;">VAZGEÇ</button>
+                    <button type="submit"
+                        style="flex: 2; padding: 16px; border-radius: 16px; border: none; background: #413225; color: #fff; font-weight: 900;">OLUŞTUR</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Unified AI Assistant View Modal -->
+    <div id="aiIframeModal" class="ai-iframe-modal">
+        <div class="ai-iframe-content">
+            <div class="ai-modal-header">
+                <h3><i data-lucide="bot"></i> SENA AI ASİSTAN</h3>
+                <button class="ai-modal-close" onclick="closeAiIframeModal()">
+                    <i data-lucide="x"></i>
                 </button>
             </div>
-
-
-            <!-- INLINE ADMIN AUTH FORM (Converted to ROBUST POP-UP) -->
-            <div id="adminAuthInline" class="robust-fixed-modal" style="display: none;">
-                <div class="robust-modal-backdrop" onclick="closeAdminAuthInline()"></div>
-                <div class="robust-modal-content" style="max-width: 400px; text-align: center;">
-                    <div style="margin-bottom: 20px;">
-                        <i data-lucide="lock" style="width: 40px; height: 40px; color: #ffd700;"></i>
-                    </div>
-                    <h3 style="color: #fff; margin-bottom: 20px;">Yönetici Girişi</h3>
-
-                    <div style="margin-bottom: 20px;">
-                        <input type="password" id="adminPasswordInputInline" class="premium-input-inline"
-                            placeholder="Şifre Giriniz (829615)"
-                            style="text-align: center; font-size: 18px; letter-spacing: 2px;">
-                    </div>
-
-                    <div style="display: flex; gap: 10px;">
-                        <button onclick="closeAdminAuthInline()"
-                            style="flex: 1; background: rgba(255,255,255,0.1); color: #fff; border: none; padding: 12px; border-radius: 12px; cursor: pointer;">İptal</button>
-                        <button onclick="verifyAdminPasswordInline()" class="auth-submit-btn"
-                            style="flex: 2; padding: 12px; border-radius: 12px;">GİRİŞ YAP</button>
-                    </div>
-                </div>
-            </div>
-
-
-
-            <!-- ROBUST FIXED MODAL FOR ADD NOTEBOOK (Pop-up Style) -->
-            <div id="addNotebookInline" class="robust-fixed-modal" style="display: none;">
-                <div class="robust-modal-backdrop" onclick="closeAddNotebookInline()"></div>
-                <div class="robust-modal-content">
-                    <div
-                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                        <h3 style="margin: 0; color: #fff; font-size: 18px; font-weight: 700;">Yeni Defter
-                            Oluştur
-                        </h3>
-                        <button onclick="closeAddNotebookInline()" class="auth-close-btn">
-                            <i data-lucide="x" style="width: 24px; height: 24px;"></i>
-                        </button>
-                    </div>
-                    <form onsubmit="addNewNotebook(event)">
-                        <label
-                            style="display: block; color: rgba(255,255,255,0.6); font-size: 12px; margin-bottom: 8px;">BAŞLIK</label>
-                        <input type="text" id="newNbTitle" placeholder="Örn: Tarih Notları" class="premium-input-inline"
-                            required>
-
-                        <label
-                            style="display: block; color: rgba(255,255,255,0.6); font-size: 12px; margin-top: 15px; margin-bottom: 8px;">AÇIKLAMA</label>
-                        <input type="text" id="newNbDesc" placeholder="Kısa açıklama..." class="premium-input-inline">
-
-                        <label
-                            style="display: block; color: rgba(255,255,255,0.6); font-size: 12px; margin-top: 15px; margin-bottom: 8px;">NOTEBOOKLM
-                            LINKI</label>
-                        <input type="url" id="newNbLink" placeholder="https://notebooklm.google.com/..."
-                            class="premium-input-inline" required>
-
-                        <div style="margin-top: 25px; display: flex; gap: 10px;">
-                            <button type="button" onclick="closeAddNotebookInline()"
-                                style="flex: 1; background: rgba(255,255,255,0.1); border: none; padding: 12px; border-radius: 12px; color: #fff; cursor: pointer;">İptal</button>
-                            <button type="submit" class="auth-submit-btn"
-                                style="flex: 2; padding: 12px; font-size: 14px; background: #4caf50; color: #fff;">OLUŞTUR</button>
-                        </div>
-                    </form>
-                </div>
+            <div class="ai-iframe-body">
+                <iframe id="aiIframe" src="" allow="microphone; camera; clipboard-read; clipboard-write;"></iframe>
             </div>
         </div>
+    </div>
 
 
 
-        <!-- GEMINI CHAT WIDGET -->
-        <div id="geminiChatWidget" class="gemini-chat-widget">
-            <div class="chat-header">
-                <div class="flex items-center gap-2" style="display:flex; align-items:center;">
-                    <i data-lucide="sparkles"></i>
-                    <span>SENA (AI)</span>
-                </div>
-                <!-- Optional Close Button if needed, or swipe down to close -->
-                <button onclick="toggleGeminiChat()" class="close-chat"><i data-lucide="chevron-down"></i></button>
+
+    <!-- GEMINI CHAT WIDGET -->
+    <div id="geminiChatWidget" class="gemini-chat-widget">
+        <div class="chat-header">
+            <div class="flex items-center gap-2" style="display:flex; align-items:center;">
+                <i data-lucide="sparkles"></i>
+                <span>SENA (AI)</span>
             </div>
-            <div id="geminiChatMessages" class="chat-messages">
-                <div class="message system">
-                    Selam! Ben SENA. Sana nasıl yardım edebilirim?
-                </div>
-            </div>
-            <div class="chat-input-area">
-                <textarea id="geminiChatInput" placeholder="Bir soru sor..." rows="1"></textarea>
-                <button onclick="sendGeminiMessage()" id="geminiSendBtn"><i data-lucide="send"></i></button>
+            <!-- Optional Close Button if needed, or swipe down to close -->
+            <button onclick="toggleGeminiChat()" class="close-chat"><i data-lucide="chevron-down"></i></button>
+        </div>
+        <div id="geminiChatMessages" class="chat-messages">
+            <div class="message system">
+                Selam! Ben SENA. Sana nasıl yardım edebilirim?
             </div>
         </div>
+        <div class="chat-input-area">
+            <textarea id="geminiChatInput" placeholder="Bir soru sor..." rows="1"></textarea>
+            <button onclick="sendGeminiMessage()" id="geminiSendBtn"><i data-lucide="send"></i></button>
+        </div>
+    </div>
 
-        <!-- Chat Toggle Button -->
-        <button id="geminiToggleBtn" onclick="toggleGeminiChat()" class="gemini-toggle-btn">
-            <i data-lucide="message-square"></i>
-            <span>AI SOHBET</span>
-        </button>
+    <!-- Chat Toggle Button -->
+    <button id="geminiToggleBtn" onclick="toggleGeminiChat()" class="gemini-toggle-btn">
+        <i data-lucide="message-square"></i>
+        <span>AI SOHBET</span>
+    </button>
 
     </div> <!-- Close Content Container -->
     </div> <!-- Close Page -->
@@ -780,47 +1223,43 @@
             </div>
         </div>
 
-        <!-- Desktop Only Header (Legacy) -->
-        <header class="exams-header sticky z-50 desktop-only">
-            <div class="exams-header-container">
-                <!-- TOP ROW -->
-                <div class="exams-header-top"
-                    style="display: flex; justify-content: space-between; align-items: center;">
-                    <div class="exams-header-title-area" onclick="showPage('home')" style="cursor: pointer;">
-                        <h1 class="exams-title">SINIF<span>HUB</span></h1>
-                        <p class="exams-subtitle">YAZILI AKIŞ SİSTEMİ</p>
-                    </div>
-                    <!-- House icon for home -->
-                    <button onclick="showPage('home')" class="liquid-glass-btn"
-                        style="width: 45px; height: 45px; border-radius: 12px; display: flex; align-items: center; justify-content: center; padding: 0; border: none;">
-                        <i data-lucide="home" style="width: 20px; height: 20px;"></i>
-                    </button>
+        <!-- Desktop Only Header (Modern) -->
+        <header class="exams-header sticky z-50 desktop-only" style="padding: 10px 0 !important;">
+            <div class="exams-header-container"
+                style="display: flex !important; flex-direction: row !important; flex-wrap: nowrap !important; justify-content: center !important; align-items: center !important; gap: 40px !important; width: 100% !important; max-width: none !important;">
+                <!-- NEW TITLE -->
+                <div class="exams-header-title-area" onclick="showPage('home')"
+                    style="cursor: pointer; margin-bottom: 0; flex-shrink: 0;">
+                    <h1 class="exams-title" style="margin: 0; font-size: 24px;">YAZILI <span>AKIŞI</span></h1>
                 </div>
 
-                <!-- BOTTOM ROW -->
-                <div class="exams-header-bottom">
-                    <div class="exams-filter-container">
-                        <nav class="exams-filter-nav no-scrollbar">
-                            <button data-filter="aktif" class="hub-filter-btn active">
-                                <i data-lucide="calendar"></i> DEVAM EDEN
+                <div class="flex items-center gap-4"
+                    style="display: flex !important; flex-direction: row !important; flex-wrap: nowrap !important; align-items: center !important; gap: 15px !important;">
+                    <!-- FILTERS (Aktif / Geçmiş) -->
+                    <div class="exams-filter-container"
+                        style="margin-bottom: 0; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 4px; height: 42px; display: flex !important; flex-direction: row !important; align-items: center; min-width: 200px; flex-shrink: 0;">
+                        <nav id="examFilterNav" class="exams-filter-nav no-scrollbar"
+                            style="display: flex !important; flex-direction: row !important; gap: 4px; height: 100%; width: 100%;">
+                            <button data-filter="aktif" class="hub-filter-btn active"
+                                style="flex: 1; padding: 0 16px; font-size: 10px; border-radius: 8px; height: 100%; display: flex; align-items: center; justify-content: center; gap: 6px; white-space: nowrap;">
+                                <i data-lucide="calendar" style="width: 14px; height: 14px;"></i> AKTİF
                             </button>
-                            <button data-filter="girilen" class="hub-filter-btn">
-                                <i data-lucide="check-circle"></i> GİRİLEN
+                            <button data-filter="girilen" class="hub-filter-btn"
+                                style="flex: 1; padding: 0 16px; font-size: 10px; border-radius: 8px; height: 100%; display: flex; align-items: center; justify-content: center; gap: 6px; white-space: nowrap;">
+                                <i data-lucide="check-circle" style="width: 14px; height: 14px;"></i> GEÇMİŞ
                             </button>
                         </nav>
                     </div>
-                    <div class="exams-search-area">
-                        <i data-lucide="search"></i>
-                        <input id="examSearchInput" type="text" placeholder="Yazılılarda Ara..."
-                            class="exams-search-input" autocomplete="off">
-                    </div>
-                </div>
 
-                <!-- STATUS ROW -->
-                <div class="exams-status-row">
-                    <div class="status-left">YAZILI AKIŞI</div>
-                    <div class="status-line"></div>
-                    <div class="status-right">LIVE SYNC ACTIVE</div>
+                    <!-- SEARCH BAR -->
+                    <div class="exams-search-area"
+                        style="flex: 0 1 300px; width: 300px; height: 42px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; margin: 0; display: flex !important; align-items: center; min-width: 150px;">
+                        <i data-lucide="search"
+                            style="width: 16px; height: 16px; margin-left: 12px; color: rgba(255,255,255,0.4);"></i>
+                        <input id="examSearchInput" type="text" placeholder="Yazılılarda Ara..."
+                            class="exams-search-input" autocomplete="off"
+                            style="font-size: 11px; font-weight: 700; background: transparent; border: none; outline: none; padding-left: 10px; color: #fff; width: 100%;">
+                    </div>
                 </div>
             </div>
         </header>
@@ -1730,6 +2169,9 @@
         <script src="js/ai_manager.js?v=2.1"></script>
         <script src="js/homework.js"></script>
         <script src="js/hub_core.js"></script>
+        <script src="js/weather.js"></script>
+        <script src="js/calendar_sync.js"></script>
+        <script src="js/calendar.js"></script>
         <script src="js/app.js"></script>
 </body>
 

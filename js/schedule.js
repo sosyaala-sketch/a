@@ -4,6 +4,68 @@ let currentLessonIndex = 0;
 let realTimeCheckInterval;
 let currentMobileTimelineDay = '';
 
+// Auto-update dates and times on desktop table
+function updateScheduleTableHeaders() {
+    const tableHandler = () => {
+        // 1. Update Headers with Dates
+        const days = ['Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma'];
+        const ths = document.querySelectorAll('.schedule-table thead th');
+
+        const today = new Date();
+        const currentDay = today.getDay(); // 0-6 (Sun-Sat)
+        const diff = today.getDate() - (currentDay === 0 ? 6 : currentDay - 1); // Get Monday
+        const monday = new Date(today.setDate(diff));
+
+        if (ths.length >= 5) {
+            days.forEach((day, index) => {
+                const date = new Date(monday);
+                date.setDate(monday.getDate() + index);
+                const dateStr = date.toLocaleDateString('tr-TR', { day: 'numeric', month: 'long' });
+                ths[index].innerHTML = `${day} <span style="display:block; font-size:11px; color:rgba(255,255,255,0.5); margin-top:4px; font-weight:500;">${dateStr}</span>`;
+            });
+        }
+
+        // 2. Update Lesson Cells with End Times from sampleSchedule
+        // Logic: Iterate over columns (days) and rows (lessons)
+        const tbody = document.getElementById('scheduleTableBody');
+        if (!tbody) return;
+        const rows = tbody.querySelectorAll('tr');
+
+        days.forEach((day, dayIndex) => {
+            const dayLessons = scheduleData[day];
+            if (!dayLessons) return;
+
+            rows.forEach((row, lessonIndex) => {
+                const cell = row.children[dayIndex];
+                if (cell && dayLessons[lessonIndex]) {
+                    const l = dayLessons[lessonIndex];
+                    // l.time is like "08:00 - 08:40"
+                    // Existing cell text: "08:00 Sağlık"
+                    // We want: "08:00 - 08:40<br>Sağlık"
+
+                    const [start, end] = l.time.split(' - ');
+                    // shortenLessonName might be useful if names are long
+                    cell.innerHTML = `
+                        <span style="color:rgba(255,255,255,0.4); font-size:11px; font-weight:700;">${start} - ${end}</span>
+                        <div style="font-size:15px; margin-top:2px;">${l.lesson}</div>
+                    `;
+                }
+            });
+        });
+    };
+
+    // Run immediately and also retry a bit later just in case DOM is slow
+    tableHandler();
+    setTimeout(tableHandler, 500);
+}
+
+// Ensure it runs when script loads
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', updateScheduleTableHeaders);
+} else {
+    updateScheduleTableHeaders();
+}
+
 function shortenLessonName(name) {
     if (!name) return "";
     const lowerName = name.toLowerCase();
@@ -76,6 +138,66 @@ function updateCarousel() {
     const carousel = document.getElementById('carousel');
     if (!carousel) return;
     carousel.innerHTML = '';
+
+    const now = new Date();
+    const day = now.getDay();
+    const hour = now.getHours();
+
+    // Cumartesi (6) tüm gün veya Pazar (0) saat 20:00'a kadar -> Hafta Sonu Modu
+    // Pazar (0) saat 20:00'dan sonra -> Geri Sayım Modu
+    let isWeekend = (day === 6) || (day === 0 && hour < 20);
+    let isCountdown = (day === 0 && hour >= 20);
+
+    if (isWeekend || isCountdown) {
+        let mainText = "Hafta Sonu";
+        let subText = "İyi Tatiller";
+
+        if (isCountdown) {
+            const target = new Date(now);
+            target.setDate(target.getDate() + 1); // Pazartesi
+            // Pazartesi ilk ders saatini al (Varsayılan 08:00)
+            let startH = 8, startM = 0;
+            if (typeof scheduleData !== 'undefined' && scheduleData['Pazartesi'] && scheduleData['Pazartesi'][0]) {
+                const parts = scheduleData['Pazartesi'][0].time.split(' - ')[0].split(':');
+                startH = parseInt(parts[0]);
+                startM = parseInt(parts[1]);
+            }
+            target.setHours(startH, startM, 0, 0);
+
+            const diff = target - now;
+            if (diff > 0) {
+                const h = Math.floor(diff / (1000 * 60 * 60));
+                const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                mainText = `${h} sa ${m} dk`;
+                subText = "DERSİN BAŞLAMASINA";
+            } else {
+                mainText = "DERS BAŞLADI";
+                subText = "İYİ DERSLER";
+            }
+        }
+
+        // 7 tane kart oluştur (center + 3 sağ + 3 sol)
+        for (let i = -3; i <= 3; i++) {
+            const card = document.createElement('div');
+            card.className = 'lesson-card';
+
+            if (i === 0) card.classList.add('center');
+            else if (i === 1) card.classList.add('right-1');
+            else if (i === 2) card.classList.add('right-2');
+            else if (i === 3) card.classList.add('right-3');
+            else if (i === -1) card.classList.add('left-1');
+            else if (i === -2) card.classList.add('left-2');
+            else if (i === -3) card.classList.add('left-3');
+
+            card.innerHTML = `
+                <div class="time-slot" style="opacity:0.8; font-size: 0.9em; letter-spacing: 1px;">${subText}</div>
+                <div class="lesson-name" style="font-size: 1.8em; letter-spacing: 0.5px;">${mainText}</div>
+                <div class="lesson-location" style="opacity: 0.5;">-</div>
+            `;
+            carousel.appendChild(card);
+        }
+        return;
+    }
 
     if (!scheduleData[currentDay] || scheduleData[currentDay].length === 0) {
         carousel.innerHTML = '<p>Bu gün için ders bulunmamaktadır.</p>';

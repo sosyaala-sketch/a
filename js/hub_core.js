@@ -265,17 +265,18 @@ window.openHubActionSheet = () => {
     if (existing) existing.remove();
 
     const html = `
-        <div id="hubActionSheetOverlay" class="modal-overlay active" style="z-index: 1999;" onclick="closeHubActionSheet()"></div>
-        <div class="hub-action-sheet active">
-            <h3>İşlem Seçin</h3>
-            <button class="hub-action-btn primary" onclick="closeHubActionSheet(); openHubUploadModal()">
+        <div id="hubActionSheetOverlay" class="modal-overlay active" style="z-index: 1999; background: rgba(0,0,0,0.4);" onclick="closeHubActionSheet()"></div>
+        <div class="hub-action-sheet active" style="background: #fff; border-radius: 32px 32px 0 0;">
+            <div style="width: 40px; height: 5px; background: #f1ede6; border-radius: 10px; margin: 0 auto 20px auto;"></div>
+            <h3 style="color: #413225; font-size: 18px; font-weight: 900; margin-bottom: 20px;">İşlem Seçin</h3>
+            <button class="hub-action-btn primary" style="background: #413225; color: #fff; border-radius: 18px; padding: 16px; margin-bottom: 12px; border: none;" onclick="closeHubActionSheet(); openHubUploadModal()">
                 <i data-lucide="upload-cloud"></i> Dosya Yükle
             </button>
-            <button class="hub-action-btn" onclick="closeHubActionSheet(); handleFolderCreationRequest()">
+            <button class="hub-action-btn" style="background: #f1ede6; color: #413225; border-radius: 18px; padding: 16px; margin-bottom: 25px; border: none;" onclick="closeHubActionSheet(); handleFolderCreationRequest()">
                 <i data-lucide="folder-plus"></i> Klasör Oluştur (Yönetici)
             </button>
-            <button class="hub-action-btn hub-cancel-btn" onclick="closeHubActionSheet()">
-                İptal
+            <button class="hub-action-btn hub-cancel-btn" style="background: transparent; color: #a69076; font-weight: 800; border: none;" onclick="closeHubActionSheet()">
+                Vazgeç
             </button>
         </div>
     `;
@@ -445,28 +446,31 @@ async function createHubFolder(name, password) {
  */
 window.openHubUploadModal = () => {
     const modalHtml = `
-        <div id="mobileUploadModalOverlay" class="modal-overlay" style="display: flex; position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:9999; justify-content:center; align-items:center;">
-             <div class="modal-content premium" style="width:90%; max-width:400px; padding:30px; border-radius:30px; background:#fff; color:#1a1a1a;">
-                <h2 style="margin-bottom:20px; font-size:20px;">Paylaşım Yap</h2>
-                <div class="form-group" style="margin-bottom:15px;">
-                    <label style="display:block; font-size:12px; color:#666; margin-bottom:5px;">İSİM</label>
-                    <input id="mobileUplTitle" type="text" class="premium-input" placeholder="Dosya adı..." style="background:#f5f5f5; color:#1a1a1a; border:1px solid #ddd;">
+        <div id="mobileUploadModalOverlay" class="modal-overlay" style="display: flex; position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:9999; justify-content:center; align-items:center;">
+             <div class="modal-content premium" style="width:90%; max-width:400px; padding:35px; border-radius:32px; background:#fdfaf5; color:#413225; border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 20px 60px rgba(0,0,0,0.2);">
+                <h2 style="margin-bottom:25px; font-size:22px; font-weight:900; letter-spacing:-0.5px;">Buluta Aktar</h2>
+                <div class="form-group" style="margin-bottom:18px;">
+                    <label style="display:block; font-size:10px; font-weight:800; color:#a69076; margin-bottom:8px; text-transform:uppercase; letter-spacing:0.5px;">DOSYA İSMİ</label>
+                    <input id="mobileUplTitle" type="text" class="premium-input" placeholder="Dosyayı isimlendir..." style="background:#fff; color:#413225; border:1px solid #f1ede6; border-radius:15px; padding:12px 15px; width:100%; font-weight:600;">
                 </div>
-                <div class="form-group" style="margin-bottom:15px;">
-                    <label style="display:block; font-size:12px; color:#666; margin-bottom:5px;">YÜKLEYEN</label>
-                    <input id="mobileUplUser" type="text" class="premium-input" placeholder="İsminiz..." style="background:#f5f5f5; color:#1a1a1a; border:1px solid #ddd;">
+                <div class="form-group" style="margin-bottom:18px;">
+                    <label style="display:block; font-size:10px; font-weight:800; color:#a69076; margin-bottom:8px; text-transform:uppercase; letter-spacing:0.5px;">KİM YÜKLÜYOR?</label>
+                    <input id="mobileUplUser" type="text" class="premium-input" placeholder="Profil isminiz..." style="background:#fff; color:#413225; border:1px solid #f1ede6; border-radius:15px; padding:12px 15px; width:100%; font-weight:600;">
                 </div>
-                <div class="form-group" style="margin-bottom:15px;">
-                    <label style="display:block; font-size:12px; color:#666; margin-bottom:5px;">DOSYA SEÇ</label>
-                    <input id="mobileUplFile" type="file" style="color:#1a1a1a; font-size:12px;">
+                <div class="form-group" style="margin-bottom:18px;">
+                    <label style="display:block; font-size:10px; font-weight:800; color:#a69076; margin-bottom:8px; text-transform:uppercase; letter-spacing:0.5px;">DOSYA SEÇİMİ</label>
+                    <div style="background:#f1ede6; border-radius:15px; padding:15px; border:1px dashed #a69076; position:relative; overflow:hidden;">
+                        <input id="mobileUplFile" type="file" style="position:absolute; inset:0; opacity:0; cursor:pointer;" onchange="this.nextElementSibling.innerText = this.files[0].name">
+                        <p style="margin:0; font-size:12px; font-weight:700; color:#a69076; text-align:center;">Tıkla veya Dosya Seç</p>
+                    </div>
                 </div>
-                <div class="form-group" style="margin-bottom:20px; display:flex; justify-content:space-between; align-items:center;">
-                    <label style="font-size:12px; color:#666;">ŞİFRE KOY</label>
-                    <input id="mobileUplPass" type="password" class="premium-input" style="width:100px; padding:8px; background:#f5f5f5; color:#1a1a1a; border:1px solid #ddd;" placeholder="Opsiyonel">
+                <div class="form-group" style="margin-bottom:30px;">
+                    <label style="display:block; font-size:10px; font-weight:800; color:#a69076; margin-bottom:8px; text-transform:uppercase; letter-spacing:0.5px;">ŞİFRELİ KORUMA</label>
+                    <input id="mobileUplPass" type="password" class="premium-input" style="background:#fff; color:#413225; border:1px solid #f1ede6; border-radius:15px; padding:12px 15px; width:100%; font-weight:600;" placeholder="Opsiyonel (Şifresiz için boş bırak)">
                 </div>
-                <div style="display:flex; gap:10px;">
-                    <button onclick="closeMobileUploadModal()" style="flex:1; padding:15px; border-radius:15px; border:none; background:#f5f5f5; color:#666;">İptal</button>
-                    <button onclick="handleMobileUpload()" id="mobileUplBtn" style="flex:2; padding:15px; border-radius:15px; border:none; background:#f3a682; color:#fff; font-weight:bold;">Yükle</button>
+                <div style="display:flex; gap:12px;">
+                    <button onclick="closeMobileUploadModal()" style="flex:1; padding:16px; border-radius:18px; border:none; background:#f1ede6; color:#a69076; font-weight:800; cursor:pointer;">VAZGEÇ</button>
+                    <button onclick="handleMobileUpload()" id="mobileUplBtn" style="flex:2; padding:16px; border-radius:18px; border:none; background:#413225; color:#fff; font-weight:900; cursor:pointer; letter-spacing:0.5px;">YÜKLEMEYE BAŞLA</button>
                 </div>
              </div>
         </div>

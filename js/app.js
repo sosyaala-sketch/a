@@ -1,6 +1,6 @@
 function updateCurrentTime() {
     const now = new Date();
-    const timeStr = now.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    const timeStr = now.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' });
     const dateStr = now.toLocaleDateString('tr-TR', { weekday: 'long', month: 'long', day: 'numeric' });
 
     const timeEl = document.getElementById('currentTime');
@@ -121,19 +121,24 @@ function showPage(pageName) {
             initExams();
         }
     } else if (pageName === 'hub') {
-        const hubPage = document.getElementById('hubPage');
-        const mobileNav = document.getElementById('mobile-nav-hub');
-        const navHub = document.getElementById('nav-hub');
-        if (hubPage) hubPage.classList.add('active');
-        if (navHub) navHub.classList.add('active');
-        if (mobileNav) {
-            mobileNav.classList.add('active');
-            mobileNav.style.color = '#fff';
-            const i = mobileNav.querySelector('i');
-            if (i) i.style.color = '#fff';
-        }
-        if (typeof initHub === 'function' && window.innerWidth <= 768) {
-            initHub();
+        if (window.innerWidth <= 768) {
+            const hubPage = document.getElementById('hubPage');
+            const mobileNav = document.getElementById('mobile-nav-hub');
+            const navHub = document.getElementById('nav-hub');
+            if (hubPage) hubPage.classList.add('active');
+            if (navHub) navHub.classList.add('active');
+            if (mobileNav) {
+                mobileNav.classList.add('active');
+                mobileNav.style.color = '#fff';
+                const i = mobileNav.querySelector('i');
+                if (i) i.style.color = '#fff';
+            }
+            if (typeof initHub === 'function') {
+                initHub();
+            }
+        } else {
+            window.open('classcloud---smart-board-file-hub/hub_app.html', '_blank');
+            return;
         }
     } else if (pageName === 'ai') {
         const aiPage = document.getElementById('aiPage');
@@ -146,6 +151,42 @@ function showPage(pageName) {
             mobileNav.style.color = '#fff';
             const i = mobileNav.querySelector('i');
             if (i) i.style.color = '#fff';
+        }
+    } else if (pageName === 'weather') {
+        const weatherPage = document.getElementById('weatherPage');
+        if (weatherPage) weatherPage.classList.add('active');
+
+        // Initialize mobile weather page on first visit
+        if (window.weatherData && !window.mobileWeatherInitialized) {
+            if (typeof updateMobileCurrentWeatherCard === 'function') {
+                updateMobileCurrentWeatherCard(window.weatherData.current);
+            }
+            if (typeof renderMobileHourlyWeather === 'function') {
+                renderMobileHourlyWeather();
+                window.mobileHourlyRendered = true;
+            }
+            window.mobileWeatherInitialized = true;
+        }
+    } else if (pageName === 'calendar') {
+        const calendarPage = document.getElementById('calendarPage');
+        const navCalendar = document.getElementById('nav-calendar');
+        if (calendarPage) calendarPage.classList.add('active');
+        if (navCalendar) navCalendar.classList.add('active');
+
+        // Initialize calendar when page is shown (only once)
+        if (typeof window.initCalendar === 'function') {
+            if (!window.calendarInitialized) {
+                window.calendarInitialized = true;
+                setTimeout(() => {
+                    window.initCalendar();
+                    console.log('Calendar initialized');
+                }, 100);
+            } else {
+                // Just re-render if already initialized
+                if (typeof window.renderCalendar === 'function') {
+                    window.renderCalendar();
+                }
+            }
         }
     }
 }

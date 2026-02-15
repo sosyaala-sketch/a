@@ -1097,6 +1097,79 @@
         /* Above nav bar */
         right: 20px !important;
     }
+
+    /* Mobile Weather Page Styles */
+    #weatherPage {
+        display: none;
+        background: #fdfaf5 !important;
+        min-height: 100vh;
+        width: 100%;
+        position: relative;
+    }
+
+    #weatherPage.active {
+        display: block !important;
+    }
+
+    .mobile-weather-content {
+        background: #fdfaf5 !important;
+    }
+
+    .mobile-current-weather-card {
+        background: #fff;
+        border-radius: 30px;
+        margin-bottom: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+        overflow: hidden;
+    }
+
+    .mobile-hourly-weather-list {
+        display: flex;
+        gap: 12px;
+        overflow-x: auto;
+        padding-bottom: 10px;
+        scrollbar-width: thin;
+        scrollbar-color: rgba(0, 0, 0, 0.1) transparent;
+    }
+
+    .mobile-hourly-weather-list::-webkit-scrollbar {
+        height: 6px;
+    }
+
+    .mobile-hourly-weather-list::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    .mobile-hourly-weather-list::-webkit-scrollbar-thumb {
+        background: rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+    }
+
+    .mobile-daily-weather-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+    }
+
+    .mobile-detailed-metrics-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+    }
+
+    .spin {
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        from {
+            transform: rotate(0deg);
+        }
+
+        to {
+            transform: rotate(360deg);
+        }
+    }
 }
 
 @media (min-width: 769px) {

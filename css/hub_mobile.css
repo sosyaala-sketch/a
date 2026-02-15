@@ -1,30 +1,25 @@
-/* --- Glass Cyber Hub (Mobile Redesign - CREAM THEME) --- */
+/* --- Minimalist Cream Hub (Mobile Redesign) --- */
 @media (max-width: 768px) {
     #hubPage.page {
         background: #fdfaf5 !important;
-        /* Cream Base */
         min-height: 100vh;
         color: #1a1a1a !important;
         padding-bottom: 120px !important;
         font-family: 'Inter', sans-serif;
-        background-image:
-            radial-gradient(at 0% 0%, rgba(209, 166, 132, 0.05) 0px, transparent 50%),
-            radial-gradient(at 100% 100%, rgba(209, 166, 132, 0.05) 0px, transparent 50%) !important;
+        background-image: none !important;
     }
 
-    #hubPage .mobile-header {
+    .hub-mobile-view.minimalist .mobile-header {
         background: transparent !important;
-        padding: 30px 25px 15px 25px !important;
-        backdrop-filter: blur(10px);
+        padding: 30px 25px 5px 25px !important;
     }
 
-    #hubPage .mobile-header h1 {
-        font-size: 24px !important;
-        font-weight: 950 !important;
-        color: #121212 !important;
+    .hub-mobile-view.minimalist .mobile-header h1 {
+        font-size: 26px !important;
+        font-weight: 900 !important;
+        color: #1a1a1a !important;
         letter-spacing: -1px !important;
-        margin-bottom: 0 !important;
-        text-shadow: none !important;
+        margin: 0 !important;
     }
 
     .mobile-header-top {
@@ -32,49 +27,36 @@
         align-items: center !important;
         justify-content: space-between !important;
         width: 100% !important;
+        margin-bottom: 25px;
     }
 
     .mobile-icon-back-btn {
-        width: 42px !important;
-        height: 42px !important;
+        width: 44px !important;
+        height: 44px !important;
         background: #fff !important;
         color: #1a1a1a !important;
-        border-radius: 14px !important;
-        border: 1px solid rgba(0, 0, 0, 0.05) !important;
+        border-radius: 16px !important;
+        border: 1px solid rgba(0, 0, 0, 0.04) !important;
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04) !important;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03) !important;
     }
 
-    /* Path Indicator Row */
-    .mobile-hub-breadcrumb-row {
-        display: flex;
-        align-items: center;
-        padding: 0 25px;
-        margin-bottom: 20px;
+    .plus-btn {
+        width: 44px !important;
+        height: 44px !important;
+        background: #413225 !important;
+        color: #fff !important;
+        border-radius: 16px !important;
+        border: none !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        box-shadow: 0 8px 20px rgba(65, 50, 37, 0.15) !important;
     }
 
-    .hub-path-indicator {
-        font-size: 10px;
-        font-weight: 800;
-        color: #f3a682;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        background: rgba(243, 166, 130, 0.1);
-        padding: 6px 14px;
-        border-radius: 12px;
-        border: 1px solid rgba(243, 166, 130, 0.2);
-    }
-
-    .item-meta {
-        font-size: 10px;
-        font-weight: 700;
-        color: #a69076 !important;
-        text-transform: uppercase;
-    }
-
-    /* Stats Row (Homework Style - Light) */
+    /* Stats Row - Minimalist */
     .mobile-stats-row {
         display: flex;
         gap: 12px;
@@ -85,76 +67,56 @@
     .mobile-stat-card {
         flex: 1;
         background: #fff;
-        border-radius: 20px;
-        padding: 15px;
+        border-radius: 18px;
+        padding: 15px 10px;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
-        border: 1px solid rgba(0, 0, 0, 0.02);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+        border: 1px solid rgba(0, 0, 0, 0.03);
     }
 
     .mobile-stat-card .stat-value {
-        font-size: 18px;
-        font-weight: 800;
+        font-size: 20px;
+        font-weight: 900;
         color: #1a1a1a;
+        margin-bottom: 2px;
     }
 
     .mobile-stat-card .stat-label {
         font-size: 10px;
         font-weight: 800;
-        color: #bbb;
+        color: #a69076;
         text-transform: uppercase;
-        margin-top: 6px;
-        letter-spacing: 1px;
+        letter-spacing: 0.5px;
+        opacity: 0.6;
     }
 
-    .mobile-stat-card.urgent .stat-value {
-        color: #f3a682;
-    }
-
-    .mobile-stat-card.completed .stat-value {
-        color: #999;
-    }
-
-    /* Header Actions */
-    .mobile-header-actions {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-
-    /* Search Bar Recovery */
-    .mobile-hub-search-row {
-        padding: 0 20px !important;
-        margin-bottom: 20px !important;
-    }
-
+    /* Search Bar - Minimalist */
     .mobile-search-bar {
-        background: #fff !important;
-        border: 1px solid rgba(0, 0, 0, 0.05) !important;
-        border-radius: 20px !important;
-        height: 56px !important;
+        background: #f1ede6 !important;
+        border: 1px solid rgba(0, 0, 0, 0.03) !important;
+        border-radius: 18px !important;
+        height: 54px !important;
         display: flex !important;
         align-items: center !important;
-        padding: 0 20px !important;
-        gap: 15px !important;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02) !important;
-        position: relative !important;
+        padding: 0 18px !important;
+        gap: 12px !important;
+        margin: 0 25px 20px 25px !important;
     }
 
     .mobile-search-bar i {
-        color: #f3a682 !important;
-        width: 20px !important;
-        height: 20px !important;
-        opacity: 1 !important;
+        color: #a69076 !important;
+        width: 18px !important;
+        height: 18px !important;
+        opacity: 0.7;
     }
 
     .mobile-search-bar input {
         background: transparent !important;
         border: none !important;
-        color: #1a1a1a !important;
+        color: #413225 !important;
         font-size: 15px !important;
         font-weight: 600 !important;
         width: 100% !important;
@@ -163,82 +125,93 @@
     }
 
     .mobile-search-bar input::placeholder {
-        color: #999 !important;
+        color: #a69076 !important;
+        opacity: 0.5;
     }
 
-    /* Filter Tabs Recovery */
+    /* Filter Tabs - Minimalist */
     .mobile-hub-filter-tabs {
         display: flex;
-        gap: 10px;
-        padding: 0 20px;
-        margin-bottom: 25px;
+        gap: 8px;
+        padding: 0 25px;
+        margin-bottom: 20px;
         overflow-x: auto;
         scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+
+    .mobile-hub-filter-tabs::-webkit-scrollbar {
+        display: none;
     }
 
     .hub-tab {
-        background: rgba(0, 0, 0, 0.04);
+        background: #f1ede6;
         border: none;
-        color: #666;
-        padding: 10px 20px;
-        border-radius: 20px;
-        font-size: 12px;
-        font-weight: 700;
+        color: #a69076;
+        padding: 10px 18px;
+        border-radius: 14px;
+        font-size: 11px;
+        font-weight: 800;
         white-space: nowrap;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
         transition: all 0.3s ease;
     }
 
     .hub-tab.active {
-        background: #f3a682 !important;
-        color: #fff !important;
-        box-shadow: 0 8px 15px rgba(243, 166, 130, 0.2);
+        background: #fff !important;
+        color: #413225 !important;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
     }
 
     /* Grid Layout */
     .mobile-modern-hub-list {
-        padding: 0 20px;
+        padding: 10px 25px;
         display: grid;
         grid-template-columns: 1fr;
         gap: 15px;
     }
 
-    /* Card Design Recovery (Light) */
+    /* Card Design - Minimalist */
     .mobile-hub-card-modern {
         background: #fff;
         border: 1px solid rgba(0, 0, 0, 0.03);
-        border-radius: 28px;
-        padding: 20px;
+        border-radius: 24px;
+        padding: 16px;
         display: flex;
         align-items: center;
-        gap: 18px;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
-        transition: all 0.3s ease;
+        gap: 15px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
     }
 
     .item-icon-box {
-        width: 54px;
-        height: 54px;
-        border-radius: 18px;
-        background: rgba(0, 0, 0, 0.02);
+        width: 50px;
+        height: 50px;
+        border-radius: 16px;
+        background: #fdfaf5;
         display: flex;
         align-items: center;
         justify-content: center;
         flex-shrink: 0;
-        border: 1px solid rgba(0, 0, 0, 0.03);
+        border: 1px solid rgba(0, 0, 0, 0.02);
     }
 
     .item-icon-box i {
-        width: 24px;
-        height: 24px;
-        color: rgba(0, 0, 0, 0.4);
+        width: 20px;
+        height: 20px;
+        color: #a69076;
     }
 
     .item-icon-box.folder i {
-        color: #f3a682;
+        color: #8d7b68;
     }
 
     .item-icon-box.image i {
-        color: #d1a684;
+        color: #a69076;
+    }
+
+    .item-icon-box.file i {
+        color: #8d7b68;
     }
 
     .card-body {
@@ -247,54 +220,52 @@
     }
 
     .item-title {
-        font-size: 16px;
+        font-size: 15px;
         font-weight: 800;
-        color: #1a1a1a;
-        margin: 0 0 4px 0;
+        color: #413225;
+        margin: 0 0 2px 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     .item-meta {
-        font-size: 11px;
-        font-weight: 600;
-        color: #999 !important;
+        font-size: 10px;
+        font-weight: 700;
+        color: #a69076 !important;
         display: flex;
         gap: 8px;
-    }
-
-    .card-actions {
-        display: flex;
-        gap: 8px;
+        opacity: 0.6;
     }
 
     .btn-action-circle {
-        width: 40px;
-        height: 40px;
-        border-radius: 14px;
-        background: rgba(0, 0, 0, 0.03);
-        border: 1px solid rgba(0, 0, 0, 0.03);
+        width: 38px;
+        height: 38px;
+        border-radius: 12px;
+        background: #f1ede6;
+        border: none;
         display: flex;
         align-items: center;
         justify-content: center;
-        color: #1a1a1a;
+        color: #413225;
     }
 
-    /* Action Sheet (Light) */
+    /* Action Sheet - Minimalist */
     .hub-action-sheet {
         position: fixed;
         bottom: 0;
         left: 0;
         width: 100%;
         background: #fff;
-        border-radius: 30px 30px 0 0;
-        padding: 30px;
+        border-radius: 32px 32px 0 0;
+        padding: 30px 25px 40px 25px;
         z-index: 2000;
         transform: translateY(100%);
-        transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        border-top: 1px solid rgba(0, 0, 0, 0.05);
+        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         display: flex;
         flex-direction: column;
-        gap: 15px;
-        box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.1);
+        gap: 12px;
+        box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.05);
     }
 
     .hub-action-sheet.active {
@@ -302,48 +273,47 @@
     }
 
     .hub-action-sheet h3 {
-        color: #1a1a1a !important;
-        margin: 0 0 10px 0;
-        font-size: 16px;
-        font-weight: 800;
+        color: #413225 !important;
+        margin: 0 0 8px 0;
+        font-size: 18px;
+        font-weight: 900;
     }
 
     .hub-action-btn {
         width: 100%;
         padding: 16px;
-        border-radius: 16px;
-        background: rgba(0, 0, 0, 0.03);
-        border: 1px solid rgba(0, 0, 0, 0.03);
-        color: #1a1a1a;
+        border-radius: 18px;
+        background: #f1ede6;
+        border: none;
+        color: #413225;
         font-size: 14px;
-        font-weight: 700;
+        font-weight: 800;
         display: flex;
         align-items: center;
         justify-content: center;
         gap: 10px;
-        cursor: pointer;
     }
 
     .hub-action-btn.primary {
-        background: #f3a682;
+        background: #413225;
         color: #fff;
-        border: none;
     }
 
-    /* Back Card (Light) */
+    /* Back Card */
     .mobile-hub-card-back {
         background: #fff;
         border: 1px solid rgba(0, 0, 0, 0.03);
-        border-radius: 24px;
-        padding: 15px 25px;
+        border-radius: 20px;
+        padding: 14px;
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 12px;
-        color: #f3a682;
-        font-size: 13px;
+        gap: 10px;
+        color: #a69076;
+        font-size: 12px;
         font-weight: 800;
-        margin-bottom: 15px;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+        margin-bottom: 20px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
     }
 }

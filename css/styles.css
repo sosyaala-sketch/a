@@ -87,8 +87,9 @@ header {
 
 .header-container {
     width: 100%;
-    max-width: 1400px;
-    margin: 0 auto;
+    max-width: 100%;
+    /* Changed from 1400px to allow full width */
+    margin: 0;
     padding: 0 40px;
     display: flex;
     justify-content: space-between;
@@ -152,170 +153,6 @@ nav a.active::after {
     background: linear-gradient(90deg, transparent, #fff, transparent);
 }
 
-.schedule-table-container {
-    max-width: 1200px;
-    margin: 40px auto;
-    padding: 0 20px;
-    overflow-x: auto;
-}
-
-.schedule-table {
-    width: 100%;
-    border-collapse: collapse;
-    background: rgba(30, 30, 30, 0.6);
-    border-radius: 15px;
-    overflow: hidden;
-}
-
-.schedule-table th {
-    background: rgba(50, 50, 50, 0.8);
-    padding: 15px;
-    text-align: left;
-    font-weight: 600;
-    font-size: 16px;
-    border-bottom: 2px solid rgba(100, 100, 100, 0.5);
-}
-
-.schedule-table td {
-    padding: 15px;
-    border-bottom: 1px solid rgba(100, 100, 100, 0.2);
-    font-size: 15px;
-}
-
-.schedule-table tr:hover {
-    background: rgba(255, 255, 255, 0.05);
-}
-
-.hero {
-    padding: 60px 50px 40px;
-    text-align: center;
-}
-
-.search-container {
-    max-width: 800px;
-    margin: 0 auto 50px;
-    position: relative;
-}
-
-.search-box {
-    width: 100%;
-    padding: 22px 65px 22px 35px;
-    border: 3px solid #fff;
-    border-radius: 50px;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    color: #fff;
-    font-size: clamp(14px, 1.8vw, 18px);
-    font-weight: 600;
-    outline: none;
-    box-shadow: 0 0 30px rgba(255, 255, 255, 0.1), inset 0 0 15px rgba(255, 255, 255, 0.05);
-    transition: all 0.3s ease;
-    cursor: pointer;
-}
-
-.search-box::placeholder {
-    color: rgba(255, 255, 255, 0.4);
-}
-
-.search-box:focus {
-    background: rgba(255, 255, 255, 0.15);
-    box-shadow: 0 0 40px rgba(255, 255, 255, 0.2);
-}
-
-.search-icon {
-    position: absolute;
-    right: 25px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 24px;
-    height: 24px;
-    cursor: pointer;
-    color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0.9;
-    transition: all 0.3s;
-    pointer-events: auto;
-}
-
-.search-icon:hover {
-    opacity: 1;
-}
-
-.quick-links {
-    display: flex;
-    justify-content: center;
-    gap: clamp(15px, 3vw, 40px);
-    margin-bottom: clamp(15px, 2vw, 25px);
-    flex-wrap: wrap;
-    padding: 0 20px;
-}
-
-.quick-link {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-    cursor: pointer;
-    transition: transform 0.3s;
-}
-
-.quick-link:hover {
-    transform: scale(1.1);
-}
-
-.icon {
-    width: 50px;
-    height: 50px;
-    background: #333;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 24px;
-}
-
-.day-selector {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: -5px;
-    flex-wrap: wrap;
-}
-
-.day-btn {
-    padding: 12px 30px;
-    background: transparent;
-    border: 2px solid #444;
-    border-radius: 30px;
-    color: #888;
-    cursor: pointer;
-    font-size: 16px;
-    transition: all 0.3s;
-}
-
-.day-btn.active {
-    background: #fff;
-    border-color: #fff;
-    color: #000;
-    font-weight: 800;
-    box-shadow: 0 0 30px rgba(255, 255, 255, 0.4);
-}
-
-.current-time-display {
-    text-align: center;
-    font-size: 18px;
-    margin-bottom: 20px;
-    color: #aaa;
-}
-
-.current-time-display .time {
-    color: #fff;
-    font-weight: bold;
-    font-size: 24px;
-}
-
 .schedule-viewer {
     max-width: 1400px;
     margin: 0 auto;
@@ -328,7 +165,6 @@ nav a.active::after {
     justify-content: center;
     align-items: flex-start;
     overflow: hidden;
-    /* Prevent horizontal scroll from cards */
 }
 
 .lesson-card {
@@ -357,37 +193,37 @@ nav a.active::after {
 }
 
 .lesson-card.right-1 {
-    transform: translateX(calc(-50% + 350px)) scale(0.85);
+    transform: translateX(calc(-50% + 400px)) scale(0.85);
     z-index: 8;
     opacity: 0.6;
 }
 
 .lesson-card.right-2 {
-    transform: translateX(calc(-50% + 600px)) scale(0.65);
+    transform: translateX(calc(-50% + 700px)) scale(0.65);
     z-index: 6;
     opacity: 0.35;
 }
 
 .lesson-card.right-3 {
-    transform: translateX(calc(-50% + 800px)) scale(0.5);
+    transform: translateX(calc(-50% + 950px)) scale(0.5);
     z-index: 4;
     opacity: 0.15;
 }
 
 .lesson-card.left-1 {
-    transform: translateX(calc(-50% - 350px)) scale(0.85);
+    transform: translateX(calc(-50% - 400px)) scale(0.85);
     z-index: 8;
     opacity: 0.6;
 }
 
 .lesson-card.left-2 {
-    transform: translateX(calc(-50% - 600px)) scale(0.65);
+    transform: translateX(calc(-50% - 700px)) scale(0.65);
     z-index: 6;
     opacity: 0.35;
 }
 
 .lesson-card.left-3 {
-    transform: translateX(calc(-50% - 800px)) scale(0.5);
+    transform: translateX(calc(-50% - 950px)) scale(0.5);
     z-index: 4;
     opacity: 0.15;
 }
@@ -428,7 +264,141 @@ nav a.active::after {
     color: #ccc;
 }
 
-.tomorrow-btn {
+.hero {
+    padding: 120px 50px 40px;
+    text-align: center;
+}
+
+.search-container {
+    max-width: 800px;
+    margin: 0 auto 80px;
+    position: relative;
+}
+
+.search-box {
+    width: 100%;
+    padding: 32px 90px 32px 50px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 60px;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(20px);
+    color: #fff;
+    font-size: 26px;
+    font-weight: 500;
+    outline: none;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    transition: all 0.4s ease;
+    cursor: text;
+    letter-spacing: 0.5px;
+}
+
+.search-box::placeholder {
+    color: rgba(255, 255, 255, 0.3);
+    font-weight: 400;
+}
+
+.search-box:focus {
+    background: rgba(0, 0, 0, 0.8);
+    border-color: #fff;
+    box-shadow: 0 20px 60px rgba(255, 255, 255, 0.1);
+    padding-left: 60px;
+}
+
+.search-icon {
+    position: absolute;
+    right: 35px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    color: rgba(255, 255, 255, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+    pointer-events: auto;
+}
+
+.search-icon:hover {
+    color: #fff;
+    transform: translateY(-50%) scale(1.1);
+}
+
+.search-icon:hover {
+    opacity: 1;
+}
+
+.quick-links {
+    display: flex;
+    justify-content: center;
+    gap: clamp(30px, 4vw, 80px);
+    margin-bottom: clamp(30px, 4vw, 60px);
+    flex-wrap: wrap;
+    padding: 0 40px;
+    width: 100%;
+}
+
+.quick-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.quick-link:hover {
+    transform: translateY(-10px);
+}
+
+.icon {
+    width: 90px;
+    height: 90px;
+    background: linear-gradient(145deg, #111, #000);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 36px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+    transition: all 0.4s ease;
+    filter: grayscale(100%);
+}
+
+.quick-link span {
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.5);
+    transition: all 0.3s ease;
+}
+
+.quick-link:hover .icon {
+    background: #fff;
+    color: #000;
+    border-color: #fff;
+    box-shadow: 0 0 40px rgba(255, 255, 255, 0.3);
+    filter: grayscale(0%);
+    transform: scale(1.1);
+}
+
+.quick-link:hover span {
+    color: #fff;
+    letter-spacing: 3px;
+}
+
+.day-selector {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: -5px;
+    flex-wrap: wrap;
+}
+
+.day-btn {
     padding: 12px 30px;
     background: transparent;
     border: 2px solid #444;
@@ -437,14 +407,287 @@ nav a.active::after {
     cursor: pointer;
     font-size: 16px;
     transition: all 0.3s;
-    margin-top: 35px;
+}
+
+.day-btn.active {
+    background: #fff;
+    border-color: #fff;
+    color: #000;
+    font-weight: 800;
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.4);
+}
+
+/* Hero Widgets (Clock + Weather) */
+.hero-widgets-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+    margin-bottom: 60px;
+}
+
+.clock-widget {
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    padding-right: 50px;
+}
+
+.time-large {
+    font-size: 72px;
+    font-weight: 100;
+    /* Thin font */
+    line-height: 1;
+    letter-spacing: -3px;
+    color: #fff;
+    font-family: 'Inter', sans-serif;
+    text-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
+}
+
+.date-large {
+    font-size: 20px;
+    font-weight: 300;
+    color: rgba(255, 255, 255, 0.5);
+    margin-top: 5px;
+    letter-spacing: 1px;
+}
+
+.weather-widget {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 30px;
+    padding: 15px 35px;
+    display: flex;
+    align-items: center;
+    gap: 25px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    height: 100px;
+}
+
+/* Custom Scrollbar for Weather List */
+#hourlyWeatherList::-webkit-scrollbar {
+    height: 8px;
+}
+
+#hourlyWeatherList::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+}
+
+#hourlyWeatherList::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+}
+
+#hourlyWeatherList::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.4);
+}
+
+.weather-widget:hover {
+    background: rgba(255, 255, 255, 0.08);
+    transform: translateY(-5px);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+.weather-icon-large i {
+    width: 48px;
+    height: 48px;
+    stroke-width: 1.5px;
+    color: #fff;
+    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.3));
+}
+
+.weather-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.weather-temp {
+    font-size: 42px;
+    font-weight: 500;
+    line-height: 1;
+    color: #fff;
+    letter-spacing: -1px;
+}
+
+.weather-desc {
+    font-size: 15px;
+    color: rgba(255, 255, 255, 0.6);
+    margin-top: 5px;
+    font-weight: 500;
+}
+
+.weather-loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.spin {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Modal Styling Improvements */
+.hourly-weather-item {
+    min-width: 100px;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 25px 20px;
+    border-radius: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: transform 0.2s;
+}
+
+.hourly-weather-item:hover {
+    background: rgba(255, 255, 255, 0.08);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.hourly-time {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.5);
+    font-weight: 600;
+}
+
+.hourly-icon i {
+    width: 28px;
+    height: 28px;
+    color: #fff;
+}
+
+.hourly-temp {
+    font-size: 22px;
+    font-weight: 700;
+    color: #fff;
+}
+
+.hourly-rain {
+    font-size: 12px;
+    color: #60a5fa;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-weight: 600;
+}
+
+/* Premium Schedule Table - Balanced */
+.schedule-table-container {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 30px;
+    background: rgba(20, 20, 20, 0.15);
+    /* Ultra transparent, no blur */
+    border-radius: 35px;
+    /* backdrop-filter removed to match user image/calendar style */
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 40px 80px rgba(0, 0, 0, 0.5);
+}
+
+.schedule-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.schedule-table th {
+    background: rgba(255, 255, 255, 0.03);
+    padding: 20px;
+    text-align: left;
+    font-weight: 800;
+    font-size: 13px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.4);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.schedule-table th:first-child {
+    border-top-left-radius: 20px;
+}
+
+.schedule-table th:last-child {
+    border-top-right-radius: 20px;
+}
+
+.schedule-table td {
+    padding: 18px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    font-size: 15px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.8);
+    transition: all 0.3s ease;
+}
+
+.schedule-table tr:last-child td {
+    border-bottom: none;
+}
+
+.schedule-table tr:last-child td:first-child {
+    border-bottom-left-radius: 20px;
+}
+
+.schedule-table tr:last-child td:last-child {
+    border-bottom-right-radius: 20px;
+}
+
+.schedule-table tr {
+    transition: all 0.3s ease;
+}
+
+.schedule-table tr:hover {
+    background: rgba(255, 255, 255, 0.05);
+    transform: scale(1.01);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    z-index: 10;
+    position: relative;
+}
+
+.schedule-table tr:hover td {
+    color: #fff;
+    text-shadow: 0 0 12px rgba(255, 255, 255, 0.35);
+}
+
+/* Premium Button Style (Restored) */
+.tomorrow-btn {
+    padding: 16px 50px;
+    background: linear-gradient(145deg, #111, #000);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 40px;
+    color: rgba(255, 255, 255, 0.6);
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    transition: all 0.4s ease;
+    margin-top: 45px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    text-transform: uppercase;
 }
 
 .tomorrow-btn:hover {
     background: #fff;
-    border-color: #fff;
     color: #000;
-    box-shadow: 0 0 30px rgba(255, 255, 255, 0.4);
+    border-color: #fff;
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 20px 50px rgba(255, 255, 255, 0.3);
 }
 
 @keyframes slideUp {
@@ -1533,5 +1776,23 @@ body .modal-content.premium .btn-secondary {
     /* Calendar Container (Last Child) */
     .homework-layout>div:last-child {
         flex: 1 !important;
+    }
+}
+/* --- RESPONSIVE VISIBILITY UTILS --- */
+.mobile-only {
+    display: none !important;
+}
+
+.desktop-only {
+    display: block !important;
+}
+
+@media (max-width: 768px) {
+    .mobile-only {
+        display: block !important;
+    }
+    
+    .desktop-only {
+        display: none !important;
     }
 }

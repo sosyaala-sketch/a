@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Takvim Test</title>
+    <link rel="stylesheet" href="css/calendar.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #020202;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .test-container {
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 40px;
+        }
+
+        .test-header {
+            color: #fff;
+            margin-bottom: 20px;
+        }
+
+        .test-header h1 {
+            font-size: 24px;
+            font-weight: 900;
+            margin: 0 0 10px 0;
+        }
+
+        .test-header p {
+            color: #71717a;
+            font-size: 14px;
+            margin: 0;
+        }
+
+        .test-buttons {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .test-btn {
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .test-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        #status {
+            color: #a1a1aa;
+            font-size: 12px;
+            margin-bottom: 20px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="test-container">
+        <div class="test-header">
+            <h1>📅 Takvim Test Sayfası</h1>
+            <p>Bu sayfa takvim fonksiyonlarını test etmek için oluşturuldu</p>
+        </div>
+
+        <div class="test-buttons">
+            <button class="test-btn" onclick="testInit()">Test Init</button>
+            <button class="test-btn" onclick="testRender()">Test Render</button>
+            <button class="test-btn" onclick="checkFunctions()">Check Functions</button>
+        </div>
+
+        <div id="status">Hazır...</div>
+
+        <div id="desktopCalendarContainer"></div>
+    </div>
+
+    <script src="js/calendar.js"></script>
+    <script>
+        function checkFunctions() {
+            const status = document.getElementById('status');
+            let msg = 'Function Check:\n';
+            msg += `- window.initCalendar: ${typeof window.initCalendar}\n`;
+            msg += `- window.renderCalendar: ${typeof window.renderCalendar}\n`;
+            msg += `- Container exists: ${!!document.getElementById('desktopCalendarContainer')}\n`;
+            status.textContent = msg;
+            console.log(msg);
+        }
+
+        function testInit() {
+            const status = document.getElementById('status');
+            try {
+                status.textContent = 'Initializing calendar...';
+                window.initCalendar();
+                status.textContent = 'Calendar initialized successfully! ✅';
+                console.log('Calendar initialized');
+            } catch (error) {
+                status.textContent = 'Error: ' + error.message + ' ❌';
+                console.error('Init error:', error);
+            }
+        }
+
+        function testRender() {
+            const status = document.getElementById('status');
+            try {
+                status.textContent = 'Rendering calendar...';
+                window.renderCalendar();
+                status.textContent = 'Calendar rendered successfully! ✅';
+                console.log('Calendar rendered');
+            } catch (error) {
+                status.textContent = 'Error: ' + error.message + ' ❌';
+                console.error('Render error:', error);
+            }
+        }
+
+        // Auto check on load
+        window.addEventListener('load', () => {
+            checkFunctions();
+        });
+    </script>
+</body>
+
+</html>

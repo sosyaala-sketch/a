@@ -1,0 +1,162 @@
+/* Integrated Desktop Hub Styles */
+
+/* Scoped to hub-desktop-view to prevent leaks */
+.hub-desktop-view {
+    font-family: 'Inter', sans-serif;
+    color: #FFFFFF;
+    position: relative;
+    /* Background handled by global body */
+}
+
+/* Custom Scrollbar for Hub Desktop */
+.hub-desktop-view .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.hub-desktop-view .custom-scrollbar::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.hub-desktop-view .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+}
+
+/* Hub Modals */
+.hub-desktop-modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    /* Higher than normal */
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(15px);
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.hub-desktop-modal-overlay.active {
+    display: flex;
+}
+
+.hub-desktop-modal-content {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(30px) saturate(180%);
+    -webkit-backdrop-filter: blur(30px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-top: 1px solid rgba(255, 255, 255, 0.3);
+    border-left: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 40px 120px rgba(0, 0, 0, 0.6);
+    border-radius: 40px;
+}
+
+/* Grid */
+.hub-card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+}
+
+@media (min-width: 768px) {
+    .hub-card-grid {
+        gap: 20px;
+    }
+}
+
+/* Animation */
+@keyframes hubFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.hub-animate-fade {
+    animation: hubFadeIn 0.4s ease-out;
+}
+
+/* Utilities */
+.hub-desktop-view .no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+.hub-desktop-view button,
+.hub-desktop-view .clickable {
+    cursor: pointer;
+    user-select: none;
+}
+
+/* Drag & Drop */
+.drop-zone-active {
+    border-color: #00E699 !important;
+    background: rgba(0, 230, 153, 0.05) !important;
+    transform: scale(1.02) !important;
+    box-shadow: 0 0 30px rgba(0, 230, 153, 0.2);
+}
+
+.dragging {
+    opacity: 0.5;
+    cursor: grabbing;
+}
+
+/* Hub Glass Panel */
+.hub-glass-panel {
+    background: rgba(255, 255, 255, 0.015);
+    backdrop-filter: blur(25px) saturate(200%);
+    -webkit-backdrop-filter: blur(25px) saturate(200%);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    border-left: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+}
+
+/* Hub Glass Button */
+.hub-glass-btn {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hub-glass-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.hub-sidebar-compact {
+    max-width: 1200px !important;
+    margin: 0 auto;
+}
+
+.hub-filter-btn.active {
+    background: rgba(255, 255, 255, 0.1) !important;
+    color: #fff !important;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+}
+
+.hub-filter-btn:not(.active) {
+    background: transparent !important;
+    color: rgba(255, 255, 255, 0.3) !important;
+}
+
+.hub-modal-input-glass {
+    background: rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s;
+}
+
+.hub-modal-input-glass:focus {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border-color: rgba(255, 255, 255, 0.3) !important;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.05);
+}

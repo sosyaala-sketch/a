@@ -1,0 +1,7 @@
+{
+  "name": "Eğitim ve Tatil Takvimi 2025-2026",
+  "description": "2025-2026 akademik yılı, resmi tatiller ve kişisel etkinlikler için özelleştirilmiş, koyu temalı interaktif bir takvim uygulaması.",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
+}
